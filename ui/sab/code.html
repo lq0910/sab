@@ -1,0 +1,703 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_standard" name="shell-type"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "surface-container-highest": "#d3e4fe", "surface-container-low": "#eff4ff", "surface-container-high": "#dce9ff", "on-primary-fixed": "#00174b", "on-primary": "#ffffff", "surface-container": "#e5eeff", "background": "#f8f9ff", "surface-tint": "#0053db", "on-tertiary": "#ffffff", "primary-fixed": "#dbe1ff", "on-error": "#ffffff", "tertiary-fixed-dim": "#ffb596", "surface": "#f8f9ff", "on-tertiary-fixed": "#360f00", "surface-bright": "#f8f9ff", "error-container": "#ffdad6", "inverse-surface": "#213145", "secondary-container": "#2170e4", "on-surface-variant": "#434655", "primary": "#004ac6", "on-primary-container": "#eeefff", "on-background": "#0b1c30", "on-tertiary-fixed-variant": "#7d2d00", "tertiary": "#943700", "on-primary-fixed-variant": "#003ea8", "tertiary-fixed": "#ffdbcd", "error": "#ba1a1a", "inverse-primary": "#b4c5ff", "secondary": "#0058be", "tertiary-container": "#bc4800", "on-tertiary-container": "#ffede6", "primary-fixed-dim": "#b4c5ff", "secondary-fixed": "#d8e2ff", "surface-dim": "#cbdbf5", "on-error-container": "#93000a", "surface-variant": "#d3e4fe", "on-secondary": "#ffffff", "on-secondary-fixed-variant": "#004395", "surface-container-lowest": "#ffffff", "outline": "#737686", "on-secondary-container": "#fefcff", "on-secondary-fixed": "#001a42", "on-surface": "#0b1c30", "inverse-on-surface": "#eaf1ff", "primary-container": "#2563eb", "secondary-fixed-dim": "#adc6ff", "outline-variant": "#c3c6d7" }, "borderRadius": { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" }, "spacing": { "space-xs": "0.125rem", "space-xl": "1rem", "space-md": "0.5rem", "space-lg": "0.75rem", "margin": "0.75rem", "gutter": "0.5rem", "space-sm": "0.25rem" }, "fontFamily": { "body-sm": ["Hanken Grotesk"], "headline-lg": ["Hanken Grotesk"], "headline-sm": ["Hanken Grotesk"], "body-lg": ["Hanken Grotesk"], "label-code": ["JetBrains Mono"], "body-md": ["Hanken Grotesk"], "label-lg": ["Hanken Grotesk"], "headline-md": ["Hanken Grotesk"], "label-md": ["Hanken Grotesk"] }, "fontSize": { "body-sm": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["1.5rem", { "lineHeight": "2rem", "letterSpacing": "-0.02em", "fontWeight": "600" }], "headline-sm": ["1.125rem", { "lineHeight": "1.5rem", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-lg": ["0.9375rem", { "lineHeight": "1.375rem", "letterSpacing": "-0.005em", "fontWeight": "400" }], "label-code": ["0.75rem", { "lineHeight": "1rem", "letterSpacing": "-0.01em", "fontWeight": "400" }], "body-md": ["0.8125rem", { "lineHeight": "1.125rem", "letterSpacing": "0em", "fontWeight": "400" }], "label-lg": ["0.8125rem", { "lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "500" }], "headline-md": ["1.25rem", { "lineHeight": "1.75rem", "letterSpacing": "-0.015em", "fontWeight": "600" }], "label-md": ["0.75rem", { "lineHeight": "0.875rem", "letterSpacing": "0.015em", "fontWeight": "500" }] } } } };</script></head><body class="bg-surface font-body-md text-body-md text-on-surface select-none antialiased min-h-screen"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-low shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 w-full flex flex-col justify-between"><div class="h-9 px-space-xl flex items-center justify-between"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-space-sm pl-space-xs"><span class="w-3 h-3 rounded-full bg-error inline-block opacity-90"></span><span class="w-3 h-3 rounded-full bg-tertiary inline-block opacity-80"></span><span class="w-3 h-3 rounded-full bg-secondary inline-block opacity-80"></span></div><nav class="flex items-center gap-space-xs" data-active-classes="bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-[0_1px_4px_rgba(0,0,0,0.04)] rounded-t-lg"><a aria-current="page" class="px-space-lg py-1.5 transition-colors flex items-center gap-space-sm max-w-[200px] truncate bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-[0_1px_4px_rgba(0,0,0,0.04)] rounded-t-lg" data-path="components-catalog" href="#">交互组件规范</a><a class="px-space-lg py-1.5 rounded-t-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-md text-label-md transition-colors flex items-center gap-space-sm max-w-[160px] truncate" data-path="bookmarks-center" href="#">收藏中心</a><a class="px-space-md py-1.5 rounded-t-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-md text-label-md transition-colors flex items-center justify-center" data-path="browser-settings" href="#">+</a></nav></div><div class="flex items-center gap-space-sm"><div class="px-space-sm py-0.5 rounded bg-surface-container font-label-code text-label-code text-on-surface-variant">轻页 SAB v2.4</div><div class="flex items-center gap-space-xs text-on-surface-variant"><button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container hover:text-on-surface rounded text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[16px]">minimize</span></button><button class="w-6 h-6 flex items-center justify-center hover:bg-surface-container hover:text-on-surface rounded text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[16px]">crop_square</span></button><button class="w-6 h-6 flex items-center justify-center hover:bg-error-container hover:text-on-error-container rounded text-on-surface-variant" type="button"><span class="material-symbols-outlined text-[16px]">close</span></button></div></div></div><div class="h-11 px-space-xl flex items-center justify-between gap-space-lg bg-surface-container-lowest/80 backdrop-blur-md shadow-[0_1px_4px_rgba(0,0,0,0.02)]"><div class="flex items-center gap-space-xs"><button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">arrow_back</span></button><button class="w-7 h-7 rounded flex items-center justify-center text-outline hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">arrow_forward</span></button><button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">refresh</span></button></div><div class="flex-1 max-w-3xl flex items-center justify-between px-space-lg py-1 bg-surface-container-low rounded-full shadow-[inset_0_1px_2px_rgba(0,0,0,0.03)] hover:bg-surface-container transition-colors"><div class="flex items-center gap-space-md truncate"><span class="material-symbols-outlined text-secondary text-[16px]">lock</span><span class="font-label-code text-label-code text-on-surface font-medium truncate">sab://components/design-system-kit</span></div><div class="flex items-center gap-space-sm flex-shrink-0"><span class="px-space-sm py-0.5 rounded bg-surface-container font-label-code text-label-code text-on-surface-variant">⌘L</span><button class="w-6 h-6 rounded-full flex items-center justify-center text-on-surface-variant hover:text-tertiary transition-colors" type="button"><span class="material-symbols-outlined text-[16px]">star</span></button></div></div><div class="flex items-center gap-space-sm"><button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">extension</span></button><button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">tune</span></button><button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" type="button"><span class="material-symbols-outlined text-[18px]">more_vert</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></div></header><main class="w-full pt-20 bg-surface-container-lowest min-h-screen"><div class="flex flex-col w-full text-on-surface bg-surface font-body-md antialiased pb-24">
+<!-- Top Spec Meta Header -->
+<header class="w-full bg-surface-container-lowest px-space-xl py-8 shadow-sm">
+<div class="max-w-7xl mx-auto flex flex-col gap-4">
+<div class="flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-space-md">
+<div class="w-7 h-7 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-sm shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">widgets</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md tracking-tight text-on-surface">轻页 SAB · 交互组件规范与组件库</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-highest text-primary font-label-code text-[11px] font-medium tracking-wide uppercase">v0.3-preview</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+              基于 Tauri v2 + Rust WebKit/WebView2 双核心标准设计 · 纯正高精度浅色 · 极简原生交互
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant font-label-code text-label-code">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="">Scale: 100% (Dense)</span>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center gap-1 hover:bg-secondary-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span class="">导出 Figma Token</span>
+</button>
+</div>
+</div>
+<!-- Quick Nav Anchors -->
+<nav class="flex flex-wrap items-center gap-2 pt-2 text-on-surface-variant font-label-md text-label-md">
+<span class="text-outline text-xs uppercase tracking-wider font-label-code mr-1">Anchors:</span>
+<a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-omnibox">
+<span class="font-label-code text-[11px] text-primary">01</span> 导航与地址栏
+        </a>
+<a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-tabs">
+<span class="font-label-code text-[11px] text-primary">02</span> 标签页系统
+        </a>
+<a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-popovers">
+<span class="font-label-code text-[11px] text-primary">03</span> 浮层与弹出菜单
+        </a>
+<a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-controls">
+<span class="font-label-code text-[11px] text-primary">04</span> 操作与表单控件
+        </a>
+<a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-feedback">
+<span class="font-label-code text-[11px] text-primary">05</span> 反馈与状态指示
+        </a>
+<a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-context-menus"><span class="font-label-code text-[11px] text-primary">06</span> 右键上下文菜单</a><a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-shortcuts"><span class="font-label-code text-[11px] text-primary">07</span> 快捷键规范</a><a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-downloads-states"><span class="font-label-code text-[11px] text-primary">08</span> 下载进度与管理器状态</a><a class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high hover:text-on-surface transition-colors flex items-center gap-1" href="#section-notifications"><span class="font-label-code text-[11px] text-primary">09</span> 桌面浮动通知气泡</a></nav>
+</div>
+</header>
+<!-- Showcase Content Body -->
+<div class="max-w-7xl mx-auto w-full px-space-xl pt-8 flex flex-col gap-12">
+<!-- ================= SECTION 01: OMNIBOX & NAVIGATION ================= -->
+<section class="flex flex-col gap-4" id="section-omnibox">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">01</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">导航与地址栏 (Omnibox &amp; Navigation Controls)</h2>
+</div>
+<span class="font-label-code text-label-code text-outline">Rhythm: 32px Bar / 28px Actions</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Omnibox State 1: Idle Capsule -->
+<div class="lg:col-span-12 bg-surface-container-lowest p-5 rounded-xl shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+              标准态：单行导航与胶囊地址栏 (Idle / Read State)
+            </span>
+<span class="font-label-code text-[11px] text-outline">Layout: Full Width Capsule · H: 34px</span>
+</div>
+<!-- Chrome Simulation Bar -->
+<div class="w-full bg-surface-container-low p-2 rounded-xl flex items-center gap-3 shadow-inner">
+<!-- Navigation Actions Matrix -->
+<div class="flex items-center gap-1">
+<button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" title="后退 (⌘[)" type="button">
+<span class="material-symbols-outlined text-[17px]">arrow_back</span>
+</button>
+<button class="w-7 h-7 rounded flex items-center justify-center text-outline-variant cursor-not-allowed" disabled="" title="前进 (⌘])" type="button">
+<span class="material-symbols-outlined text-[17px]">arrow_forward</span>
+</button>
+<button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" title="重新载入 (⌘R)" type="button">
+<span class="material-symbols-outlined text-[17px]">refresh</span>
+</button>
+<button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" title="主页" type="button">
+<span class="material-symbols-outlined text-[17px]">home</span>
+</button>
+</div>
+<!-- Capsule Omnibox -->
+<div class="flex-1 flex items-center justify-between px-3 py-1 bg-surface-container-lowest rounded-full shadow-sm hover:shadow transition-all group cursor-text">
+<div class="flex items-center gap-2 truncate">
+<span class="material-symbols-outlined text-[15px] text-secondary">lock</span>
+<span class="font-label-code text-label-code text-outline">sab://</span>
+<span class="font-label-code text-label-code font-medium text-on-surface">workspace.workbench</span>
+<span class="font-label-code text-label-code text-outline truncate">/projects/design-system-kit?view=grid</span>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<span class="px-1.5 py-0.2 rounded bg-surface-container font-label-code text-[10px] text-outline">⌘L</span>
+<button class="w-6 h-6 rounded-full flex items-center justify-center text-outline hover:text-tertiary transition-colors" title="收藏此页" type="button">
+<span class="material-symbols-outlined text-[16px]">star</span>
+</button>
+<button class="w-6 h-6 rounded-full flex items-center justify-center text-outline hover:text-on-surface transition-colors" title="分享链接" type="button">
+<span class="material-symbols-outlined text-[16px]">ios_share</span>
+</button>
+</div>
+</div>
+<!-- Right Controls -->
+<div class="flex items-center gap-1">
+<button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface relative" type="button">
+<span class="material-symbols-outlined text-[17px]">download</span>
+<span class="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary"></span>
+</button>
+<button class="w-7 h-7 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[17px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Omnibox State 2: Active / Typing & Drop Autocomplete Preview -->
+<div class="lg:col-span-12 bg-surface-container-lowest p-5 rounded-xl shadow-sm flex flex-col gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface font-semibold flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              聚焦检索态：输入联想面板 (Focused Omnibox with Autocomplete Flyout)
+            </span>
+<div class="flex items-center gap-2 font-label-code text-[11px] text-outline">
+<span class="">Token: Elevation Tier 2</span>
+<span class="">•</span>
+<span class="">Fast-Switch: Tab / :keyword</span>
+</div>
+</div>
+<!-- Chrome Frame with Open Dropdown -->
+<div class="w-full bg-surface-container-low p-3 rounded-xl flex flex-col gap-2">
+<!-- Focused Omnibox Container -->
+<div class="w-full bg-surface-container-lowest rounded-lg p-1.5 shadow-md flex items-center justify-between gap-3">
+<div class="flex items-center gap-2 flex-1">
+<!-- Search Provider Badge -->
+<div class="flex items-center gap-1 px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-md text-label-md cursor-pointer hover:bg-primary-fixed-dim transition-colors">
+<span class="material-symbols-outlined text-[14px]">search</span>
+<span class="font-medium text-xs">必应 Bing</span>
+<span class="material-symbols-outlined text-[12px] opacity-70">expand_more</span>
+</div>
+<!-- Input Mockup -->
+<div class="flex items-center font-body-md text-body-md text-on-surface">
+<span class="font-medium">tauri v2 release note</span>
+<span class="inline-block w-0.5 h-4 bg-primary animate-pulse ml-0.5"></span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-5 h-5 rounded-full flex items-center justify-center text-outline hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[14px]">cancel</span>
+</button>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-code text-[10px] text-on-surface-variant font-medium">ESC 取消</span>
+</div>
+</div>
+<!-- Autocomplete Floating Flyout -->
+<div class="w-full bg-surface-container-lowest rounded-xl shadow-lg p-2 flex flex-col gap-1 mt-1">
+<div class="px-2 py-1 flex items-center justify-between text-outline font-label-md text-[11px]">
+<span class="uppercase tracking-wider">智能检索建议 · SQLite FTS5 本地索引</span>
+<span class="font-label-code">⌘1 ~ ⌘4 快速跳转</span>
+</div>
+<!-- Item 1: Active selection -->
+<div class="px-3 py-2 rounded-lg bg-surface-container-high flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[17px] text-primary">search</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md font-medium text-on-surface">tauri v2 release note</span>
+<span class="text-xs text-outline">—— 官方发布文档与迁移方案</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code text-[10px]">Bing 搜索</span>
+<span class="material-symbols-outlined text-[15px] text-outline">arrow_forward</span>
+</div>
+</div>
+<!-- Item 2: Bookmark Match -->
+<div class="px-3 py-2 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[17px] text-tertiary">star</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md text-on-surface">Tauri v2 Documentation · Architecture Overview</span>
+<span class="font-label-code text-xs text-outline">v2.tauri.app/docs</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-tertiary font-label-code text-[10px]">书签匹配</span>
+<span class="material-symbols-outlined text-[15px] text-outline">north_west</span>
+</div>
+</div>
+<!-- Item 3: History Match -->
+<div class="px-3 py-2 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[17px] text-outline">history</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md text-on-surface">rust-lang/cargo-binstall</span>
+<span class="font-label-code text-xs text-outline">github.com/cargo-bins/cargo-binstall</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-outline font-label-code">昨天 16:42</span>
+</div>
+</div>
+<!-- Item 4: Shortcut query -->
+<div class="px-3 py-2 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[17px] text-secondary">terminal</span>
+<div class="flex items-center gap-2">
+<span class="font-body-md text-body-md text-on-surface">执行内置命令：<span class="font-label-code font-semibold text-primary">:cache clear --storage</span></span>
+</div>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code text-[10px]">系统行为</span>
+</div>
+<!-- Footer hints -->
+<div class="px-2 pt-2 pb-1 mt-1 flex items-center justify-between font-label-code text-[11px] text-outline bg-surface-container-lowest">
+<div class="flex items-center gap-3">
+<span class=""><kbd class="px-1 py-0.2 bg-surface-container rounded font-medium">↵</kbd> 打开</span>
+<span class=""><kbd class="px-1 py-0.2 bg-surface-container rounded font-medium">Tab</kbd> 自动补全</span>
+<span class=""><kbd class="px-1 py-0.2 bg-surface-container rounded font-medium">↑↓</kbd> 切换选项</span>
+</div>
+<div class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[13px]">bolt</span>
+<span class="">双核引擎预渲染启用</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= SECTION 02: TAB SYSTEM ================= -->
+<section class="flex flex-col gap-4" id="section-tabs">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">02</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">标签页系统 (Tab Management Suite)</h2>
+</div>
+<span class="font-label-code text-label-code text-outline">Tab Height: 36px · Radius: 8px Top</span>
+</div>
+<!-- Real Tab Strip Interactive Demo Container -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-6">
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md font-semibold text-on-surface">标准标签栏容器态 (Tab Strip Bar)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            支持固定标签 (Pinned Tabs)、激活态指示器、音频播放与一键静音微交互、悬停状态与标签分组。
+          </p>
+</div>
+<!-- Simulated OS Chrome Tab Strip -->
+<div class="w-full bg-surface-container p-1 rounded-t-xl overflow-x-auto">
+<div class="flex items-end gap-1 min-w-[760px] pt-1">
+<!-- Pinned Tab 1 -->
+<div class="w-10 h-9 rounded-t-lg bg-surface-container-high hover:bg-surface-container-lowest flex items-center justify-center relative group cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[18px] text-primary">dashboard</span>
+<span class="absolute bottom-1 w-1.5 h-1.5 rounded-full bg-primary"></span>
+</div>
+<!-- Pinned Tab 2 (Unread Notification) -->
+<div class="w-10 h-9 rounded-t-lg bg-surface-container-high hover:bg-surface-container-lowest flex items-center justify-center relative group cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[18px] text-tertiary">mail</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span>
+</div>
+<!-- Tab Group Indicator -->
+<div class="h-8 px-2 rounded-md bg-primary-fixed text-on-primary-fixed flex items-center gap-1 font-label-code text-[11px] font-medium mr-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="">开发环境</span>
+</div>
+<!-- Active Tab -->
+<div class="h-9 px-3.5 bg-surface-container-lowest rounded-t-lg flex items-center gap-2 max-w-[240px] shadow-sm relative cursor-pointer">
+<!-- Top Active Pill Accent -->
+<span class="absolute top-0 left-3 right-3 h-0.5 bg-primary rounded-full"></span>
+<span class="material-symbols-outlined text-[16px] text-primary flex-shrink-0">public</span>
+<span class="font-label-md text-label-md font-medium text-on-surface truncate flex-1">轻页 SAB - 极简专注工作区</span>
+<!-- Tab Audio Wave & Mute Button -->
+<button class="w-5 h-5 rounded hover:bg-surface-container flex items-center justify-center text-primary group" title="点击静音" type="button">
+<span class="material-symbols-outlined text-[14px]">volume_up</span>
+</button>
+<!-- Close Button -->
+<button class="w-5 h-5 rounded hover:bg-surface-container-high flex items-center justify-center text-outline hover:text-on-surface" title="关闭标签页" type="button">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+<!-- Inactive Tab 1 (Hover Simulation) -->
+<div class="h-9 px-3 bg-surface-container-low hover:bg-surface-container-highest rounded-t-lg flex items-center gap-2 max-w-[210px] text-on-surface-variant cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-[16px] text-secondary flex-shrink-0">terminal</span>
+<span class="font-label-md text-label-md truncate flex-1">Rust Analyzer 2024</span>
+<button class="w-4 h-4 rounded opacity-0 group-hover:opacity-100 hover:bg-surface-container flex items-center justify-center text-outline hover:text-on-surface transition-opacity" type="button">
+<span class="material-symbols-outlined text-[13px]">close</span>
+</button>
+</div>
+<!-- Inactive Tab 2 (Playing Audio in background) -->
+<div class="h-9 px-3 bg-surface-container-low hover:bg-surface-container-highest rounded-t-lg flex items-center gap-2 max-w-[210px] text-on-surface-variant cursor-pointer transition-colors group">
+<span class="material-symbols-outlined text-[16px] text-outline flex-shrink-0">music_note</span>
+<span class="font-label-md text-label-md truncate flex-1">Lo-Fi Beats 4K</span>
+<!-- Audio badge -->
+<span class="px-1 py-0.2 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-code text-[9px] font-semibold">PLAY</span>
+<button class="w-4 h-4 rounded opacity-0 group-hover:opacity-100 hover:bg-surface-container flex items-center justify-center text-outline" type="button">
+<span class="material-symbols-outlined text-[13px]">close</span>
+</button>
+</div>
+<!-- New Tab Action Button -->
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface flex items-center justify-center transition-colors ml-1" title="新建标签页 (⌘T)" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</button>
+</div>
+</div>
+<!-- Tab State Token Matrix Detail Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<!-- Item A -->
+<div class="p-3.5 rounded-lg bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">固定标签 (Pinned)</span>
+<span class="font-label-code text-[10px] text-outline">40px Fixed</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">仅显示高清 Favicon，取消关闭十字，底部渲染 2px 活跃状态圆点，可拖拽锁定首位。</p>
+</div>
+<!-- Item B -->
+<div class="p-3.5 rounded-lg bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">音频指示与静音</span>
+<span class="font-label-code text-[10px] text-outline">Audio Hook</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">检测到 HTML5 WebAudio 输出时动态加载动效扬声器图标，单次点击直接下发 WebKit 进程静音指令。</p>
+</div>
+<!-- Item C -->
+<div class="p-3.5 rounded-lg bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">Tab 分组胶囊</span>
+<span class="font-label-code text-[10px] text-outline">Group Token</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">支持多色彩标签归集与一键收起折叠，内存自动在 15 分钟无激活后释放至虚拟睡眠态。</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= SECTION 03: OVERLAYS, POPOVERS & MENUS ================= -->
+<section class="flex flex-col gap-4" id="section-popovers">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">03</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">浮层、弹出菜单与上下文面板 (Overlays &amp; Popovers)</h2>
+</div>
+<span class="font-label-code text-label-code text-outline">Elevation Tier 2 &amp; Tier 3</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Card 1: Mini Bookmark Popover (Cmd+D) -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-md flex flex-col justify-between gap-4">
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-tertiary" style="font-variation-settings: 'FILL' 1;">star</span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">已添加至书签 (⌘D)</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-code text-[10px] text-outline">Popover</span>
+</div>
+<div class="flex flex-col gap-2.5">
+<!-- Title Field -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-[11px] text-on-surface-variant">书签名：</label>
+<input class="px-2.5 py-1.5 bg-surface-container-low rounded font-body-sm text-body-sm text-on-surface focus:outline-none focus:bg-surface-container-lowest transition-colors" type="text" value="Rust WebKit 跨平台渲染引擎演进手册">
+</div>
+<!-- Folder Picker -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-[11px] text-on-surface-variant">存储目录：</label>
+<div class="flex items-center justify-between px-2.5 py-1.5 bg-surface-container-low rounded cursor-pointer hover:bg-surface-container transition-colors">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-secondary">folder</span>
+<span class="font-body-sm text-body-sm text-on-surface">技术研发 / Rust 核心架构</span>
+</div>
+<span class="material-symbols-outlined text-[16px] text-outline">expand_more</span>
+</div>
+</div>
+<!-- Tags Chips -->
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-[11px] text-on-surface-variant">快捷标签：</label>
+<div class="flex flex-wrap items-center gap-1.5">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-code text-[11px] flex items-center gap-1">
+                    #tauri <span class="material-symbols-outlined text-[12px] text-outline cursor-pointer">close</span>
+</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-code text-[11px] flex items-center gap-1">
+                    #desktop <span class="material-symbols-outlined text-[12px] text-outline cursor-pointer">close</span>
+</span>
+<button class="px-2 py-0.5 rounded-full bg-surface-container hover:bg-surface-container-highest text-primary font-label-code text-[11px]" type="button">
+                    + 添加
+                  </button>
+</div>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<button class="text-error hover:text-error-container font-label-md text-label-md font-medium" type="button">移除书签</button>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 rounded bg-surface-container hover:bg-surface-container-high font-label-md text-label-md text-on-surface" type="button">修改更多</button>
+<button class="px-3.5 py-1 rounded bg-primary text-on-primary font-label-md text-label-md hover:bg-secondary-container shadow-sm" type="button">完成</button>
+</div>
+</div>
+</div>
+<!-- Card 2: Search Engine Switcher Context Menu -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-md flex flex-col justify-between gap-4">
+<div class="flex flex-col gap-2">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary">travel_explore</span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">搜索引擎快速切换器</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-code text-[10px] text-outline">Dropdown</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">支持在地址栏中键入前缀快速路由至不同聚合引擎。</p>
+<div class="flex flex-col gap-1 mt-2">
+<!-- Option 1: Selected -->
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg bg-surface-container-high cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary">check</span>
+<span class="font-label-md text-label-md font-medium text-on-surface">微软必应 (Bing)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-1 py-0.2 rounded bg-surface-container font-label-code text-[10px] text-outline">默认</span>
+<span class="font-label-code text-xs text-primary font-semibold">:b</span>
+</div>
+</div>
+<!-- Option 2 -->
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-center gap-2 pl-6">
+<span class="font-label-md text-label-md text-on-surface">谷歌 Google</span>
+</div>
+<span class="font-label-code text-xs text-outline">:g</span>
+</div>
+<!-- Option 3 -->
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-center gap-2 pl-6">
+<span class="font-label-md text-label-md text-on-surface">百度 Baidu</span>
+</div>
+<span class="font-label-code text-xs text-outline">:bd</span>
+</div>
+<!-- Option 4 -->
+<div class="flex items-center justify-between px-2.5 py-2 rounded-lg hover:bg-surface-container cursor-pointer transition-colors">
+<div class="flex items-center gap-2 pl-6">
+<span class="font-label-md text-label-md text-on-surface">DuckDuckGo 隐私引擎</span>
+</div>
+<span class="font-label-code text-xs text-outline">:ddg</span>
+</div>
+</div>
+</div>
+<div class="pt-2 flex items-center justify-between text-xs text-on-surface-variant font-label-md">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">tune</span> 引擎配置</span>
+<span class="text-primary hover:underline cursor-pointer">添加自定义 OpenSearch</span>
+</div>
+</div>
+<!-- Card 3: Downloads Floating Drawer Item Preview -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-md flex flex-col justify-between gap-4">
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between pb-1">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px] text-secondary">downloading</span>
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">下载管理器浮层</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-highest text-secondary font-label-code text-[10px]">1 项进行中</span>
+</div>
+<!-- Download Task 1: In Progress -->
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-center gap-2 min-w-0">
+<div class="w-7 h-7 rounded bg-surface-container-high flex items-center justify-center flex-shrink-0 text-primary">
+<span class="material-symbols-outlined text-[16px]">inventory_2</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-medium text-on-surface truncate">Tauri_SAB_x64_v2.4.0.dmg</span>
+<span class="font-label-code text-[11px] text-outline">42.2 MB / 48.0 MB · 3.8 MB/s</span>
+</div>
+</div>
+<button class="text-outline hover:text-error transition-colors" title="暂停/取消" type="button">
+<span class="material-symbols-outlined text-[16px]">close</span>
+</button>
+</div>
+<!-- Custom Smooth Progress Bar -->
+<div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-300" style="width: 88%;"></div>
+</div>
+<div class="flex items-center justify-between text-[11px] font-label-code text-outline pt-0.5">
+<span class="">剩余约 2 秒</span>
+<span class="text-primary font-medium">88%</span>
+</div>
+</div>
+<!-- Download Task 2: Completed -->
+<div class="p-3 rounded-lg bg-surface-container-low flex items-center justify-between gap-2">
+<div class="flex items-center gap-2 min-w-0">
+<div class="w-7 h-7 rounded bg-surface-container flex items-center justify-center flex-shrink-0 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px]">description</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-medium text-on-surface truncate">WebKit_v605_FTS5.sqlite</span>
+<span class="font-label-code text-[11px] text-outline">12.4 MB · 已完成</span>
+</div>
+</div>
+<button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-code text-[11px] flex items-center gap-1" type="button">
+<span class="">定位</span>
+<span class="material-symbols-outlined text-[12px]">folder_open</span>
+</button>
+</div>
+</div>
+<div class="pt-2 flex items-center justify-between">
+<span class="text-xs font-label-md text-on-surface-variant hover:text-on-surface cursor-pointer">清空已完成记录</span>
+<span class="text-xs font-label-code text-primary cursor-pointer hover:underline">打开下载总库 (⌘J)</span>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= SECTION 04: ACTIONS & FORM CONTROLS ================= -->
+<section class="flex flex-col gap-4" id="section-controls">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">04</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">基础操作与表单控件 (Buttons &amp; Inputs)</h2>
+</div>
+<span class="font-label-code text-label-code text-outline">Native OS Micro-Discipline</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Card Left: Button System Matrix -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-5">
+<div class="flex flex-col gap-1">
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">按钮层级矩阵 (Buttons Spec Matrix)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">严格统一 28px / 32px / 36px 规范，无边框设计，全以表面层级与交互微动效传达。</p>
+</div>
+<!-- Buttons Group 1: Primary, Secondary, Ghost, Destructive -->
+<div class="flex flex-col gap-4">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 items-center">
+<!-- Primary -->
+<div class="flex flex-col gap-1.5 items-center">
+<button class="w-full py-2 px-3 rounded-lg bg-primary hover:bg-secondary-container active:bg-primary-container text-on-primary font-label-md text-label-md font-medium transition-all shadow-sm" type="button">
+                  主要按钮
+                </button>
+<span class="font-label-code text-[10px] text-outline">Primary #2563eb</span>
+</div>
+<!-- Secondary -->
+<div class="flex flex-col gap-1.5 items-center">
+<button class="w-full py-2 px-3 rounded-lg bg-surface-container hover:bg-surface-container-high active:bg-surface-container-highest text-on-surface font-label-md text-label-md font-medium transition-all" type="button">
+                  次级按钮
+                </button>
+<span class="font-label-code text-[10px] text-outline">Tonal Surface</span>
+</div>
+<!-- Ghost Icon / Button -->
+<div class="flex flex-col gap-1.5 items-center">
+<button class="w-full py-2 px-3 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface font-label-md text-label-md font-medium transition-all" type="button">
+                  幽灵按钮
+                </button>
+<span class="font-label-code text-[10px] text-outline">Ghost / Flat</span>
+</div>
+<!-- Destructive -->
+<div class="flex flex-col gap-1.5 items-center">
+<button class="w-full py-2 px-3 rounded-lg bg-error-container hover:bg-error/20 text-on-error-container font-label-md text-label-md font-medium transition-all" type="button">
+                  清理缓存
+                </button>
+<span class="font-label-code text-[10px] text-outline">Destructive</span>
+</div>
+</div>
+<!-- Disabled & Loading States -->
+<div class="flex items-center gap-3 pt-2">
+<button class="py-1.5 px-3 rounded-lg bg-surface-container text-outline-variant font-label-md text-label-md cursor-not-allowed" disabled="" type="button">
+                已禁用 (Disabled)
+              </button>
+<button class="py-1.5 px-3 rounded-lg bg-primary-fixed text-on-primary-fixed font-label-md text-label-md flex items-center gap-2" type="button">
+<span class="material-symbols-outlined text-[16px] animate-spin">progress_activity</span>
+<span class="">核心重载中...</span>
+</button>
+<div class="flex items-center gap-1 ml-auto">
+<button class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">bookmark</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">history</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container hover:bg-surface-container-high flex items-center justify-center text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Card Right: Inputs, Switches & Selectors -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-5">
+<div class="flex flex-col gap-1">
+<span class="font-label-lg text-label-lg font-semibold text-on-surface">表单与配置切换项 (Form Controls)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">专为桌面设置面板设计的紧凑开关、单选组与实时过滤搜索栏。</p>
+</div>
+<div class="flex flex-col gap-4">
+<!-- Search Filter Bar with Clear -->
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[16px] text-outline">search</span>
+<input class="w-full pl-9 pr-16 py-2 bg-surface-container-low rounded-lg font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/20 transition-all" placeholder="快速过滤偏好设置或快捷键绑定..." type="text" value="硬件加速">
+<div class="absolute right-2 top-2 flex items-center gap-1">
+<span class="px-1.5 py-0.5 rounded bg-surface-container font-label-code text-[10px] text-outline">⌘F</span>
+</div>
+</div>
+<!-- Switches Matrix -->
+<div class="flex flex-col gap-3">
+<!-- Switch 1: ON -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-medium text-on-surface">独立沙箱安全隔离 (Sandbox Isolation)</span>
+<span class="font-body-sm text-[11px] text-outline">将第三方脚本执行权限严格限定在 WebKit Worker 沙箱</span>
+</div>
+<!-- Custom Native Switch (Active) -->
+<div class="w-10 h-5 bg-primary rounded-full p-0.5 cursor-pointer flex items-center justify-end transition-colors">
+<div class="w-4 h-4 bg-on-primary rounded-full shadow-sm"></div>
+</div>
+</div>
+<!-- Switch 2: OFF -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-medium text-on-surface">页面滚动弹性物理反弹 (Bouncing Scroll)</span>
+<span class="font-body-sm text-[11px] text-outline">还原 macOS 触控板平滑动量物理回弹效果</span>
+</div>
+<!-- Custom Native Switch (Inactive) -->
+<div class="w-10 h-5 bg-surface-container-highest rounded-full p-0.5 cursor-pointer flex items-center justify-start transition-colors">
+<div class="w-4 h-4 bg-on-primary rounded-full shadow-sm"></div>
+</div>
+</div>
+</div>
+<!-- Radio Option Controls -->
+<div class="flex flex-col gap-1.5 pt-1">
+<span class="font-label-md text-[11px] text-outline uppercase tracking-wider">启动时恢复状态：</span>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-high cursor-pointer">
+<span class="w-4 h-4 rounded-full bg-primary flex items-center justify-center">
+<span class="w-1.5 h-1.5 rounded-full bg-on-primary"></span>
+</span>
+<span class="font-body-sm text-body-sm text-on-surface font-medium">恢复上次打开的标签页</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg bg-surface-container-low hover:bg-surface-container cursor-pointer transition-colors">
+<span class="w-4 h-4 rounded-full bg-surface-container-highest flex items-center justify-center"></span>
+<span class="font-body-sm text-body-sm text-on-surface">始终打开新空白页</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= SECTION 05: BADGES & TOAST FEEDBACK ================= -->
+<section class="flex flex-col gap-4" id="section-feedback">
+<div class="flex items-center justify-between pb-2">
+<div class="flex items-center gap-3">
+<span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">05</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">状态指示器与轻量反馈 (Feedback &amp; Status Badges)</h2>
+</div>
+<span class="font-label-code text-label-code text-outline">Local SQLite Synced</span>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-6">
+<!-- Badges Gallery -->
+<div class="flex flex-col gap-3">
+<span class="font-label-md text-label-md font-semibold text-on-surface">系统状态徽标体系 (System Engine Badges)</span>
+<div class="flex flex-wrap items-center gap-3">
+<!-- Badge 1: Success -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-fixed text-on-primary-fixed font-label-code text-label-code font-medium">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="">双引擎就绪 · WebKit 605.1</span>
+</div>
+<!-- Badge 2: SQLite WAL Active -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-code text-label-code font-medium">
+<span class="material-symbols-outlined text-[14px]">database</span>
+<span class="">SQLite WAL 模式 · 延迟 0.12ms</span>
+</div>
+<!-- Badge 3: Warning/Pending -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-code text-label-code font-medium">
+<span class="material-symbols-outlined text-[14px]">drive_file_rename_outline</span>
+<span class="">待整理书签 · 14 项未分类</span>
+</div>
+<!-- Badge 4: Offline Sandbox -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-highest text-on-surface font-label-code text-label-code">
+<span class="material-symbols-outlined text-[14px]">shield</span>
+<span class="">离线零网络跟踪沙箱</span>
+</div>
+</div>
+</div>
+<!-- Micro Toast Floating Demo Section -->
+<div class="flex flex-col gap-3 pt-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-semibold text-on-surface">原生轻提示条 (Desktop Micro Toast)</span>
+<span class="font-label-code text-[11px] text-outline">Auto-Dismiss: 3500ms</span>
+</div>
+<!-- Micro Toast Container Preview -->
+<div class="w-full bg-surface-container-low p-4 rounded-xl flex items-center justify-center">
+<div class="max-w-xl w-full bg-inverse-surface text-inverse-on-surface px-4 py-2.5 rounded-lg shadow-xl flex items-center justify-between gap-4">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-primary-fixed">check_circle</span>
+<span class="font-body-sm text-body-sm font-medium">已同步至本地 SQLite 数据库 · 延迟 0.12ms (WAL Commit)</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2 py-0.5 rounded bg-surface-container-highest/20 hover:bg-surface-container-highest/30 text-inverse-on-surface font-label-code text-xs font-medium transition-colors" type="button">
+                  撤销 (⌘Z)
+                </button>
+<button class="w-5 h-5 flex items-center justify-center text-outline hover:text-inverse-on-surface" type="button">
+<span class="material-symbols-outlined text-[14px]">close</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= SECTION 06: CONTEXT MENUS ================= --><section class="flex flex-col gap-4" id="section-context-menus"><div class="flex items-center justify-between pb-2"><div class="flex items-center gap-3"><span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">06</span><h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">右键上下文菜单 (Context Menus &amp; Overlays)</h2></div><span class="font-label-code text-label-code text-outline">Desktop Native Feel · Backdrop Blur &amp; Separators</span></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><!-- Menu 1: Page General Context Menu --><div class="bg-surface-container-lowest p-5 rounded-xl shadow-sm flex flex-col gap-3"><div class="flex items-center justify-between pb-1"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary">web</span><span class="font-label-lg text-label-lg font-semibold text-on-surface">网页正文通用菜单</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container font-label-code text-[10px] text-outline">Page Context</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">空白处右击触发，支持基础历史导航、离线另存与 WebKit 检查器。</p><div class="w-full bg-surface-container-low p-3 rounded-xl flex items-center justify-center"><div class="w-full max-w-[240px] bg-surface-container-lowest rounded-xl shadow-xl p-1.5 flex flex-col gap-0.5 text-on-surface select-none"><div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-outline">arrow_back</span><span class="font-body-sm text-body-sm">返回</span></div><span class="font-label-code text-[11px] text-outline">⌘[</span></div><div class="px-2.5 py-1.5 rounded-lg opacity-40 flex items-center justify-between cursor-not-allowed"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-outline">arrow_forward</span><span class="font-body-sm text-body-sm">前进</span></div><span class="font-label-code text-[11px] text-outline">⌘]</span></div><div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-outline">refresh</span><span class="font-body-sm text-body-sm">重新加载</span></div><span class="font-label-code text-[11px] text-outline">⌘R</span></div><div class="h-px bg-surface-container my-1"></div><div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-tertiary">star</span><span class="font-body-sm text-body-sm">将本页加入书签</span></div><span class="font-label-code text-[11px] text-outline">⌘D</span></div><div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-outline">lock</span><span class="font-body-sm text-body-sm">无痕窗口中重新打开</span></div></div><div class="h-px bg-surface-container my-1"></div><div class="px-2.5 py-1.5 rounded-lg hover:bg-surface-container flex items-center justify-between cursor-pointer transition-colors"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-outline">code</span><span class="font-body-sm text-body-sm">查看网页源代码</span></div><span class="font-label-code text-[11px] text-outline">⌥⌘U</span></div><div class="px-2.5 py-1.5 rounded-lg bg-surface-container-high flex items-center justify-between cursor-pointer"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[15px] text-primary">developer_mode</span><span class="font-body-sm text-body-sm font-medium text-primary">检查元素</span></div><span class="font-label-code text-[11px] text-primary font-medium">⌥⌘I</span></div></div></div></div><!-- Menu 2: Tab & Link Context Menu --></div></section><section class="flex flex-col gap-4" id="section-downloads-states"><div class="flex items-center justify-between pb-2"><div class="flex items-center gap-3"><span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">08</span><h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">下载进度与多态管理体系 (Download Progress &amp; Manager States)</h2></div><span class="font-label-code text-label-code text-outline">Stream &amp; Chunk Protocol · SHA-256 Checksum</span></div><div class="grid grid-cols-1 lg:grid-cols-12 gap-6"><div class="lg:col-span-12 bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-6"><div class="flex flex-col gap-1"><span class="font-label-lg text-label-lg font-semibold text-on-surface">多态下载项矩阵规范 (Download Task State Matrix)</span><p class="font-body-sm text-body-sm text-on-surface-variant">涵盖进行中、暂停挂起、安全沙箱哈希校验、已完成就绪以及网络故障重试 5 大生命周期状态。</p></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-3"><div class="flex items-start justify-between gap-3"><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-primary flex-shrink-0"><span class="material-symbols-outlined text-[20px]">downloading</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2"><span class="font-label-md text-label-md font-semibold text-on-surface truncate">libwebkit2gtk-4.1.tar.xz</span><span class="px-1.5 py-0.2 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[10px] font-medium">68% 下载中</span></div><span class="font-label-code text-[11px] text-outline mt-0.5">142.8 MB / 210.0 MB · 12.4 MB/s · 剩余 5 秒</span></div></div><div class="flex items-center gap-1"><button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-on-surface-variant hover:text-on-surface transition-colors" title="暂停下载" type="button"><span class="material-symbols-outlined text-[16px]">pause</span></button><button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-outline hover:text-error transition-colors" title="取消任务" type="button"><span class="material-symbols-outlined text-[16px]">close</span></button></div></div><div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden"><div class="h-full bg-primary rounded-full transition-all duration-300" style="width: 68%;"></div></div><div class="flex items-center justify-between text-[11px] font-label-code text-outline"><span class="flex items-center gap-1 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> 双通道 HTTP/3 并发分块传输</span><span class="">PID: 88412</span></div></div><div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-3"><div class="flex items-start justify-between gap-3"><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-lg bg-surface-container-high flex items-center justify-center text-outline flex-shrink-0"><span class="material-symbols-outlined text-[20px]">pause_circle</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2"><span class="font-label-md text-label-md font-semibold text-on-surface truncate">Xcode_Toolchain_16.0.pkg</span><span class="px-1.5 py-0.2 rounded bg-surface-container-highest text-on-surface-variant font-label-code text-[10px]">已暂停</span></div><span class="font-label-code text-[11px] text-outline mt-0.5">2.18 GB / 4.60 GB · 用户手动挂起</span></div></div><div class="flex items-center gap-1"><button class="w-7 h-7 rounded bg-primary-fixed text-on-primary-fixed hover:bg-primary-fixed-dim flex items-center justify-center transition-colors" title="继续下载" type="button"><span class="material-symbols-outlined text-[16px]">play_arrow</span></button><button class="w-7 h-7 rounded hover:bg-surface-container flex items-center justify-center text-outline hover:text-error transition-colors" title="取消任务" type="button"><span class="material-symbols-outlined text-[16px]">close</span></button></div></div><div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden"><div class="h-full bg-outline rounded-full" style="width: 47%;"></div></div><div class="flex items-center justify-between text-[11px] font-label-code text-outline"><span class="">断点续传支持：Accept-Ranges (bytes)</span><span class="">47.4%</span></div></div><div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-3"><div class="flex items-start justify-between gap-3"><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary flex-shrink-0"><span class="material-symbols-outlined text-[20px] animate-spin">sync</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2"><span class="font-label-md text-label-md font-semibold text-on-surface truncate">rustc-nightly-x86_64-apple-darwin.tar.gz</span><span class="px-1.5 py-0.2 rounded bg-secondary-fixed text-on-secondary-fixed font-label-code text-[10px] font-medium">哈希校验中</span></div><span class="font-label-code text-[11px] text-outline mt-0.5">186.4 MB · 正在验证 SHA-256 签名完整性...</span></div></div><span class="material-symbols-outlined text-secondary text-[18px]">verified_user</span></div><div class="w-full h-1.5 rounded-full bg-surface-container overflow-hidden"><div class="h-full bg-secondary rounded-full animate-pulse" style="width: 95%;"></div></div><div class="flex items-center justify-between text-[11px] font-label-code text-outline"><span class="text-secondary">沙箱安全隔离中</span><span class="font-mono text-[10px]">SHA: e3b0c442...98fc</span></div></div><div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-3"><div class="flex items-start justify-between gap-3"><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary flex-shrink-0"><span class="material-symbols-outlined text-[20px]">task_alt</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2"><span class="font-label-md text-label-md font-semibold text-on-surface truncate">Tauri_Studio_v2.1_arm64.dmg</span><span class="px-1.5 py-0.2 rounded bg-surface-container-high text-primary font-label-code text-[10px] font-medium">已完成</span></div><span class="font-label-code text-[11px] text-outline mt-0.5">88.5 MB · 今天 10:14 · 安全无威胁</span></div></div><div class="flex items-center gap-1.5"><button class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-code text-[11px] hover:bg-secondary-container transition-colors shadow-sm" type="button">打开文件</button><button class="p-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface-variant" title="在文件夹中显示" type="button"><span class="material-symbols-outlined text-[16px]">folder_open</span></button></div></div><div class="w-full h-1.5 rounded-full bg-primary"></div><div class="flex items-center justify-between text-[11px] font-label-code text-outline"><span class="">存储位置：~/Downloads</span><span class="text-primary">100% Complete</span></div></div></div><div class="p-3.5 rounded-lg bg-error-container/30 flex items-center justify-between gap-4"><div class="flex items-center gap-3 min-w-0"><div class="w-8 h-8 rounded-lg bg-error-container text-error flex items-center justify-center flex-shrink-0"><span class="material-symbols-outlined text-[18px]">error_outline</span></div><div class="flex flex-col min-w-0"><div class="flex items-center gap-2"><span class="font-label-md text-label-md font-semibold text-on-surface truncate">llvm-darwin-x64-debug.symbols.zip</span><span class="px-1.5 py-0.2 rounded bg-error-container text-error font-label-code text-[10px] font-medium">连接中断</span></div><span class="font-body-sm text-[11px] text-outline">ERR_CONNECTION_RESET · 远端服务器提前关闭 TCP 流 · 已下载 312.4 MB</span></div></div><div class="flex items-center gap-2 flex-shrink-0"><button class="px-2.5 py-1 rounded bg-error text-on-error font-label-code text-[11px] flex items-center gap-1 shadow-sm hover:opacity-90 transition-opacity" type="button"><span class="material-symbols-outlined text-[14px]">replay</span> 重新尝试</button><button class="px-2 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-code text-[11px]" type="button">取消</button></div></div></div></div></section><section class="flex flex-col gap-4" id="section-notifications"><div class="flex items-center justify-between pb-2"><div class="flex items-center gap-3"><span class="px-2 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-code text-[12px] font-medium">09</span><h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">桌面浮动通知气泡与交互 Toast (Floating Notification Bubbles &amp; In-App Alerts)</h2></div><span class="font-label-code text-label-code text-outline">Elevation Tier 3 · Native Backdrop Blur</span></div><div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="bg-surface-container-lowest p-5 rounded-xl shadow-lg flex flex-col justify-between gap-4"><div class="flex flex-col gap-3"><div class="flex items-center justify-between pb-1"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-primary">task_alt</span><span class="font-label-lg text-label-lg font-semibold text-on-surface">下载完成通知气泡</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container font-label-code text-[10px] text-outline">Bubble #1</span></div><div class="p-3 rounded-lg bg-surface-container-low flex items-start gap-3"><div class="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary flex-shrink-0"><span class="material-symbols-outlined text-[20px]">archive</span></div><div class="flex flex-col min-w-0 flex-1"><div class="flex items-center justify-between"><span class="font-label-md text-label-md font-semibold text-on-surface truncate">Tauri_SAB_x64.dmg</span><span class="text-[10px] font-label-code text-outline">刚刚</span></div><span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">48.0 MB · 文件已通过安全验证并就绪</span></div></div></div><div class="flex items-center justify-between pt-1"><button class="text-outline hover:text-on-surface font-label-code text-[11px] transition-colors" type="button">稍后处理</button><div class="flex items-center gap-1.5"><button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-code text-[11px] transition-colors" type="button">在访达中显示</button><button class="px-3 py-1 rounded bg-primary text-on-primary font-label-code text-[11px] hover:bg-secondary-container transition-colors shadow-sm" type="button">直接打开</button></div></div></div><div class="bg-surface-container-lowest p-5 rounded-xl shadow-lg flex flex-col justify-between gap-4"><div class="flex flex-col gap-3"><div class="flex items-center justify-between pb-1"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-secondary">security</span><span class="font-label-lg text-label-lg font-semibold text-on-surface">网页权限授权询问气泡</span></div><span class="px-1.5 py-0.5 rounded bg-surface-container font-label-code text-[10px] text-outline">Permission</span></div><div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-2.5"><div class="flex items-start gap-2.5"><div class="w-8 h-8 rounded-lg bg-secondary-fixed flex items-center justify-center text-secondary flex-shrink-0"><span class="material-symbols-outlined text-[18px]">location_on</span></div><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md font-semibold text-on-surface">maps.workbench.internal 正在请求获取：</span><div class="flex items-center gap-1.5 mt-1"><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-label-code text-[10px]">精确地理位置</span><span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-label-code text-[10px]">系统桌面通知</span></div></div></div><p class="font-body-sm text-[11px] text-outline leading-tight">该站点将通过 WebKit Geolocation API 获取粗略位置数据，可随时在站点控制板撤回。</p></div></div><div class="flex items-center justify-between pt-1 gap-1"><button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-error font-label-code text-[11px] transition-colors" type="button">拒绝</button><div class="flex items-center gap-1.5"><button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-code text-[11px] transition-colors" type="button">本次允许</button><button class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-code text-[11px] hover:bg-secondary-container transition-colors shadow-sm" type="button">始终允许</button></div></div></div><div class="bg-surface-container-lowest p-5 rounded-xl shadow-lg flex flex-col justify-between gap-4"><div class="flex flex-col gap-3"><div class="flex items-center justify-between pb-1"><div class="flex items-center gap-2"><span class="material-symbols-outlined text-[18px] text-tertiary">shield_with_heart</span><span class="font-label-lg text-label-lg font-semibold text-on-surface">未知可执行文件拦截警告</span></div><span class="px-1.5 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-code text-[10px] font-semibold">Sandbox Alert</span></div><div class="p-3 rounded-lg bg-tertiary-fixed/20 flex flex-col gap-2"><div class="flex items-start gap-2.5"><div class="w-8 h-8 rounded-lg bg-tertiary-fixed flex items-center justify-center text-tertiary flex-shrink-0"><span class="material-symbols-outlined text-[18px]">warning</span></div><div class="flex flex-col min-w-0"><span class="font-label-md text-label-md font-semibold text-on-surface truncate">setup-driver-x86.exe</span><span class="font-body-sm text-[11px] text-tertiary font-medium mt-0.5">未检测到合规数字签名证书</span></div></div><p class="font-body-sm text-[11px] text-on-surface-variant leading-tight">可执行文件可能包含潜在攻击载荷，轻页 SAB 已将其隔离在只读临时沙箱中。</p></div></div><div class="flex items-center justify-between pt-1"><button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-on-surface font-label-code text-[11px] transition-colors" type="button">更多详情</button><div class="flex items-center gap-1.5"><button class="px-2.5 py-1 rounded bg-surface-container hover:bg-surface-container-high text-outline hover:text-error font-label-code text-[11px] transition-colors" type="button">丢弃文件</button><button class="px-3 py-1 rounded bg-tertiary text-on-tertiary font-label-code text-[11px] hover:opacity-90 transition-opacity shadow-sm" type="button">仍要放行保存</button></div></div></div></div></section></div>
+</div></main><footer class="w-full bg-surface-container-lowest py-space-xl shadow-[0_-1px_6px_rgba(0,0,0,0.02)]"><div class="w-full px-space-xl flex items-center justify-between font-label-md text-label-md text-on-surface-variant"><span class="">轻页 SAB · 极简原生桌面端浏览器环境</span><div class="flex items-center gap-space-xl"><span class="font-label-code text-label-code">WebKit 605.1 / Blink Dual Engine</span><span class="hover:text-on-surface cursor-pointer">隐私与安全</span><span class="hover:text-on-surface cursor-pointer">快捷键手册</span></div></div></footer>
+
+</body></html>

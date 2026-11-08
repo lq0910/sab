@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>设置 - 轻页 SAB</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#0058be",
+            "primary-hover": "#004ac6",
+            "primary-container": "#e0edff",
+            surface: "#ffffff",
+            "page-bg": "#f8fafc",
+            "page-alt": "#f1f5f9"
+          },
+          fontFamily: {
+            sans: ["Hanken Grotesk", "system-ui", "-apple-system", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-page-bg text-slate-800 font-sans antialiased select-none min-h-screen flex flex-col">
+<!-- ================= Chrome 风格顶部导航条 (无全局左侧栏) ================= -->
+<header class="sticky top-0 z-50 bg-[#eef2f6] border-b border-slate-200 shrink-0">
+<!-- 1. 顶部标签栏 + macOS 交通灯 -->
+<div class="h-10 px-3 flex items-center gap-2">
+<!-- 交通灯控制点 -->
+<div class="flex items-center gap-2 pr-3">
+<span class="w-3 h-3 rounded-full bg-[#ff5f56] border border-[#e0443e] cursor-pointer opacity-90 hover:opacity-100 transition-opacity"></span>
+<span class="w-3 h-3 rounded-full bg-[#ffbd2e] border border-[#dea123] cursor-pointer opacity-90 hover:opacity-100 transition-opacity"></span>
+<span class="w-3 h-3 rounded-full bg-[#27c93f] border border-[#1aab29] cursor-pointer opacity-90 hover:opacity-100 transition-opacity"></span>
+</div>
+<!-- 标签页集合 -->
+<div class="flex items-center gap-1.5 flex-1 overflow-x-auto">
+<!-- 激活标签：设置 -->
+<div class="h-8 px-3.5 bg-white border border-slate-200/90 rounded-t-lg border-b-white -mb-[1px] flex items-center gap-2 min-w-[160px] max-w-[210px] shadow-[0_-1px_3px_rgba(0,0,0,0.02)]">
+<span class="material-symbols-outlined text-primary text-[17px]">settings</span>
+<span class="text-xs font-semibold text-slate-800 truncate flex-1">设置 - 轻页 SAB</span>
+<button class="text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full w-4 h-4 flex items-center justify-center transition-colors" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<!-- 非激活标签：工作区 -->
+<div class="h-8 px-3.5 bg-transparent hover:bg-slate-200/60 rounded-t-lg flex items-center gap-2 min-w-[130px] max-w-[180px] transition-colors cursor-pointer text-slate-600">
+<span class="material-symbols-outlined text-[16px] text-slate-400">grid_view</span>
+<span class="text-xs font-medium truncate flex-1">工作区 Workbench</span>
+<button class="text-slate-400 hover:text-slate-700 hover:bg-slate-200 rounded-full w-4 h-4 flex items-center justify-center" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<!-- 新建标签按钮 -->
+<button class="w-7 h-7 flex items-center justify-center rounded-md text-slate-500 hover:bg-slate-200/80 hover:text-slate-800 transition-colors ml-0.5" title="新建标签页" type="button">
+<span class="material-symbols-outlined text-sm">add</span>
+</button>
+</div>
+<!-- 右侧控制区/头像 -->
+<div class="flex items-center gap-2 pl-2">
+<button class="w-7 h-7 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200/70" title="窗口设置">
+<span class="material-symbols-outlined text-[17px]">minimize</span>
+</button>
+<button class="w-7 h-7 rounded-full flex items-center justify-center text-slate-500 hover:bg-slate-200/70" title="最大化">
+<span class="material-symbols-outlined text-[15px]">crop_square</span>
+</button>
+</div>
+</div>
+<!-- 2. 现代 Chrome 导航工具条 + 全圆角药丸地址栏 -->
+<div class="h-12 px-4 flex items-center gap-2.5 bg-white border-t border-slate-200/80">
+<div class="flex items-center gap-1 text-slate-600">
+<button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors" title="后退" type="button">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full text-slate-300 cursor-not-allowed" title="前进" type="button">
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors" title="重新加载" type="button">
+<span class="material-symbols-outlined text-lg">refresh</span>
+</button>
+</div>
+<!-- 全圆角药丸地址栏 (rounded-full) -->
+<div class="flex-1 max-w-3xl mx-auto flex items-center h-8 px-4 rounded-full bg-[#edf2f7] border border-slate-200/80 hover:border-slate-300 focus-within:bg-white focus-within:border-primary focus-within:ring-2 focus-within:ring-blue-100 transition-all gap-2 text-xs text-slate-700">
+<span class="material-symbols-outlined text-primary text-[16px]">tune</span>
+<span class="font-mono text-slate-400 select-none">sab://</span>
+<input class="w-full bg-transparent font-medium text-slate-800 placeholder:text-slate-400 focus:outline-none text-xs" readonly="" type="text" value="settings/general"/>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-200/80 text-slate-500">内置页面</span>
+</div>
+<div class="flex items-center gap-1 text-slate-600">
+<button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors" title="扩展工具" type="button">
+<span class="material-symbols-outlined text-lg">extension</span>
+</button>
+<div class="w-7 h-7 rounded-full bg-blue-100 border border-blue-200 text-primary font-bold text-xs flex items-center justify-center ml-1">
+          lq
+        </div>
+<button class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors" title="主菜单" type="button">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+</header>
+<!-- ================= Chrome 标准经典双栏设置页主区域 ================= -->
+<div class="flex-1 flex max-w-6xl w-full mx-auto px-6 py-8 gap-8 items-start">
+<!-- 左侧：设置垂直导航菜单 (固定/黏性 Chrome 侧边栏结构，宽 ~250px) -->
+<aside class="w-60 shrink-0 sticky top-24 space-y-6">
+<div class="flex items-center gap-2.5 px-3 mb-4">
+<div class="w-7 h-7 rounded-md bg-primary text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[17px]">settings</span>
+</div>
+<span class="font-bold text-base text-slate-900 tracking-tight">系统设置</span>
+</div>
+<nav class="space-y-1 font-medium text-xs">
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-full bg-blue-50 text-primary font-semibold transition-colors" href="#section-startup">
+<span class="material-symbols-outlined text-lg">rocket_launch</span>
+<span>启动行为与主页</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#section-search">
+<span class="material-symbols-outlined text-lg">search</span>
+<span>搜索引擎</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#section-bookmarks">
+<span class="material-symbols-outlined text-lg">sync_alt</span>
+<span>书签迁移与导入</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#section-default-browser">
+<span class="material-symbols-outlined text-lg">verified_user</span>
+<span>默认浏览器</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#section-privacy">
+<span class="material-symbols-outlined text-lg">shield_lock</span>
+<span>隐私与本地沙箱</span>
+</a>
+<a class="flex items-center gap-3 px-3.5 py-2.5 rounded-full text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" href="#section-about">
+<span class="material-symbols-outlined text-lg">info</span>
+<span>关于轻页 SAB</span>
+</a>
+</nav>
+<div class="px-3 pt-4 border-t border-slate-200">
+<div class="p-3 rounded-xl bg-slate-100/80 text-[11px] text-slate-500 leading-relaxed">
+<div class="flex items-center gap-1.5 font-semibold text-slate-700 mb-1">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            本地 SQLite 状态已同步
+          </div>
+          所有配置在编辑后即刻写入本地持久化，无任何第三方云端遥测。
+        </div>
+</div>
+</aside>
+<!-- 右侧：Chrome 标准宽体设置内容主区域 (~720px 居中开阔感) -->
+<main class="flex-1 max-w-[740px] space-y-8 pb-16">
+<!-- 1. 启动行为与主页 -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5" id="section-startup">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div class="flex items-center gap-2.5 text-slate-900">
+<span class="material-symbols-outlined text-primary text-xl">rocket_launch</span>
+<h2 class="text-base font-bold">启动行为与新标签页</h2>
+</div>
+<span class="text-xs text-slate-400 font-mono">startup.mode</span>
+</div>
+<p class="text-xs text-slate-500 -mt-2">
+          决定轻页在冷启动或键入快捷键唤醒新窗口时的首屏承载策略。
+        </p>
+<!-- 单选列表 (Chrome 风格) -->
+<div class="space-y-2.5 text-xs" id="startup-options">
+<!-- 选项 1: 极简搜索主页 (激活) -->
+<label class="flex items-start gap-3.5 p-3.5 rounded-xl border border-blue-200 bg-blue-50/50 cursor-pointer transition-all hover:border-primary/50">
+<input checked="" class="mt-0.5 w-4 h-4 text-primary focus:ring-primary accent-primary" name="startup-mode" type="radio" value="minimal-search"/>
+<div class="space-y-0.5 flex-1">
+<div class="font-semibold text-slate-900 flex items-center justify-between">
+<span>打开极简搜索主页 (默认)</span>
+<span class="text-[11px] text-primary font-mono font-medium">冷启动 ≤ 12ms</span>
+</div>
+<p class="text-slate-500">纯粹聚焦居中 Omnibar 搜索胶囊，首屏零视觉打扰，键盘自动聚焦至输入框。</p>
+</div>
+</label>
+<!-- 选项 2: 收藏书签看板 -->
+<label class="flex items-start gap-3.5 p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition-all">
+<input class="mt-0.5 w-4 h-4 text-primary focus:ring-primary accent-primary" name="startup-mode" type="radio" value="bookmarks-grid"/>
+<div class="space-y-0.5 flex-1">
+<div class="font-semibold text-slate-800">打开收藏书签看板主页</div>
+<p class="text-slate-500">平铺高频书签矩阵与多级分类树，无需调用侧边栏即可直达常用生产力工具。</p>
+</div>
+</label>
+<!-- 选项 3: 恢复上次会话 -->
+<label class="flex items-start gap-3.5 p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition-all">
+<input class="mt-0.5 w-4 h-4 text-primary focus:ring-primary accent-primary" name="startup-mode" type="radio" value="restore-session"/>
+<div class="space-y-0.5 flex-1">
+<div class="font-semibold text-slate-800">恢复上次退出的所有会话</div>
+<p class="text-slate-500">从本地快照还原上次关闭时的全部工作区与固定标签，保留滚动进度与上下文状态。</p>
+</div>
+</label>
+<!-- 选项 4: 自定义网址 -->
+<label class="flex items-start gap-3.5 p-3.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 cursor-pointer transition-all">
+<input class="mt-0.5 w-4 h-4 text-primary focus:ring-primary accent-primary" name="startup-mode" type="radio" value="custom-url"/>
+<div class="space-y-2 flex-1">
+<div class="font-semibold text-slate-800">打开特定网页或一组网页</div>
+<input class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:bg-white focus:ring-1 focus:ring-primary/20 transition-all font-mono" placeholder="https://workspace.internal/dash" type="text"/>
+</div>
+</label>
+</div>
+</section>
+<!-- 2. 搜索引擎 -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5" id="section-search">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div class="flex items-center gap-2.5 text-slate-900">
+<span class="material-symbols-outlined text-primary text-xl">travel_explore</span>
+<h2 class="text-base font-bold">搜索引擎</h2>
+</div>
+<span class="text-xs text-slate-400 font-mono">search.engine</span>
+</div>
+<div class="flex items-center justify-between py-1">
+<div>
+<div class="text-xs font-semibold text-slate-800">地址栏中使用的全局默认搜索引擎</div>
+<div class="text-xs text-slate-500 mt-0.5">在顶部全圆角地址栏中直接键入关键字并回车即可直达搜索结果。</div>
+</div>
+<div class="w-48">
+<select class="w-full text-xs font-medium bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-slate-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+<option selected="" value="bing">必应 (Bing)</option>
+<option value="baidu">百度 (Baidu)</option>
+<option value="google">Google</option>
+<option value="duckduckgo">DuckDuckGo</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-2 pt-2 border-t border-slate-100">
+<div class="p-2.5 rounded-xl border border-blue-200 bg-blue-50/50 flex items-center justify-between text-xs">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-base">travel_explore</span>
+<span class="font-medium text-slate-800">必应 Bing</span>
+</div>
+<span class="text-[10px] bg-primary/10 text-primary px-1.5 py-0.2 rounded font-medium">默认</span>
+</div>
+<div class="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-between text-xs transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-base">search</span>
+<span class="font-medium text-slate-700">百度 Baidu</span>
+</div>
+<span class="text-[11px] font-mono text-slate-400">:bd</span>
+</div>
+<div class="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-between text-xs transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-base">public</span>
+<span class="font-medium text-slate-700">Google</span>
+</div>
+<span class="text-[11px] font-mono text-slate-400">:g</span>
+</div>
+<div class="p-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-between text-xs transition-colors cursor-pointer">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 text-base">shield</span>
+<span class="font-medium text-slate-700">DuckDuckGo</span>
+</div>
+<span class="text-[11px] font-mono text-slate-400">:ddg</span>
+</div>
+</div>
+</section>
+<!-- 3. 书签迁移与导入 (核心区域) -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5" id="section-bookmarks">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-slate-100">
+<div>
+<div class="flex items-center gap-2.5 text-slate-900">
+<span class="material-symbols-outlined text-primary text-xl">sync_alt</span>
+<h2 class="text-base font-bold">书签迁移与导入工作台</h2>
+</div>
+<p class="text-xs text-slate-500 mt-1">一键从系统已安装浏览器或备份文件中无损还原层级树状目录与图标。</p>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium text-xs flex items-center gap-1.5 transition-colors shadow-xs" id="import-chrome" type="button">
+<span class="material-symbols-outlined text-[15px] text-blue-600">cloud_download</span>
+<span>从 Chrome 导入</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium text-xs flex items-center gap-1.5 transition-colors shadow-xs" id="import-edge" type="button">
+<span class="material-symbols-outlined text-[15px] text-sky-600">swap_horiz</span>
+<span>从 Edge 导入</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white font-medium text-xs flex items-center gap-1.5 transition-colors shadow-xs" id="import-html" type="button">
+<span class="material-symbols-outlined text-[15px]">file_upload</span>
+<span>导入 HTML</span>
+</button>
+</div>
+</div>
+<!-- 迁移状态卡片 -->
+<div class="p-4 rounded-xl bg-slate-50 border border-slate-200/90 space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-blue-100 text-primary flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-xl">fact_check</span>
+</div>
+<div>
+<h3 class="text-xs font-bold text-slate-900">Chrome Default Profile 已完成深度解析</h3>
+<p class="font-mono text-[11px] text-slate-500">LocalState: Registered · 智能排重策略已生效</p>
+</div>
+</div>
+<div class="flex items-center gap-4 text-right">
+<div>
+<span class="text-[10px] text-slate-400 block uppercase">解析书签</span>
+<span class="text-base font-bold text-primary font-mono">1,280 <span class="text-[11px] font-normal text-slate-500">项</span></span>
+</div>
+<div class="border-l border-slate-200 pl-4">
+<span class="text-[10px] text-slate-400 block uppercase">排重过滤</span>
+<span class="text-base font-bold text-amber-600 font-mono">42 <span class="text-[11px] font-normal text-slate-500">条</span></span>
+</div>
+</div>
+</div>
+<!-- 层级树预览容器 -->
+<div class="rounded-lg bg-white border border-slate-200 overflow-hidden text-xs">
+<div class="px-3 py-2 bg-slate-100/70 border-b border-slate-200 flex justify-between items-center font-mono text-[11px] text-slate-500">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px]">account_tree</span>
+                层级树结构预览 (保留完整深层嵌套)
+              </span>
+<span>条目总数</span>
+</div>
+<div class="p-2 space-y-1 font-sans">
+<div class="flex items-center justify-between p-1.5 rounded hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-2 text-slate-800 font-medium">
+<span class="material-symbols-outlined text-base text-primary">folder</span>
+<span>书签栏 (Bookmarks Bar)</span>
+</div>
+<span class="font-mono text-[11px] text-slate-400">984 条</span>
+</div>
+<div class="flex items-center justify-between p-1.5 pl-6 rounded hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-2 text-slate-700">
+<span class="material-symbols-outlined text-base text-slate-400">folder_open</span>
+<span>研发知识库与 Rust 官方标准库</span>
+</div>
+<span class="font-mono text-[11px] text-slate-400">320 条</span>
+</div>
+<div class="flex items-center justify-between p-1 pl-10 rounded hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-2 text-slate-600">
+<span class="material-symbols-outlined text-xs text-slate-400">bookmark</span>
+<span class="truncate">The Rust Reference (2024 Edition)</span>
+</div>
+<span class="font-mono text-[11px] text-slate-400">doc.rust-lang.org</span>
+</div>
+<div class="flex items-center justify-between p-1.5 pl-6 rounded hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-2 text-slate-700">
+<span class="material-symbols-outlined text-base text-slate-400">folder_open</span>
+<span>财务报表与合规研报库</span>
+</div>
+<span class="font-mono text-[11px] text-slate-400">188 条</span>
+</div>
+<div class="flex items-center justify-between p-1.5 rounded hover:bg-slate-50 transition-colors">
+<div class="flex items-center gap-2 text-slate-800 font-medium">
+<span class="material-symbols-outlined text-base text-primary">folder</span>
+<span>其他收藏 (Other Bookmarks)</span>
+</div>
+<span class="font-mono text-[11px] text-slate-400">254 条</span>
+</div>
+</div>
+</div>
+<!-- 底部控制按钮组 -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1">
+<div class="flex items-center gap-1.5 text-slate-500 text-xs">
+<span class="material-symbols-outlined text-emerald-600 text-base">verified</span>
+<span>已剔除 UTM 营销跟踪参数，保持书签链接简洁纯净</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 font-medium text-xs flex items-center gap-1 transition-colors" id="undo-btn" type="button">
+<span class="material-symbols-outlined text-sm">undo</span>
+<span>撤销本次导入</span>
+</button>
+<button class="px-3.5 py-1.5 rounded-lg bg-primary hover:bg-primary-hover text-white font-medium text-xs flex items-center gap-1 transition-colors shadow-xs" id="confirm-merge-btn" type="button">
+<span class="material-symbols-outlined text-sm">save</span>
+<span>写入本地 SQLite</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. 默认浏览器 -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4" id="section-default-browser">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div class="flex items-center gap-2.5 text-slate-900">
+<span class="material-symbols-outlined text-primary text-xl">verified_user</span>
+<h2 class="text-base font-bold">默认浏览器</h2>
+</div>
+<span class="text-xs text-slate-400 font-mono">system.handler</span>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center text-primary shadow-xs">
+<span class="material-symbols-outlined text-2xl">desktop_windows</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="text-xs font-bold text-slate-900">轻页 SAB 已经是您的默认浏览器</h3>
+<span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-semibold border border-emerald-200">已激活</span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">当前已挂载系统 HTTP / HTTPS / SAB 内部自定义协议句柄。</p>
+</div>
+</div>
+<button class="px-3.5 py-2 rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 font-medium text-xs shrink-0 transition-colors shadow-xs flex items-center justify-center gap-1.5" type="button">
+<span class="material-symbols-outlined text-[15px]">settings_suggest</span>
+<span>打开系统设置</span>
+</button>
+</div>
+</section>
+<!-- 5. 隐私与本地数据沙箱 -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5" id="section-privacy">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div class="flex items-center gap-2.5 text-slate-900">
+<span class="material-symbols-outlined text-primary text-xl">shield_lock</span>
+<h2 class="text-base font-bold">隐私与本地沙箱</h2>
+</div>
+<span class="text-xs text-slate-400 font-mono">sandbox.security</span>
+</div>
+<p class="text-xs text-slate-500 -mt-2">
+          轻页不设云端账户中心。书签、浏览历史、密码钥匙串完全存留在宿主操作系统的本地加密区。
+        </p>
+<!-- Toggle 开关项目列表 -->
+<div class="divide-y divide-slate-100 text-xs">
+<!-- 项目 1: 本地 SQLite 路径展示 -->
+<div class="py-3.5 flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<span class="font-semibold text-slate-800">本地 SQLite 数据库独立存储池</span>
+<span class="text-[11px] font-mono text-emerald-600 font-medium">WAL 模式已就绪</span>
+</div>
+<div class="bg-slate-50 border border-slate-200 rounded-lg p-2 font-mono text-[11px] text-slate-700 select-all">
+              %APPDATA%/Local/com.sab.browser/data/vault.sqlite3
+            </div>
+</div>
+<!-- 项目 2: 会话隔离 Toggle -->
+<div class="py-3.5 flex items-center justify-between">
+<div class="space-y-0.5 pr-4">
+<div class="font-semibold text-slate-800">无痕会话沙箱隔离</div>
+<p class="text-slate-500">第三方 Cookie 默认严格阻断，窗口关闭时自动清理临时站点存储。</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- 项目 3: 指纹探测拦截 Toggle -->
+<div class="py-3.5 flex items-center justify-between">
+<div class="space-y-0.5 pr-4">
+<div class="font-semibold text-slate-800">硬件加速 WebGL2 指纹扰动防护</div>
+<p class="text-slate-500">禁止网页执行画布噪点探测脚本，防范跨站跨设备隐式行为画像跟踪。</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- 项目 4: 清除浏览数据操作行 -->
+<div class="py-3.5 flex items-center justify-between">
+<div class="space-y-0.5 pr-4">
+<div class="font-semibold text-slate-800">清除浏览数据</div>
+<p class="text-slate-500">清理历史记录、Cookie、缓存的图片和本地临时文件。</p>
+</div>
+<button class="px-3.5 py-1.5 rounded-lg border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 font-medium text-xs transition-colors shrink-0 flex items-center gap-1.5 shadow-xs" type="button">
+<span class="material-symbols-outlined text-[15px]">delete_sweep</span>
+<span>彻底清理缓存</span>
+</button>
+</div>
+</div>
+</section>
+<!-- 6. 关于轻页 SAB -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4" id="section-about">
+<div class="flex items-center justify-between pb-3 border-b border-slate-100">
+<div class="flex items-center gap-2.5 text-slate-900">
+<span class="material-symbols-outlined text-primary text-xl">info</span>
+<h2 class="text-base font-bold">关于轻页 SAB</h2>
+</div>
+<span class="text-xs text-slate-400 font-mono">v0.3-preview</span>
+</div>
+<div class="flex items-start gap-4">
+<div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-200 text-primary font-bold text-base flex items-center justify-center shrink-0 shadow-xs">
+            SAB
+          </div>
+<div class="space-y-2 flex-1 text-xs">
+<div>
+<h3 class="text-sm font-bold text-slate-900">轻页 Small And Beautiful</h3>
+<p class="text-slate-500 font-mono text-[11px]">版本 v0.3-tauri-preview (Build 20240519) · 架构：Tauri v2 + Rust WebKit/WebView2</p>
+</div>
+<p class="text-slate-600 leading-relaxed">
+              设计作者：<strong class="text-slate-900 font-semibold">lq</strong><br/>
+              设计承诺：原生编译拒绝臃肿 Electron 运行时，剔除推荐信息流、剥离开屏广告、不写入系统守护驻留后台进程。
+            </p>
+<div class="flex items-center gap-2 pt-1 font-mono text-[11px] text-slate-500">
+<span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">Rust 1.78</span>
+<span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">Tauri 2.0-rc</span>
+<span class="px-2 py-0.5 rounded bg-slate-100 border border-slate-200">MIT License</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- 简易交互脚本 -->
+<script>
+    (function () {
+      // 启动模式单选高亮联动
+      const startupRadios = document.querySelectorAll('input[name="startup-mode"]');
+      startupRadios.forEach((radio) => {
+        radio.addEventListener('change', (e) => {
+          startupRadios.forEach((r) => {
+            const parentLabel = r.closest('label');
+            if (parentLabel) {
+              parentLabel.classList.remove('bg-blue-50/50', 'border-blue-200');
+              parentLabel.classList.add('bg-white', 'border-slate-200');
+            }
+          });
+          if (e.target.checked) {
+            const currentLabel = e.target.closest('label');
+            if (currentLabel) {
+              currentLabel.classList.remove('bg-white', 'border-slate-200');
+              currentLabel.classList.add('bg-blue-50/50', 'border-blue-200');
+            }
+          }
+        });
+      });
+
+      // 导入确认按钮反馈
+      const confirmMergeBtn = document.getElementById('confirm-merge-btn');
+      if (confirmMergeBtn) {
+        confirmMergeBtn.addEventListener('click', () => {
+          const originalText = confirmMergeBtn.innerHTML;
+          confirmMergeBtn.disabled = true;
+          confirmMergeBtn.innerHTML = '<span class="material-symbols-outlined text-xs animate-spin">refresh</span><span>正在写入 SQLite...</span>';
+          setTimeout(() => {
+            confirmMergeBtn.innerHTML = '<span class="material-symbols-outlined text-xs">done_all</span><span>已导入 1,280 项</span>';
+            setTimeout(() => {
+              confirmMergeBtn.disabled = false;
+              confirmMergeBtn.innerHTML = originalText;
+            }, 2000);
+          }, 600);
+        });
+      }
+
+      // 撤销按钮反馈
+      const undoBtn = document.getElementById('undo-btn');
+      if (undoBtn) {
+        undoBtn.addEventListener('click', () => {
+          const originalText = undoBtn.innerHTML;
+          undoBtn.innerHTML = '<span class="material-symbols-outlined text-xs">check</span><span>已撤销恢复</span>';
+          setTimeout(() => {
+            undoBtn.innerHTML = originalText;
+          }, 1800);
+        });
+      }
+    })();
+  </script>
+</body></html>

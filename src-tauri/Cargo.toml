@@ -1,0 +1,30 @@
+# 功能：锁定桌面宿主、系统 WebView 与 SQLite 依赖；时间：2026-11-08；作者：lq。
+[package]
+name = "sab"
+version = "0.1.0"
+description = "轻页 SAB 桌面浏览器技术骨架"
+authors = ["lq"]
+edition = "2021"
+rust-version = "1.90"
+license = "Apache-2.0"
+
+[lib]
+name = "sab_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "=2.7.4", features = [] }
+
+[dependencies]
+tauri = { version = "=2.12.5", features = ["unstable"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "=0.32.1", features = ["bundled"] }
+url = "=2.5.8"
+uuid = { version = "=1.29.0", features = ["v4"] }
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+strip = true

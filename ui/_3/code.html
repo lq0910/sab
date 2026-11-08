@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,300..900;1,300..900&amp;family=JetBrains+Mono:wght@100..900&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "background": "#f8fafc",
+          "surface-container-lowest": "#ffffff",
+          "tertiary-fixed": "#ffdbcd",
+          "on-tertiary-fixed-variant": "#7d2d00",
+          "primary-fixed": "#dbe1ff",
+          "surface-container": "#f1f5f9",
+          "tertiary": "#0284c7",
+          "on-tertiary-fixed": "#360f00",
+          "secondary": "#475569",
+          "tertiary-fixed-dim": "#ffb596",
+          "outline": "#94a3b8",
+          "on-tertiary": "#ffffff",
+          "error": "#ba1a1a",
+          "on-error-container": "#93000a",
+          "on-background": "#0f172a",
+          "secondary-fixed-dim": "#adc6ff",
+          "surface-variant": "#e2e8f0",
+          "surface-tint": "#2563eb",
+          "primary-container": "#2563eb",
+          "surface-bright": "#ffffff",
+          "on-tertiary-container": "#ffede6",
+          "primary-fixed-dim": "#b4c5ff",
+          "on-secondary-container": "#fefcff",
+          "primary": "#2563eb",
+          "secondary-fixed": "#d8e2ff",
+          "secondary-container": "#e0e7ff",
+          "surface-dim": "#e2e8f0",
+          "on-secondary-fixed": "#001a42",
+          "on-primary-container": "#eff6ff",
+          "surface-container-highest": "#e2e8f0",
+          "inverse-on-surface": "#f8fafc",
+          "on-secondary-fixed-variant": "#004395",
+          "on-surface-variant": "#475569",
+          "on-primary": "#ffffff",
+          "inverse-surface": "#1e293b",
+          "surface-container-low": "#f8fafc",
+          "on-secondary": "#ffffff",
+          "on-primary-fixed-variant": "#003ea8",
+          "surface-container-high": "#e2e8f0",
+          "surface": "#f8fafc",
+          "outline-variant": "#e2e8f0",
+          "on-primary-fixed": "#00174b",
+          "on-surface": "#0f172a",
+          "tertiary-container": "#e0f2fe",
+          "inverse-primary": "#b4c5ff",
+          "error-container": "#fee2e2",
+          "on-error": "#ffffff"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.375rem",
+          "xl": "0.5rem",
+          "full": "0.75rem"
+        },
+        "spacing": {
+          "margin": "0.75rem",
+          "space-lg": "0.75rem",
+          "space-xl": "1rem",
+          "space-xs": "0.25rem",
+          "space-md": "0.5rem",
+          "space-sm": "0.375rem",
+          "gutter": "0.5rem",
+          "margin-window": "0.5rem"
+        },
+        "fontFamily": {
+          "label-lg": ["JetBrains Mono"],
+          "headline-md": ["Hanken Grotesk"],
+          "headline-lg": ["Hanken Grotesk"],
+          "label-md": ["JetBrains Mono"],
+          "label-sm": ["JetBrains Mono"],
+          "body-sm": ["Hanken Grotesk"],
+          "label-code": ["JetBrains Mono"],
+          "body-lg": ["Hanken Grotesk"],
+          "body-md": ["Hanken Grotesk"],
+          "headline-sm": ["Hanken Grotesk"]
+        },
+        "fontSize": {
+          "label-lg": ["0.8125rem", {"lineHeight": "1rem", "letterSpacing": "0.01em", "fontWeight": "500"}],
+          "label-sm": ["0.6875rem", {"lineHeight": "0.875rem", "letterSpacing": "0.02em", "fontWeight": "500"}],
+          "headline-md": ["1.125rem", {"lineHeight": "1.5rem", "letterSpacing": "-0.015em", "fontWeight": "600"}],
+          "headline-lg": ["1.375rem", {"lineHeight": "1.75rem", "letterSpacing": "-0.02em", "fontWeight": "600"}],
+          "label-md": ["0.75rem", {"lineHeight": "0.875rem", "letterSpacing": "0.015em", "fontWeight": "500"}],
+          "body-sm": ["0.75rem", {"lineHeight": "1rem", "letterSpacing": "0em", "fontWeight": "400"}],
+          "label-code": ["0.75rem", {"lineHeight": "1rem", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+          "body-lg": ["0.9375rem", {"lineHeight": "1.375rem", "letterSpacing": "-0.005em", "fontWeight": "400"}],
+          "body-md": ["0.8125rem", {"lineHeight": "1.125rem", "letterSpacing": "0em", "fontWeight": "400"}],
+          "headline-sm": ["0.9375rem", {"lineHeight": "1.25rem", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+        }
+      }
+    }
+  };
+</script></head><body class="bg-surface font-body-md text-on-surface antialiased select-none"><aside class="fixed left-0 top-0 h-full w-14 bg-surface-container-lowest border-r border-outline-variant z-50 flex flex-col items-center justify-between py-space-md shadow-sm"><div class="flex flex-col items-center gap-space-md w-full"><div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center"><span class="material-symbols-outlined text-primary text-headline-sm">layers</span></div><nav class="flex flex-col items-center gap-space-xs w-full px-space-xs" data-active-classes="bg-blue-50 text-primary border border-blue-100 rounded-lg"><a class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors" data-path="browser-workspace" href="#" title="浏览视窗"><span class="material-symbols-outlined text-headline-sm">tab</span></a><a aria-current="page" class="w-10 h-10 flex items-center justify-center transition-colors bg-blue-50 text-primary border border-blue-200 rounded-lg" data-path="bookmarks-library" href="#" title="收藏管理"><span class="material-symbols-outlined text-headline-sm">bookmarks</span></a><a class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors" data-path="reading-queue" href="#" title="稍后阅读"><span class="material-symbols-outlined text-headline-sm">auto_stories</span></a><a class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors" data-path="browser-history" href="#" title="历史记录"><span class="material-symbols-outlined text-headline-sm">history</span></a><a class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors" data-path="downloads-hub" href="#" title="下载中心"><span class="material-symbols-outlined text-headline-sm">download</span></a></nav></div><div class="flex flex-col items-center gap-space-sm"><a class="w-10 h-10 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition-colors" data-path="browser-settings" href="#" title="设置与选项"><span class="material-symbols-outlined text-headline-sm">settings</span></a><div class="w-2 h-2 rounded-full bg-primary mb-space-xs"></div></div></aside><div class="pl-14"><header class="fixed top-0 left-14 right-0 z-40 bg-slate-100/95 backdrop-blur-xl border-b border-outline-variant shadow-sm"><div class="h-24 flex flex-col justify-between"><div class="h-10 px-margin-window flex items-center gap-space-md border-b border-slate-200/60"><div class="flex items-center gap-space-xs px-space-xs"><span class="w-3 h-3 rounded-full bg-[#ef4444] cursor-pointer opacity-85 hover:opacity-100 transition-opacity"></span><span class="w-3 h-3 rounded-full bg-[#f59e0b] cursor-pointer opacity-85 hover:opacity-100 transition-opacity"></span><span class="w-3 h-3 rounded-full bg-[#10b981] cursor-pointer opacity-85 hover:opacity-100 transition-opacity"></span></div><div class="flex items-center gap-space-xs flex-1 overflow-x-auto overflow-y-hidden pt-1"><div class="h-8 px-space-md bg-white border border-outline-variant border-b-white rounded-t-lg flex items-center gap-space-sm min-w-[140px] max-w-[200px] shadow-sm"><img alt="Profile" class="w-4 h-4 rounded-full object-cover shrink-0" src="https://lh3.googleusercontent.com/aida/AEtjO1U6Ndqz-g0HP3vllFKyScv19oU2daAUqQG5ymCzYFVwt_FB5naLwuW4NBhVN5qTs6Q3-jheEJxPOYJnZT3VhKwDMnfouCWA0PGihwSOa9TG1SSL9DDTkaPBWNZnXF3xCj76v-9DOBvChPsaqjtBj7Y2BOpp-2hb4nSGN6YJ8lDS3zIczcENkCoXOSuY19Qz8OfqJr4DsULTs7GtODAcvDPQfsBIktdiWILsh6AeNBf8"/><span class="font-body-sm text-body-sm text-slate-800 font-medium truncate flex-1">轻页 SAB Workspace</span><button class="text-slate-400 hover:text-slate-700 shrink-0" type="button"><span class="material-symbols-outlined text-label-md">close</span></button></div><div class="h-8 px-space-md bg-transparent hover:bg-slate-200/60 rounded-t-lg flex items-center gap-space-sm min-w-[120px] max-w-[180px] transition-colors"><span class="material-symbols-outlined text-slate-500 text-label-lg">public</span><span class="font-body-sm text-body-sm text-slate-500 truncate flex-1">Rust Docs</span><button class="text-slate-400 hover:text-slate-700 shrink-0" type="button"><span class="material-symbols-outlined text-label-md">close</span></button></div><button class="w-7 h-7 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-200 hover:text-slate-800 transition-colors" title="新建标签页" type="button"><span class="material-symbols-outlined text-body-md">add</span></button></div><div class="flex items-center gap-space-xs pr-space-xs"><img alt="Profile" class="w-7 h-7 rounded-full object-cover ring-1 ring-slate-300" src="https://lh3.googleusercontent.com/aida/AEtjO1U6Ndqz-g0HP3vllFKyScv19oU2daAUqQG5ymCzYFVwt_FB5naLwuW4NBhVN5qTs6Q3-jheEJxPOYJnZT3VhKwDMnfouCWA0PGihwSOa9TG1SSL9DDTkaPBWNZnXF3xCj76v-9DOBvChPsaqjtBj7Y2BOpp-2hb4nSGN6YJ8lDS3zIczcENkCoXOSuY19Qz8OfqJr4DsULTs7GtODAcvDPQfsBIktdiWILsh6AeNBf8"/></div></div><div class="h-14 px-margin flex items-center gap-space-md bg-surface-container-lowest"><div class="flex items-center gap-space-xs"><button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" title="后退" type="button"><span class="material-symbols-outlined text-body-lg">arrow_back</span></button><button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 cursor-not-allowed" title="前进" type="button"><span class="material-symbols-outlined text-body-lg">arrow_forward</span></button><button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" title="重新加载" type="button"><span class="material-symbols-outlined text-body-lg">refresh</span></button></div><div class="flex-1 flex items-center h-9 px-space-md rounded-xl bg-white border border-slate-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all gap-space-sm shadow-inner"><span class="material-symbols-outlined text-primary text-label-lg">lock</span><span class="font-label-sm text-label-sm text-slate-400">sab://</span><input class="w-full bg-transparent font-body-sm text-body-sm text-slate-800 placeholder:text-slate-400 focus:outline-none" placeholder="搜索网址或键入轻页指令..." type="text" value="workspace.sab/workbench"/><span class="font-label-sm text-label-sm px-space-xs py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-500">⌘L</span></div><div class="flex items-center gap-space-xs"><button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-primary transition-colors" title="添加收藏 (Cmd+D)" type="button"><span class="material-symbols-outlined text-body-lg">star</span></button><button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" title="阅读模式" type="button"><span class="material-symbols-outlined text-body-lg">chrome_reader_mode</span></button><button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" title="扩展工具" type="button"><span class="material-symbols-outlined text-body-lg">extension</span></button><button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors" title="选项菜单" type="button"><span class="material-symbols-outlined text-body-lg">more_vert</span></button></div></div></div></header><main class="relative pt-24 min-h-screen bg-slate-50 w-full px-space-md pb-space-lg"><div class="flex flex-col w-full">
+<!-- Atmospheric Subtle Ambient Glow -->
+<div class="relative w-full overflow-hidden">
+<div class="absolute -top-32 left-1/4 w-96 h-96 bg-blue-100/60 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<div class="absolute top-10 right-10 w-80 h-80 bg-sky-100/60 rounded-full blur-3xl pointer-events-none -z-10"></div>
+<!-- Top Command Deck: Live Filtering, View Toggle & Management Actions -->
+<section class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md py-space-sm">
+<div class="flex items-center gap-space-md flex-1 max-w-2xl">
+<div class="relative flex-1 flex items-center bg-white border border-slate-200 rounded-xl px-space-md py-1.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-sm">
+<span class="material-symbols-outlined text-slate-400 text-body-lg shrink-0">search</span>
+<input class="w-full bg-transparent px-space-sm font-body-md text-body-md text-slate-800 placeholder:text-slate-400 focus:outline-none" id="bookmark-search-input" placeholder="在 842 条本地索引中极速检索 (标签、URL、关键词)..." type="text"/>
+<div class="flex items-center gap-space-xs shrink-0">
+<span class="font-label-sm text-label-sm text-slate-400 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">ESC</span>
+<span class="font-label-sm text-label-sm text-slate-400 px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200">/</span>
+</div>
+</div>
+<!-- Density / View Switcher -->
+<div class="flex items-center bg-slate-200/70 border border-slate-200 rounded-lg p-0.5 shrink-0">
+<button class="px-space-sm py-1 rounded bg-white text-primary font-label-md text-label-md flex items-center gap-1 shadow-sm transition-colors" id="btn-view-grid" title="网格视图 (Grid View)">
+<span class="material-symbols-outlined text-headline-sm">grid_view</span>
+<span class="hidden sm:inline">网格</span>
+</button>
+<button class="px-space-sm py-1 rounded text-slate-600 hover:text-slate-900 font-label-md text-label-md flex items-center gap-1 transition-colors" id="btn-view-compact" title="紧凑列表 (Compact List)">
+<span class="material-symbols-outlined text-headline-sm">view_agenda</span>
+<span class="hidden sm:inline">列表</span>
+</button>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="h-8 px-space-md bg-white border border-slate-200 hover:bg-slate-100 text-slate-700 rounded-lg font-body-sm text-body-sm flex items-center gap-space-xs transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-body-lg text-slate-500">file_download</span>
+<span>导入书签</span>
+</button>
+<button class="h-8 px-space-md bg-primary hover:bg-blue-700 text-white rounded-lg font-body-sm text-body-sm flex items-center gap-space-xs transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-body-lg">create_new_folder</span>
+<span>新建目录</span>
+</button>
+</div>
+</section>
+<!-- Pinned Favorites (置顶高频站点) -->
+<section class="mt-space-lg">
+<div class="flex items-center justify-between mb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-body-lg">push_pin</span>
+<span class="font-headline-sm text-headline-sm text-slate-900 font-semibold">常用置顶 · Pinned Deck</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-500">6 站点</span>
+</div>
+<button class="font-label-sm text-label-sm text-slate-500 hover:text-primary transition-colors flex items-center gap-0.5" type="button">
+<span>自定义排序</span>
+<span class="material-symbols-outlined text-label-md">tune</span>
+</button>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-space-sm">
+<!-- Pinned Card 1: Rust Docs -->
+<a class="group bg-white hover:bg-slate-50/80 border border-slate-200 rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-sm hover:shadow" href="https://doc.rust-lang.org">
+<div class="flex items-start justify-between">
+<div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-headline-md">memory</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400 group-hover:text-primary transition-colors">Rust</span>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-sm text-headline-sm text-slate-900 truncate group-hover:text-primary transition-colors">Rust Documentation</div>
+<div class="font-label-sm text-label-sm text-slate-500 truncate mt-0.5">doc.rust-lang.org</div>
+</div>
+</a>
+<!-- Pinned Card 2: GitHub -->
+<a class="group bg-white hover:bg-slate-50/80 border border-slate-200 rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-sm hover:shadow" href="https://github.com">
+<div class="flex items-start justify-between">
+<div class="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center text-sky-600 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-headline-md">code</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400 group-hover:text-sky-600 transition-colors">Git</span>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-sm text-headline-sm text-slate-900 truncate group-hover:text-sky-600 transition-colors">GitHub Workspace</div>
+<div class="font-label-sm text-label-sm text-slate-500 truncate mt-0.5">github.com</div>
+</div>
+</a>
+<!-- Pinned Card 3: Figma -->
+<a class="group bg-white hover:bg-slate-50/80 border border-slate-200 rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-sm hover:shadow" href="https://figma.com">
+<div class="flex items-start justify-between">
+<div class="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-600 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-headline-md">polyline</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400 group-hover:text-indigo-600 transition-colors">Design</span>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-sm text-headline-sm text-slate-900 truncate group-hover:text-indigo-600 transition-colors">Figma Cloud</div>
+<div class="font-label-sm text-label-sm text-slate-500 truncate mt-0.5">figma.com</div>
+</div>
+</a>
+<!-- Pinned Card 4: MDN -->
+<a class="group bg-white hover:bg-slate-50/80 border border-slate-200 rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-sm hover:shadow" href="https://developer.mozilla.org">
+<div class="flex items-start justify-between">
+<div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-headline-md">integration_instructions</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400 group-hover:text-primary transition-colors">Web</span>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-sm text-headline-sm text-slate-900 truncate group-hover:text-primary transition-colors">MDN Web Docs</div>
+<div class="font-label-sm text-label-sm text-slate-500 truncate mt-0.5">developer.mozilla.org</div>
+</div>
+</a>
+<!-- Pinned Card 5: Vercel -->
+<a class="group bg-white hover:bg-slate-50/80 border border-slate-200 rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-sm hover:shadow" href="https://vercel.com">
+<div class="flex items-start justify-between">
+<div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-headline-md">change_history</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400 group-hover:text-amber-600 transition-colors">Deploy</span>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-sm text-headline-sm text-slate-900 truncate group-hover:text-amber-600 transition-colors">Vercel Console</div>
+<div class="font-label-sm text-label-sm text-slate-500 truncate mt-0.5">vercel.com</div>
+</div>
+</a>
+<!-- Pinned Card 6: arXiv -->
+<a class="group bg-white hover:bg-slate-50/80 border border-slate-200 rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 hover:-translate-y-0.5 shadow-sm hover:shadow" href="https://arxiv.org">
+<div class="flex items-start justify-between">
+<div class="w-8 h-8 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-headline-md">menu_book</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400 group-hover:text-primary transition-colors">Research</span>
+</div>
+<div class="mt-space-md">
+<div class="font-headline-sm text-headline-sm text-slate-900 truncate group-hover:text-primary transition-colors">arXiv Preprints</div>
+<div class="font-label-sm text-label-sm text-slate-500 truncate mt-0.5">arxiv.org</div>
+</div>
+</a>
+</div>
+</section>
+<!-- Structural Split: System Directory Navigator + Rich Collection Display -->
+<div class="mt-space-xl flex flex-col lg:flex-row gap-space-lg">
+<!-- Non-AI Taxonomy Navigation (分类导航页签) -->
+<aside class="w-full lg:w-56 shrink-0 flex flex-col gap-space-sm">
+<div class="flex items-center justify-between px-space-xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-slate-400 font-semibold">本地层级目录</span>
+<span class="font-label-sm text-label-sm text-slate-400">8 分类</span>
+</div>
+<nav class="flex flex-row lg:flex-col gap-1 overflow-x-auto pb-space-xs lg:pb-0" id="category-tabs">
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg bg-blue-50 text-blue-600 border border-blue-200/80 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg">terminal</span>
+<span class="font-medium">开发</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-blue-100 text-blue-700 ml-2 font-medium">240</span>
+</button>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-slate-500">palette</span>
+<span>设计</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 ml-2">128</span>
+</button>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-slate-500">badge</span>
+<span>工作</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 ml-2">95</span>
+</button>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-slate-500">school</span>
+<span>学习</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 ml-2">114</span>
+</button>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-slate-500">auto_stories</span>
+<span>阅读</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 ml-2">82</span>
+</button>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-slate-500">spa</span>
+<span>生活</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 ml-2">66</span>
+</button>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-slate-500">shopping_bag</span>
+<span>购物</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 ml-2">48</span>
+</button>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-slate-100 text-slate-700 hover:text-slate-900 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-slate-500">sports_esports</span>
+<span>娱乐</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-slate-100 text-slate-500 ml-2">57</span>
+</button>
+<!-- Triage / Unorganized Bin -->
+<div class="my-space-xs hidden lg:block h-px bg-slate-200"></div>
+<button class="category-btn flex items-center justify-between px-space-md py-2 rounded-lg hover:bg-rose-50 text-red-600 hover:text-red-700 font-headline-sm text-headline-sm text-left transition-colors whitespace-nowrap" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-body-lg text-red-500">inbox</span>
+<span class="font-medium">待整理</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 rounded bg-rose-100 text-red-600 ml-2 font-medium">12</span>
+</button>
+</nav>
+<!-- Quick Storage Metric Card -->
+<div class="hidden lg:flex flex-col p-space-md bg-white border border-slate-200 rounded-xl mt-space-md shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-500">本地索引数据库</span>
+<span class="material-symbols-outlined text-primary text-label-md">database</span>
+</div>
+<span class="font-label-lg text-label-lg text-slate-800 font-semibold mt-1">bookmarks.db</span>
+<div class="w-full bg-slate-100 rounded-full h-1.5 mt-space-sm overflow-hidden">
+<div class="bg-primary h-1.5 rounded-full w-2/5"></div>
+</div>
+<div class="flex justify-between items-center mt-1.5">
+<span class="font-label-sm text-label-sm text-slate-500">3.4 MB / 10 MB</span>
+<span class="font-label-sm text-label-sm text-emerald-600 font-medium">已同步</span>
+</div>
+</div>
+</aside>
+<!-- Main Collection Container -->
+<main class="flex-1 min-w-0 flex flex-col">
+<!-- Collection Header & Sub-filtering -->
+<div class="flex flex-wrap items-center justify-between gap-space-sm pb-space-sm mb-space-sm">
+<div class="flex items-center gap-space-sm">
+<h2 class="font-headline-md text-headline-md text-slate-900 font-semibold">开发 (Development)</h2>
+<span class="font-label-sm text-label-sm text-slate-500">显示 1 - 24 / 共 240 项</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-sm py-1 rounded bg-white border border-slate-200 text-slate-700 hover:text-slate-900 font-label-md text-label-md flex items-center gap-1 shadow-sm transition-colors" type="button">
+<span>排序: 最近添加</span>
+<span class="material-symbols-outlined text-label-md text-slate-400">expand_more</span>
+</button>
+<button class="w-7 h-7 rounded bg-white border border-slate-200 text-slate-600 hover:text-slate-900 flex items-center justify-center shadow-sm transition-colors" type="button">
+<span class="material-symbols-outlined text-label-lg">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Bookmarks Canvas: Supports Grid & List dynamically via class toggle -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-space-md" id="bookmarks-deck">
+<!-- Bookmark Item 1 -->
+<article class="bookmark-card group relative bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 shrink-0 flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-headline-md">terminal</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-400 truncate">crates.io</span>
+<!-- Action Dropdown Trigger -->
+<div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-primary flex items-center justify-center transition-colors" title="固定到顶部" type="button">
+<span class="material-symbols-outlined text-label-md">push_pin</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="编辑" type="button">
+<span class="material-symbols-outlined text-label-md">edit</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="移动" type="button">
+<span class="material-symbols-outlined text-label-md">drive_file_move</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors" title="删除" type="button">
+<span class="material-symbols-outlined text-label-md">delete</span>
+</button>
+</div>
+</div>
+<a class="font-headline-sm text-headline-sm text-slate-900 font-semibold hover:text-primary transition-colors block truncate mt-0.5" href="#">
+                  Crates.io: Rust Package Registry
+                </a>
+<p class="font-body-sm text-body-sm text-slate-600 line-clamp-2 mt-1">
+                  官方 Rust 包管理仓库与 crates 索引元数据库，包含系统包与依赖关系解析。
+                </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm border-t border-slate-100 flex items-center justify-between">
+<div class="flex flex-wrap gap-1 items-center">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">rust</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">pkg</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200/70 font-medium">核心基建</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400">2 天前</span>
+</div>
+</article>
+<!-- Bookmark Item 2 -->
+<article class="bookmark-card group relative bg-white border border-slate-200 hover:border-sky-300 hover:shadow-md rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-sky-50 border border-sky-100 shrink-0 flex items-center justify-center text-sky-600 shadow-sm">
+<span class="material-symbols-outlined text-headline-md">dataset</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-400 truncate">tauri.app</span>
+<div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-primary flex items-center justify-center transition-colors" title="固定到顶部" type="button">
+<span class="material-symbols-outlined text-label-md">push_pin</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="编辑" type="button">
+<span class="material-symbols-outlined text-label-md">edit</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="移动" type="button">
+<span class="material-symbols-outlined text-label-md">drive_file_move</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors" title="删除" type="button">
+<span class="material-symbols-outlined text-label-md">delete</span>
+</button>
+</div>
+</div>
+<a class="font-headline-sm text-headline-sm text-slate-900 font-semibold hover:text-sky-600 transition-colors block truncate mt-0.5" href="#">
+                  Tauri v2 Documentation
+                </a>
+<p class="font-body-sm text-body-sm text-slate-600 line-clamp-2 mt-1">
+                  跨平台轻量应用框架核心指南，集成 Wry 与 Tao 后端窗口子系统。
+                </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm border-t border-slate-100 flex items-center justify-between">
+<div class="flex flex-wrap gap-1 items-center">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">tauri</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">ipc</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-sky-50 text-sky-700 border border-sky-200/70 font-medium">工程架构</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400">4 天前</span>
+</div>
+</article>
+<!-- Bookmark Item 3 -->
+<article class="bookmark-card group relative bg-white border border-slate-200 hover:border-indigo-300 hover:shadow-md rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-indigo-50 border border-indigo-100 shrink-0 flex items-center justify-center text-indigo-600 shadow-sm">
+<span class="material-symbols-outlined text-headline-md">lan</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-400 truncate">tokio.rs</span>
+<div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-primary flex items-center justify-center transition-colors" title="固定到顶部" type="button">
+<span class="material-symbols-outlined text-label-md">push_pin</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="编辑" type="button">
+<span class="material-symbols-outlined text-label-md">edit</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="移动" type="button">
+<span class="material-symbols-outlined text-label-md">drive_file_move</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors" title="删除" type="button">
+<span class="material-symbols-outlined text-label-md">delete</span>
+</button>
+</div>
+</div>
+<a class="font-headline-sm text-headline-sm text-slate-900 font-semibold hover:text-indigo-600 transition-colors block truncate mt-0.5" href="#">
+                  Tokio: Async Runtime for Rust
+                </a>
+<p class="font-body-sm text-body-sm text-slate-600 line-clamp-2 mt-1">
+                  高并发事件驱动异步网络框架，内置多线程调度池与定时器通道。
+                </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm border-t border-slate-100 flex items-center justify-between">
+<div class="flex flex-wrap gap-1 items-center">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">async</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">network</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 border border-indigo-200/70 font-medium">底层协议</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400">1 周前</span>
+</div>
+</article>
+<!-- Bookmark Item 4 -->
+<article class="bookmark-card group relative bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 shrink-0 flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-headline-md">layers</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-400 truncate">tailwindcss.com</span>
+<div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-primary flex items-center justify-center transition-colors" title="固定到顶部" type="button">
+<span class="material-symbols-outlined text-label-md">push_pin</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="编辑" type="button">
+<span class="material-symbols-outlined text-label-md">edit</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="移动" type="button">
+<span class="material-symbols-outlined text-label-md">drive_file_move</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors" title="删除" type="button">
+<span class="material-symbols-outlined text-label-md">delete</span>
+</button>
+</div>
+</div>
+<a class="font-headline-sm text-headline-sm text-slate-900 font-semibold hover:text-primary transition-colors block truncate mt-0.5" href="#">
+                  Tailwind CSS Components &amp; Config
+                </a>
+<p class="font-body-sm text-body-sm text-slate-600 line-clamp-2 mt-1">
+                  实用优先的 CSS 工具集，提供极度精细的设计令牌定义与响应式断点。
+                </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm border-t border-slate-100 flex items-center justify-between">
+<div class="flex flex-wrap gap-1 items-center">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">css</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">ui</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200/70 font-medium">样式规范</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400">2 周前</span>
+</div>
+</article>
+<!-- Bookmark Item 5 -->
+<article class="bookmark-card group relative bg-white border border-slate-200 hover:border-amber-300 hover:shadow-md rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-100 shrink-0 flex items-center justify-center text-amber-600 shadow-sm">
+<span class="material-symbols-outlined text-headline-md">bolt</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-400 truncate">vitejs.dev</span>
+<div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-primary flex items-center justify-center transition-colors" title="固定到顶部" type="button">
+<span class="material-symbols-outlined text-label-md">push_pin</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="编辑" type="button">
+<span class="material-symbols-outlined text-label-md">edit</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="移动" type="button">
+<span class="material-symbols-outlined text-label-md">drive_file_move</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors" title="删除" type="button">
+<span class="material-symbols-outlined text-label-md">delete</span>
+</button>
+</div>
+</div>
+<a class="font-headline-sm text-headline-sm text-slate-900 font-semibold hover:text-amber-600 transition-colors block truncate mt-0.5" href="#">
+                  Vite: Next Generation Frontend Tooling
+                </a>
+<p class="font-body-sm text-body-sm text-slate-600 line-clamp-2 mt-1">
+                  基于原生 ESM 与 Rollup 构建的高性能前端构建工具，极速冷启动与热重载。
+                </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm border-t border-slate-100 flex items-center justify-between">
+<div class="flex flex-wrap gap-1 items-center">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">bundler</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">esm</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200/70 font-medium">工程架构</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400">3 周前</span>
+</div>
+</article>
+<!-- Bookmark Item 6 -->
+<article class="bookmark-card group relative bg-white border border-slate-200 hover:border-slate-400 hover:shadow-md rounded-xl p-space-md flex flex-col justify-between transition-all duration-200 shadow-sm">
+<div class="flex items-start gap-space-md">
+<div class="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 shrink-0 flex items-center justify-center text-slate-600 shadow-sm">
+<span class="material-symbols-outlined text-headline-md">storage</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-slate-400 truncate">sqlite.org</span>
+<div class="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-primary flex items-center justify-center transition-colors" title="固定到顶部" type="button">
+<span class="material-symbols-outlined text-label-md">push_pin</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="编辑" type="button">
+<span class="material-symbols-outlined text-label-md">edit</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-slate-100 text-slate-400 hover:text-slate-800 flex items-center justify-center transition-colors" title="移动" type="button">
+<span class="material-symbols-outlined text-label-md">drive_file_move</span>
+</button>
+<button class="w-6 h-6 rounded hover:bg-rose-50 text-slate-400 hover:text-rose-600 flex items-center justify-center transition-colors" title="删除" type="button">
+<span class="material-symbols-outlined text-label-md">delete</span>
+</button>
+</div>
+</div>
+<a class="font-headline-sm text-headline-sm text-slate-900 font-semibold hover:text-primary transition-colors block truncate mt-0.5" href="#">
+                  SQLite: Embedded SQL Database
+                </a>
+<p class="font-body-sm text-body-sm text-slate-600 line-clamp-2 mt-1">
+                  自包含、零配置的高可靠嵌入式 SQL 数据库引擎，轻页全量索引核心驱动。
+                </p>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm border-t border-slate-100 flex items-center justify-between">
+<div class="flex flex-wrap gap-1 items-center">
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">sql</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 text-slate-600 border border-slate-200/60">embedded</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200/70 font-medium">存储内核</span>
+</div>
+<span class="font-label-sm text-label-sm text-slate-400">1 个月前</span>
+</div>
+</article>
+</div>
+<!-- Virtual Scrolling Indicator / Pagination Hint -->
+<div class="mt-space-lg py-space-md px-space-lg rounded-xl bg-white border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-sm">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-slate-600">虚拟滚动视口已激活 · 正在渲染 6 / 240 节点</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-label-sm text-label-sm transition-colors" type="button">加载更多记录</button>
+<button class="px-space-md py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-label-sm text-label-sm transition-colors" type="button">展开全部</button>
+</div>
+</div>
+</main>
+</div>
+<!-- Status Bar & Local SQLite Health (底部状态与本地统计) -->
+<footer class="mt-space-xl pt-space-md pb-space-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm text-slate-500 border-t border-slate-200">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-emerald-600 text-headline-sm">check_circle</span>
+<span class="font-label-sm text-label-sm text-slate-700 font-medium">共 842 条本地收藏 · 离线 SQLite 索引已就绪</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200 text-slate-500">延迟 0.12ms</span>
+</div>
+<div class="flex items-center gap-space-md font-label-sm text-label-sm">
+<span class="text-slate-500">FTS5 全文检索引擎 active</span>
+<span class="w-1 h-1 rounded-full bg-slate-300"></span>
+<a class="hover:text-primary transition-colors text-slate-600" href="#">导出 JSON 备份</a>
+<span class="w-1 h-1 rounded-full bg-slate-300"></span>
+<a class="hover:text-primary transition-colors text-slate-600" href="#">重建索引</a>
+</div>
+</footer>
+</div>
+</div>
+<script>
+  (function () {
+    // View Switcher Micro-interaction
+    const btnGrid = document.getElementById('btn-view-grid');
+    const btnCompact = document.getElementById('btn-view-compact');
+    const deck = document.getElementById('bookmarks-deck');
+
+    if (btnGrid && btnCompact && deck) {
+      btnGrid.addEventListener('click', () => {
+        btnGrid.classList.remove('text-slate-600', 'bg-transparent');
+        btnGrid.classList.add('bg-white', 'text-primary', 'shadow-sm');
+
+        btnCompact.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+        btnCompact.classList.add('text-slate-600', 'bg-transparent');
+
+        deck.className = 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-space-md';
+      });
+
+      btnCompact.addEventListener('click', () => {
+        btnCompact.classList.remove('text-slate-600', 'bg-transparent');
+        btnCompact.classList.add('bg-white', 'text-primary', 'shadow-sm');
+
+        btnGrid.classList.remove('bg-white', 'text-primary', 'shadow-sm');
+        btnGrid.classList.add('text-slate-600', 'bg-transparent');
+
+        deck.className = 'flex flex-col gap-space-xs';
+      });
+    }
+
+    // Category Tabs Active State
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => {
+          b.classList.remove('bg-blue-50', 'text-blue-600', 'border', 'border-blue-200/80');
+          b.classList.add('text-slate-700', 'hover:bg-slate-100');
+        });
+        btn.classList.add('bg-blue-50', 'text-blue-600', 'border', 'border-blue-200/80');
+        btn.classList.remove('hover:bg-slate-100');
+      });
+    });
+
+    // Realtime Filter Simulation
+    const searchInput = document.getElementById('bookmark-search-input');
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.bookmark-card');
+        cards.forEach(card => {
+          const text = card.textContent.toLowerCase();
+          if (!query || text.includes(query)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    }
+  })();
+</script></main></div></body></html>

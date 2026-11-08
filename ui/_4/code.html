@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta content="web_dashboard" name="shell-type"/>
+<title>轻页 SAB - 现代极速工作台</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<style>
+    @layer base {
+      html, body { margin: 0; padding: 0; }
+      body { overscroll-behavior: none; }
+    }
+    ::-webkit-scrollbar { display: none; }
+  </style>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2563eb",
+            "primary-hover": "#1d4ed8",
+            "on-primary": "#ffffff",
+            "surface": "#f8fafc",
+            "surface-container": "#f1f5f9",
+            "surface-card": "#ffffff",
+            "text-main": "#0f172a",
+            "text-sub": "#334155",
+            "text-muted": "#64748b",
+            "border-subtle": "#e2e8f0"
+          },
+          fontFamily: {
+            sans: ["Hanken Grotesk", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+            mono: ["JetBrains Mono", "monospace"]
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-[#f8fafc] text-text-main font-sans antialiased min-h-screen flex flex-col select-none">
+<!-- 顶部现代浏览器标准窗口栏 & 导航栏 (全宽顶通，无左侧边栏) -->
+<header class="w-full bg-[#f1f5f9]/90 backdrop-blur-md border-b border-border-subtle sticky top-0 z-50 transition-all">
+<!-- Row 1: macOS 交通灯 + 标签页 Tab 栏 + 用户区域 -->
+<div class="h-10 px-4 flex items-center gap-3">
+<!-- 交通灯控制点 -->
+<div class="flex items-center gap-2 pr-2 shrink-0">
+<span class="w-3 h-3 rounded-full bg-[#ef4444] cursor-pointer hover:brightness-90 transition-all shadow-sm"></span>
+<span class="w-3 h-3 rounded-full bg-[#f59e0b] cursor-pointer hover:brightness-90 transition-all shadow-sm"></span>
+<span class="w-3 h-3 rounded-full bg-[#10b981] cursor-pointer hover:brightness-90 transition-all shadow-sm"></span>
+</div>
+<!-- 标签页群组 -->
+<div class="flex items-center gap-1.5 flex-1 overflow-x-auto">
+<!-- 激活标签页 -->
+<div class="h-8 px-3.5 bg-white text-text-main rounded-t-lg border-t border-x border-border-subtle flex items-center gap-2 min-w-[150px] max-w-[210px] shadow-[0_1px_3px_rgba(0,0,0,0.03)] relative top-[1px]">
+<div class="w-4 h-4 rounded-full bg-blue-50 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[13px]">dashboard</span>
+</div>
+<span class="text-xs font-medium truncate flex-1">轻页 SAB Workspace</span>
+<button class="w-4 h-4 rounded hover:bg-slate-100 text-text-muted hover:text-text-main flex items-center justify-center shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[12px]">close</span>
+</button>
+</div>
+<!-- 非激活标签页 -->
+<div class="h-8 px-3.5 bg-transparent hover:bg-slate-200/60 text-text-muted hover:text-text-main rounded-lg flex items-center gap-2 min-w-[130px] max-w-[180px] transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-slate-500 text-[14px]">public</span>
+<span class="text-xs font-normal truncate flex-1">Rust Docs</span>
+<button class="w-4 h-4 rounded hover:bg-slate-200 text-text-muted hover:text-text-main flex items-center justify-center shrink-0 transition-colors" type="button">
+<span class="material-symbols-outlined text-[12px]">close</span>
+</button>
+</div>
+<!-- 新建标签 -->
+<button class="w-7 h-7 flex items-center justify-center rounded-lg text-text-muted hover:bg-slate-200 hover:text-text-main transition-colors" title="新建标签页" type="button">
+<span class="material-symbols-outlined text-base">add</span>
+</button>
+</div>
+<!-- 右侧轻便状态与头像 -->
+<div class="flex items-center gap-2 shrink-0">
+<button class="w-7 h-7 flex items-center justify-center rounded-lg text-text-muted hover:bg-slate-200 hover:text-text-main transition-colors" title="窗口分割模式">
+<span class="material-symbols-outlined text-sm">splitscreen</span>
+</button>
+<img alt="Profile" class="w-6 h-6 rounded-full object-cover ring-1 ring-border-subtle" src="https://lh3.googleusercontent.com/aida/AEtjO1U6Ndqz-g0HP3vllFKyScv19oU2daAUqQG5ymCzYFVwt_FB5naLwuW4NBhVN5qTs6Q3-jheEJxPOYJnZT3VhKwDMnfouCWA0PGihwSOa9TG1SSL9DDTkaPBWNZnXF3xCj76v-9DOBvChPsaqjtBj7Y2BOpp-2hb4nSGN6YJ8lDS3zIczcENkCoXOSuY19Qz8OfqJr4DsULTs7GtODAcvDPQfsBIktdiWILsh6AeNBf8"/>
+</div>
+</div>
+<!-- Row 2: 导航控制与胶囊地址栏 (Omnibox) -->
+<div class="h-12 px-4 flex items-center gap-3 bg-white">
+<!-- 页面操作控件 -->
+<div class="flex items-center gap-1 shrink-0 text-text-sub">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 hover:text-text-main transition-colors" title="后退" type="button">
+<span class="material-symbols-outlined text-lg">arrow_back</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-300 cursor-not-allowed" title="前进" type="button">
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 hover:text-text-main transition-colors" title="重新加载" type="button">
+<span class="material-symbols-outlined text-lg">refresh</span>
+</button>
+</div>
+<!-- 全圆角胶囊地址栏 Omnibox -->
+<div class="flex-1 flex items-center h-8 px-3 rounded-full bg-[#f1f5f9] border border-slate-200/90 shadow-sm focus-within:bg-white focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all gap-2">
+<span class="material-symbols-outlined text-primary text-[15px]">lock</span>
+<span class="font-mono text-xs text-text-muted font-medium">sab://</span>
+<input class="w-full bg-transparent font-sans text-xs text-text-main placeholder:text-text-muted focus:outline-none" placeholder="搜索网址或键入轻页指令..." type="text" value="workspace.sab/workbench"/>
+<span class="font-mono text-[10px] px-1.5 py-0.5 rounded bg-slate-200/80 text-text-muted font-medium">⌘L</span>
+</div>
+<!-- 右侧常用快捷按钮 -->
+<div class="flex items-center gap-1 shrink-0 text-text-sub">
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 hover:text-amber-500 transition-colors" title="添加收藏 (Cmd+D)" type="button">
+<span class="material-symbols-outlined text-lg">star</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 hover:text-text-main transition-colors" title="稍后阅读 / 阅读模式" type="button">
+<span class="material-symbols-outlined text-lg">chrome_reader_mode</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 hover:text-text-main transition-colors" title="扩展程序" type="button">
+<span class="material-symbols-outlined text-lg">extension</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 hover:text-text-main transition-colors" title="主菜单" type="button">
+<span class="material-symbols-outlined text-lg">more_vert</span>
+</button>
+</div>
+</div>
+</header>
+<!-- 主体工作区 (极简纯浅色背景，顶通居中容器) -->
+<main class="flex-1 w-full max-w-5xl mx-auto flex flex-col justify-between px-6 pt-12 pb-8">
+<!-- 极简居中搜索核心区域 -->
+<div class="w-full flex flex-col items-center max-w-2xl mx-auto">
+<!-- 顶部极简 Badge -->
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50/80 border border-blue-100 text-xs text-primary mb-6 shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-medium tracking-wide">SAB Precision Gateway</span>
+<span class="text-blue-300">/</span>
+<span class="text-text-sub font-mono text-[11px]">Rust Native Core</span>
+</div>
+<!-- 极简高亮纯白胶囊搜索框 -->
+<div class="w-full relative group">
+<div class="relative w-full bg-white hover:border-slate-300 focus-within:border-primary border border-slate-200/90 rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_24px_rgba(0,0,0,0.08)] transition-all duration-200 flex items-center p-1.5 pl-3 pr-2">
+<!-- 搜索引擎切换选择器 -->
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-100/80 hover:bg-slate-200/70 text-text-sub hover:text-text-main transition-colors cursor-pointer select-none shrink-0" id="engine-selector" type="button">
+<span class="material-symbols-outlined text-primary text-[17px]">search</span>
+<span class="text-xs font-semibold tracking-wide" id="current-engine-name">必应 Bing</span>
+<span class="material-symbols-outlined text-[14px] text-text-muted">unfold_more</span>
+</button>
+<!-- 搜索输入本体 -->
+<input autocomplete="off" class="flex-1 bg-transparent px-3 py-2 text-sm text-text-main placeholder:text-slate-400 focus:outline-none" id="home-search-input" placeholder="键入搜索词、键入域名直达，或输入 '?' 唤起轻页指令..." spellcheck="false" type="text"/>
+<!-- 清空及搜索按钮 -->
+<div class="flex items-center gap-1 shrink-0">
+<button class="hidden w-7 h-7 items-center justify-center rounded-full text-slate-400 hover:text-text-main hover:bg-slate-100 transition-colors" id="clear-btn" title="清除输入" type="button">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-primary hover:bg-primary-hover text-white flex items-center justify-center transition-transform active:scale-95 shadow-md shadow-blue-500/20" id="search-action-btn" title="开始检索 (Enter)" type="button">
+<span class="material-symbols-outlined text-[17px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- 引擎切换下拉菜单 -->
+<div class="hidden absolute top-full mt-2 left-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-200/80 p-1.5 z-30" id="engine-flyout">
+<div class="text-[11px] font-medium text-slate-400 px-3 py-1">切换默认搜索引擎</div>
+<div class="flex flex-col gap-0.5 mt-0.5">
+<button class="engine-option flex items-center justify-between w-full px-3 py-2 rounded-xl text-left bg-blue-50 text-primary font-medium text-xs transition-colors" data-engine="bing">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[15px]">bolt</span>
+<span>必应 (Bing 极速)</span>
+</div>
+<span class="material-symbols-outlined text-xs">check</span>
+</button>
+<button class="engine-option flex items-center justify-between w-full px-3 py-2 rounded-xl text-left hover:bg-slate-50 text-text-sub text-xs transition-colors" data-engine="google">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[15px] text-slate-400">travel_explore</span>
+<span>谷歌 (Google)</span>
+</div>
+</button>
+<button class="engine-option flex items-center justify-between w-full px-3 py-2 rounded-xl text-left hover:bg-slate-50 text-text-sub text-xs transition-colors" data-engine="duckduckgo">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[15px] text-slate-400">shield</span>
+<span>DuckDuckGo 隐私</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+<!-- 快捷键指引徽标 -->
+<div class="w-full flex items-center justify-between mt-3 px-2 text-text-muted text-[11px] font-mono select-none">
+<div class="flex items-center gap-3">
+<span class="flex items-center gap-1">
+<kbd class="px-1.5 py-0.5 rounded bg-slate-200/80 text-text-sub font-semibold">Enter</kbd>
+<span>直接检索</span>
+</span>
+<span class="text-slate-300">•</span>
+<span class="flex items-center gap-1">
+<kbd class="px-1.5 py-0.5 rounded bg-slate-200/80 text-text-sub font-semibold">Tab</kbd>
+<span>切换搜索引擎</span>
+</span>
+</div>
+<div class="flex items-center gap-1">
+<kbd class="px-1.5 py-0.5 rounded bg-slate-200/80 text-text-sub font-semibold">⌘K</kbd>
+<span>唤起命令面板</span>
+</div>
+</div>
+</div>
+<!-- 最近访问卡片组 (纯白卡片，浅色柔和阴影) -->
+<div class="w-full max-w-4xl mx-auto my-10">
+<!-- 标题栏与操作按钮 -->
+<div class="flex items-center justify-between px-1 pb-3.5 select-none">
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1.5 text-text-main">
+<span class="material-symbols-outlined text-base text-primary">history_toggle_off</span>
+<span class="font-semibold text-sm tracking-tight">最近访问</span>
+</div>
+<span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-200/70 text-text-sub" id="history-badge">6 项</span>
+</div>
+<div class="flex items-center gap-2">
+<!-- 展开/折叠切换 -->
+<button class="flex items-center gap-1 px-2.5 py-1 rounded-lg text-text-sub hover:text-text-main hover:bg-slate-200/60 transition-colors text-xs font-medium" id="toggle-history-view" type="button">
+<span id="toggle-view-text">展开更多 (12)</span>
+<span class="material-symbols-outlined text-[15px]" id="toggle-view-icon">expand_more</span>
+</button>
+<div class="h-3.5 w-px bg-slate-200"></div>
+<!-- 清理记录 -->
+<button class="flex items-center gap-1 px-2 py-1 rounded-lg text-text-muted hover:text-red-600 hover:bg-red-50 transition-colors text-xs font-medium" id="clear-all-history" title="清理所有本地最近打开条目" type="button">
+<span class="material-symbols-outlined text-[15px]">delete_sweep</span>
+<span>清理记录</span>
+</button>
+</div>
+</div>
+<!-- 6 项精致纯白卡片网格 -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="history-grid">
+<!-- Card 1: Rust Standard Library -->
+<div class="history-item group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm hover:shadow-md">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0 text-primary">
+<span class="material-symbols-outlined text-lg">terminal</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#" title="Rust 编程语言官方标准库与并发指引">
+                  Rust Standard Library
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">doc.rust-lang.org</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" title="从最近列表移除" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span>12 分钟前</span>
+</span>
+<span class="font-mono text-[10px] text-slate-400 font-medium uppercase group-hover:text-primary transition-colors">Tauri View</span>
+</div>
+</div>
+<!-- Card 2: GitHub Architecture -->
+<div class="history-item group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm hover:shadow-md">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center shrink-0 text-amber-600">
+<span class="material-symbols-outlined text-lg">data_object</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#" title="GitHub - SAB Browser Core / Engine">
+                  GitHub · SAB Architecture
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">github.com/sab-desktop</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" title="从最近列表移除" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+<span>42 分钟前</span>
+</span>
+<span class="font-mono text-[10px] text-slate-400 font-medium uppercase group-hover:text-primary transition-colors">Git Commit</span>
+</div>
+</div>
+<!-- Card 3: MDN Web Docs -->
+<div class="history-item group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm hover:shadow-md">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0 text-indigo-600">
+<span class="material-symbols-outlined text-lg">menu_book</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#" title="MDN Web Docs · Performance &amp; Memory Profiling">
+                  MDN Web Docs · Memory
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">developer.mozilla.org</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" title="从最近列表移除" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+<span>2 小时前</span>
+</span>
+<span class="font-mono text-[10px] text-slate-400 font-medium uppercase group-hover:text-primary transition-colors">Documentation</span>
+</div>
+</div>
+<!-- Card 4: Hacker News -->
+<div class="history-item group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm hover:shadow-md">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-orange-50 border border-orange-100 flex items-center justify-center shrink-0 text-orange-600">
+<span class="material-symbols-outlined text-lg">newspaper</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#" title="Hacker News 极速精选模式">
+                  Hacker News: Newest
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">news.ycombinator.com</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" title="从最近列表移除" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+<span>4 小时前</span>
+</span>
+<span class="font-mono text-[10px] text-slate-400 font-medium uppercase group-hover:text-primary transition-colors">Aggregator</span>
+</div>
+</div>
+<!-- Card 5: arXiv -->
+<div class="history-item group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm hover:shadow-md">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-cyan-50 border border-cyan-100 flex items-center justify-center shrink-0 text-cyan-600">
+<span class="material-symbols-outlined text-lg">dns</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#" title="Arxiv · High Velocity Latency Benchmarks 2025">
+                  arXiv: Computer Science
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">arxiv.org/abs/2502.0194</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" title="从最近列表移除" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
+<span>昨天 18:32</span>
+</span>
+<span class="font-mono text-[10px] text-slate-400 font-medium uppercase group-hover:text-primary transition-colors">Preprint</span>
+</div>
+</div>
+<!-- Card 6: Material Design 3 -->
+<div class="history-item group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm hover:shadow-md">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-purple-50 border border-purple-100 flex items-center justify-center shrink-0 text-purple-600">
+<span class="material-symbols-outlined text-lg">palette</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#" title="Material Design 3 Token Hierarchy Reference">
+                  M3 Spec · Theme Tokens
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">m3.material.io</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" title="从最近列表移除" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span class="flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+<span>前天 14:10</span>
+</span>
+<span class="font-mono text-[10px] text-slate-400 font-medium uppercase group-hover:text-primary transition-colors">Design System</span>
+</div>
+</div>
+<!-- 折叠扩展卡片 7~9 -->
+<div class="history-item extra-history hidden group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0 text-emerald-600">
+<span class="material-symbols-outlined text-lg">code</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#">
+                  crates.io: Rust Packages
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">crates.io</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span>3 天前</span>
+<span class="font-mono text-[10px] text-slate-400 uppercase">Rust Lang</span>
+</div>
+</div>
+<div class="history-item extra-history hidden group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 flex items-center justify-center shrink-0 text-sky-600">
+<span class="material-symbols-outlined text-lg">bolt</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#">
+                  Vite.js Documentation
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">vite.dev</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span>4 天前</span>
+<span class="font-mono text-[10px] text-slate-400 uppercase">Build Tool</span>
+</div>
+</div>
+<div class="history-item extra-history hidden group relative bg-white hover:border-blue-300 border border-slate-200/80 rounded-xl p-3.5 transition-all duration-150 flex flex-col justify-between h-28 shadow-sm">
+<div class="flex items-start justify-between gap-2.5">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-8 h-8 rounded-lg bg-teal-50 border border-teal-100 flex items-center justify-center shrink-0 text-teal-600">
+<span class="material-symbols-outlined text-lg">storage</span>
+</div>
+<div class="min-w-0 flex-1">
+<a class="font-medium text-xs text-text-main hover:text-primary transition-colors block truncate" href="#">
+                  PostgreSQL 17 Notes
+                </a>
+<p class="font-mono text-[11px] text-text-muted truncate mt-0.5">postgresql.org</p>
+</div>
+</div>
+<button class="dismiss-item opacity-0 group-hover:opacity-100 w-5 h-5 flex items-center justify-center rounded text-slate-400 hover:text-text-main hover:bg-slate-100 transition-all shrink-0" type="button">
+<span class="material-symbols-outlined text-xs">close</span>
+</button>
+</div>
+<div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-text-muted">
+<span>5 天前</span>
+<span class="font-mono text-[10px] text-slate-400 uppercase">Database</span>
+</div>
+</div>
+</div>
+<!-- 空状态提示 (默认隐藏) -->
+<div class="hidden flex-col items-center justify-center py-12 bg-white border border-slate-200/70 rounded-2xl shadow-sm" id="history-empty">
+<span class="material-symbols-outlined text-3xl text-slate-300 mb-2">auto_delete</span>
+<p class="text-sm font-medium text-text-main">本地最近访问记录已全部清空</p>
+<p class="text-xs text-text-muted mt-1">记录仅存储在当前系统沙盒中，零云端追踪，保护您的隐私</p>
+</div>
+</div>
+<!-- 底部居中低调状态注脚 -->
+<footer class="w-full flex flex-col items-center justify-center pt-6 select-none border-t border-slate-200/60 mt-auto">
+<div class="flex items-center gap-2 text-text-muted text-xs font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span class="tracking-wide">轻页 SAB · Small And Beautiful</span>
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1 font-mono tracking-tight">零商业推送 · 确定性桌面体验 · 极低内存常驻</p>
+</footer>
+</main>
+<script>
+    (function () {
+      const searchInput = document.getElementById('home-search-input');
+      const clearBtn = document.getElementById('clear-btn');
+      const searchBtn = document.getElementById('search-action-btn');
+      const engineSelector = document.getElementById('engine-selector');
+      const engineFlyout = document.getElementById('engine-flyout');
+      const engineNameSpan = document.getElementById('current-engine-name');
+      const toggleHistoryBtn = document.getElementById('toggle-history-view');
+      const toggleText = document.getElementById('toggle-view-text');
+      const toggleIcon = document.getElementById('toggle-view-icon');
+      const extraHistoryItems = document.querySelectorAll('.extra-history');
+      const clearAllBtn = document.getElementById('clear-all-history');
+      const historyGrid = document.getElementById('history-grid');
+      const historyEmpty = document.getElementById('history-empty');
+      const historyBadge = document.getElementById('history-badge');
+
+      let currentEngine = 'bing';
+      let isExpanded = false;
+
+      // 搜索引擎地址映射
+      const engines = {
+        bing: { name: '必应 Bing', url: 'https://cn.bing.com/search?q=' },
+        google: { name: '谷歌 Google', url: 'https://www.google.com/search?q=' },
+        duckduckgo: { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=' }
+      };
+
+      // 搜索执行
+      function executeSearch() {
+        const q = searchInput.value.trim();
+        if (!q) return;
+
+        if (/^(http:\/\/|https:\/\/)/i.test(q)) {
+          window.location.href = q;
+        } else if (/^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)+/.test(q) && !q.includes(' ')) {
+          window.location.href = 'https://' + q;
+        } else {
+          const target = engines[currentEngine].url + encodeURIComponent(q);
+          window.open(target, '_blank');
+        }
+      }
+
+      searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          executeSearch();
+        } else if (e.key === 'Tab') {
+          e.preventDefault();
+          cycleEngine();
+        }
+      });
+
+      searchBtn.addEventListener('click', executeSearch);
+
+      // 输入框清空逻辑
+      searchInput.addEventListener('input', () => {
+        if (searchInput.value.length > 0) {
+          clearBtn.classList.remove('hidden');
+          clearBtn.classList.add('flex');
+        } else {
+          clearBtn.classList.add('hidden');
+          clearBtn.classList.remove('flex');
+        }
+      });
+
+      clearBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        clearBtn.classList.add('hidden');
+        clearBtn.classList.remove('flex');
+        searchInput.focus();
+      });
+
+      // 循环切换搜索引擎
+      function cycleEngine() {
+        const list = ['bing', 'google', 'duckduckgo'];
+        const nextIdx = (list.indexOf(currentEngine) + 1) % list.length;
+        setEngine(list[nextIdx]);
+      }
+
+      function setEngine(key) {
+        currentEngine = key;
+        engineNameSpan.textContent = engines[key].name;
+        engineFlyout.classList.add('hidden');
+      }
+
+      // 下拉菜单显示/隐藏
+      engineSelector.addEventListener('click', (e) => {
+        e.stopPropagation();
+        engineFlyout.classList.toggle('hidden');
+      });
+
+      document.querySelectorAll('.engine-option').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const eng = btn.getAttribute('data-engine');
+          setEngine(eng);
+        });
+      });
+
+      document.addEventListener('click', () => {
+        engineFlyout.classList.add('hidden');
+      });
+
+      // 展开/折叠历史项
+      toggleHistoryBtn.addEventListener('click', () => {
+        isExpanded = !isExpanded;
+        extraHistoryItems.forEach(el => {
+          if (isExpanded) {
+            el.classList.remove('hidden');
+          } else {
+            el.classList.add('hidden');
+          }
+        });
+
+        if (isExpanded) {
+          toggleText.textContent = '收起列表';
+          toggleIcon.textContent = 'expand_less';
+          historyBadge.textContent = '9 项';
+        } else {
+          toggleText.textContent = '展开更多 (12)';
+          toggleIcon.textContent = 'expand_more';
+          historyBadge.textContent = '6 项';
+        }
+      });
+
+      // 移除单项
+      document.querySelectorAll('.dismiss-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const card = btn.closest('.history-item');
+          if (card) {
+            card.style.opacity = '0';
+            card.style.transform = 'scale(0.96)';
+            card.style.transition = 'all 0.15s ease';
+            setTimeout(() => {
+              card.remove();
+              updateHistoryCount();
+            }, 150);
+          }
+        });
+      });
+
+      // 清空全部
+      clearAllBtn.addEventListener('click', () => {
+        historyGrid.classList.add('hidden');
+        historyEmpty.classList.remove('hidden');
+        historyEmpty.classList.add('flex');
+        historyBadge.textContent = '0 项';
+        toggleHistoryBtn.classList.add('opacity-40', 'pointer-events-none');
+      });
+
+      function updateHistoryCount() {
+        const remaining = document.querySelectorAll('.history-item').length;
+        historyBadge.textContent = remaining + ' 项';
+        if (remaining === 0) {
+          historyGrid.classList.add('hidden');
+          historyEmpty.classList.remove('hidden');
+          historyEmpty.classList.add('flex');
+          toggleHistoryBtn.classList.add('opacity-40', 'pointer-events-none');
+        }
+      }
+
+      // 自动聚焦
+      window.addEventListener('load', () => {
+        searchInput.focus();
+      });
+    })();
+  </script>
+</body></html>

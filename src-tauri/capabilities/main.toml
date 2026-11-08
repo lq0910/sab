@@ -1,0 +1,19 @@
+# 功能：仅允许本地 main WebView 使用指定命令，远程内容无授权；时间：2026-11-08；作者：lq。
+identifier = "main"
+description = "轻页本地界面的最小命令权限"
+local = true
+webviews = ["main"]
+permissions = [
+  # 功能：允许本地顶栏调用 Tauri 原生窗口拖动命令；时间：2026-11-08；作者：lq。
+  "core:window:allow-start-dragging",
+  # 功能：允许本地顶栏关闭、最小化和切换最大化原生窗口状态；时间：2026-11-08；作者：lq。
+  "core:window:allow-close", "core:window:allow-minimize", "core:window:allow-toggle-maximize",
+  # 功能：允许本地界面创建并弹出原生标签菜单，按目标标签启用或禁用刷新项；时间：2026-11-08；作者：lq。
+  "core:menu:allow-new", "core:menu:allow-popup", "core:menu:allow-set-enabled",
+  # 功能：菜单使用完成后释放 Tauri 原生资源；时间：2026-11-08；作者：lq。
+  "core:resources:allow-close",
+  "core:event:allow-listen", "core:event:allow-unlisten",
+  "allow-bootstrap", "allow-list-bookmarks", "allow-save-bookmark",
+  "allow-delete-bookmark", "allow-save-settings", "allow-list-recent",
+  "allow-clear-history", "allow-hide-recent", "allow-browser-view"
+]

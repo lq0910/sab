@@ -1,0 +1,13 @@
+# 功能：忽略依赖、构建与本机数据；时间：2026-11-08；作者：lq。
+.DS_Store
+node_modules/
+.pnpm-store/
+dist/
+src-tauri/target/
+src-tauri/gen/
+output/
+*.local
+*.sqlite3*
+.env
+.env.*
+!.env.example

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-browser-view"
+description = "Enables the browser_view command without any pre-configured scope."
+commands.allow = ["browser_view"]
+
+[[permission]]
+identifier = "deny-browser-view"
+description = "Denies the browser_view command without any pre-configured scope."
+commands.deny = ["browser_view"]

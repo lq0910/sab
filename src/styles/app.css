@@ -1,0 +1,290 @@
+/* 功能：按 UI 组件稿还原紧凑浏览器框架和页面布局；时间：2026-11-08；作者：lq。 */
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--text); background: transparent; font: 13px/1.5 var(--font); -webkit-font-smoothing: antialiased; }
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button, input, select, a { -webkit-tap-highlight-color: transparent; }
+button:disabled { opacity: .4; cursor: default; }
+button { border: 0; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus-visible, select:focus-visible { outline: none; box-shadow: var(--focus); border-color: var(--accent); }
+button, a { touch-action: manipulation; }
+svg { flex-shrink: 0; vertical-align: middle; }
+h1, h2, p { margin: 0; }
+h1 { font-size: 20px; font-weight: 600; letter-spacing: -.015em; }
+h2 { font-size: 14px; font-weight: 600; }
+small { font-size: 11px; }
+strong { font-weight: 500; }
+kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--muted); padding: 2px 5px; border-radius: 4px; white-space: nowrap; }
+/* 功能：在透明无边框原生窗口上裁切并绘制圆角外框；时间：2026-11-08；作者：lq。 */
+.browser-shell { position: relative; height: 100dvh; display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; background: var(--canvas); }
+/* 功能：为应用首次冷启动提供覆盖式品牌动画，并让就绪后的切换自然淡出；时间：2026-11-08；作者：lq。 */
+.launch-screen { position: absolute; inset: 0; z-index: 30; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: var(--canvas); color: var(--text); }
+.launch-logo { width: 64px; height: 64px; margin-bottom: 6px; animation: launch-logo-spin 1.3s linear infinite; }
+.launch-screen strong { font-size: 14px; font-weight: 600; }
+.launch-screen > span { color: var(--muted); font-size: 11px; }
+.launch-screen-leave-active { transition: opacity 180ms ease; }
+.launch-screen-leave-to { opacity: 0; }
+@keyframes launch-logo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.browser-chrome { flex-shrink: 0; user-select: none; background: var(--chrome); }
+/* 功能：把窗口控制区和标签页排列在一条 Chrome 风格顶栏中；时间：2026-11-08；作者：lq。 */
+.tab-strip { height: var(--tab-height); display: flex; align-items: center; padding: 0 12px; gap: 12px; }
+.window-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding: 0 4px; }
+.window-control { width: 12px; height: 12px; padding: 0; border-radius: 50%; border: 1px solid rgb(0 0 0 / 12%); }
+.window-control.close { background: #ff6058; }
+.window-control.minimize { background: #ffbd2e; }
+.window-control.maximize { background: #28c840; }
+/* 功能：多标签超出可视宽度时保留横向滚动，并通过专用入口搜索全部标签；时间：2026-11-08；作者：lq。 */
+.tabs { display: flex; align-self: stretch; align-items: center; gap: 4px; min-width: 0; flex: 1; overflow-x: auto; scrollbar-width: none; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab-picker-trigger { width: 27px; height: 27px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 27px; border-radius: 7px; background: transparent; color: var(--secondary); }
+.tab-picker-trigger:hover, .tab-picker-trigger[aria-expanded='true'] { background: var(--surface-high); color: var(--text); }
+/* 功能：用横向滑入、底色和阴影的柔和过渡表现活动标签切换；时间：2026-11-08；作者：lq。 */
+.browser-tab { height: 30px; min-width: 110px; max-width: 230px; display: flex; align-items: center; border: 1px solid transparent; border-radius: 9px; opacity: .78; transform: translateX(0); transition: background-color 260ms ease, border-color 260ms ease, box-shadow 280ms ease, opacity 220ms ease; }
+/* 功能：阻止鼠标拖动标签时选中标题文本；时间：2026-11-08；作者：lq。 */
+.browser-tab, .browser-tab * { -webkit-user-select: none; user-select: none; }
+.browser-tab:hover, .browser-tab.active { opacity: 1; }
+.browser-tab.active { border-color: var(--line); background: var(--toolbar); box-shadow: 0 3px 10px rgb(20 28 45 / 10%); }
+.browser-tab.active.flow-from-left { animation: tab-flow-from-left 300ms cubic-bezier(.22, .68, .25, 1); }
+.browser-tab.active.flow-from-right { animation: tab-flow-from-right 300ms cubic-bezier(.22, .68, .25, 1); }
+.browser-tab > button[role='tab'] { min-width: 0; flex: 1; height: 29px; display: flex; align-items: center; gap: 8px; padding: 0 10px; color: var(--muted); background: transparent; text-align: left; transition: color 220ms ease; }
+.browser-tab.active > button[role='tab'] { color: var(--text); }
+.browser-tab svg { transition: color 240ms ease; }
+.browser-tab.active > button svg { color: var(--accent); }
+.browser-tab span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; }
+/* 功能：让新活动标签沿切换方向轻滑到位，避免上下跳动和尺寸变化；时间：2026-11-08；作者：lq。 */
+@keyframes tab-flow-from-left { from { opacity: .72; transform: translateX(-9px); } 72% { opacity: 1; transform: translateX(1px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes tab-flow-from-right { from { opacity: .72; transform: translateX(9px); } 72% { opacity: 1; transform: translateX(-1px); } to { opacity: 1; transform: translateX(0); } }
+/* 功能：让标签关闭图标在紧凑圆形悬停区内稳定居中；时间：2026-11-08；作者：lq。 */
+.tab-close { width: 22px; height: 22px; padding: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 0; border-radius: 50%; background: transparent; color: var(--muted); margin: 0 4px 0 0; flex-shrink: 0; transition: color 160ms ease, background-color 160ms ease, transform 220ms cubic-bezier(.2, .8, .2, 1.2); }
+.tab-close:hover { background: var(--surface-high); color: var(--text); transform: scale(1.08); }
+.new-tab { margin-bottom: 1px; }
+.navigation-bar { height: var(--nav-height); display: flex; align-items: center; gap: 4px; background: var(--toolbar); border-bottom: 1px solid var(--line); padding: 4px 14px; }
+.icon-button { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; border-radius: 6px; color: var(--secondary); background: transparent; flex-shrink: 0; }
+.icon-button:hover:not(:disabled) { background: var(--surface-high); color: var(--text); }
+/* 功能：统一地址栏右侧操作图标的线条粗细和禁用状态颜色；时间：2026-11-08；作者：lq。 */
+.navigation-bar > .icon-button { color: var(--secondary); }
+.navigation-bar > .icon-button:disabled { opacity: 1; color: var(--secondary); }
+.navigation-bar > .icon-button svg { stroke-width: 1.7; }
+/* 功能：加重导航栏最右侧菜单省略号的可视笔画，使其与邻近图标协调；时间：2026-11-08；作者：lq。 */
+.navigation-bar > .icon-button:last-child svg { stroke-width: 2.4; }
+.address-bar { height: 32px; min-width: 0; flex: 1; display: flex; align-items: center; gap: 8px; background: var(--surface-low); border: 1px solid var(--line); border-radius: 999px; padding: 0 12px; margin: 0 8px; }
+.address-bar > svg { color: var(--accent); }
+.address-bar:focus-within { border-color: var(--accent); box-shadow: var(--focus); }
+.address-bar input { width: 100%; min-width: 0; background: transparent; border: 0; outline: none; box-shadow: none; font-size: 12px; }
+.address-bar input:focus-visible { box-shadow: none; }
+.content-viewport { position: relative; flex: 1; min-height: 0; overflow: auto; }
+.preview-notice { background: var(--surface-high); color: var(--secondary); font-size: 11px; padding: 5px 16px; text-align: center; }
+.button { height: 32px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; transition: background 120ms; }
+.primary { background: var(--accent); color: var(--accent-text); }
+.primary:hover:not(:disabled) { filter: brightness(.95); }
+.secondary { border: 1px solid var(--line); background: var(--surface-low); color: var(--secondary); }
+.secondary:hover:not(:disabled) { background: var(--surface-high); }
+.destructive { background: transparent; border: 1px solid var(--line); color: var(--danger); }
+.inline-actions { display: flex; align-items: center; gap: 8px; }
+.text-button { background: transparent; color: var(--muted); display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 32px; padding: 0 6px; font-size: 12px; }
+.text-button:hover { color: var(--text); }
+.status-dot { display: inline-block; height: 6px; width: 6px; border-radius: 50%; background: var(--success); flex-shrink: 0; }
+.count-badge, .state-badge { border-radius: 999px; background: var(--surface-low); padding: 3px 8px; font-size: 11px; font-weight: 400; color: var(--secondary); }
+/* 功能：为主页灰底叠加低对比度的柔焦色晕，不影响页面内容交互；时间：2026-11-08；作者：lq。 */
+.home-view { position: relative; isolation: isolate; min-height: 100%; display: flex; flex-direction: column; padding: 0 40px; }
+.home-view::before { content: ''; position: absolute; z-index: -1; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 18% 34%, rgb(211 224 248 / 24%), transparent 42%), radial-gradient(ellipse at 82% 58%, rgb(225 229 241 / 28%), transparent 44%); filter: blur(34px); }
+/* 功能：无最近访问记录时隐藏历史留白并将搜索区放在主页中线稍上方；时间：2026-11-08；作者：lq。 */
+.home-view--no-recent { display: grid; grid-template-rows: minmax(0, .86fr) auto minmax(0, 1.14fr); }
+.home-view--no-recent .home-search { grid-row: 2; margin: 0 auto; align-self: center; }
+.home-view--no-recent .home-footer { grid-row: 3; align-self: end; margin: 0 auto; }
+.home-search { position: relative; width: min(100%, 760px); margin: clamp(90px, 16vh, 180px) auto 0; }
+/* 功能：将 SAB 图标置于无最近记录时的搜索框上方，并随窗口高度保持留白；时间：2026-11-08；作者：lq。 */
+.home-brand-logo { position: absolute; left: 50%; bottom: calc(100% + clamp(96px, 13.5vh, 156px)); width: 100px; height: 100px; object-fit: contain; transform: translateX(-50%); filter: drop-shadow(0 8px 18px rgb(25 39 67 / 10%)); }
+.search-capsule { height: 56px; display: flex; align-items: center; gap: 12px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); padding: 7px; box-shadow: var(--shadow); }
+.search-capsule:focus-within { border-color: var(--accent); box-shadow: var(--focus), var(--shadow); }
+.engine-control { display: flex; align-items: center; gap: 5px; flex-shrink: 0; background: var(--surface-low); border-radius: 999px; padding: 0 10px; height: 38px; }
+.engine-control svg { color: var(--accent); }
+.engine-control select { border: 0; outline: 0; background: transparent; width: 112px; font-size: 12px; }
+.search-capsule > input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; height: 38px; box-shadow: none; font-size: 14px; }
+.search-capsule > input:focus-visible { box-shadow: none; }
+.search-capsule > input::placeholder { color: var(--muted); }
+.search-submit { height: 38px; width: 38px; display: grid; place-items: center; border-radius: 50%; background: var(--accent); color: var(--accent-text); flex-shrink: 0; transition: transform 120ms; }
+.search-submit:hover { transform: translateX(2px); }
+.search-hints { display: flex; justify-content: space-between; color: var(--muted); margin: 12px 10px 0; font-size: 11px; }
+.search-hints kbd { margin-right: 5px; }
+.recent-section { width: min(100%, 1040px); margin: 56px auto 32px; }
+.section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-heading h2, .pinned-section h2 { display: flex; align-items: center; gap: 8px; }
+.section-heading h2 > svg, .pinned-section h2 > svg { color: var(--accent); }
+.recent-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.recent-card { position: relative; padding: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 1px 2px rgb(0 0 0 / 3%); }
+.recent-hide { position: absolute; top: 4px; right: 4px; opacity: 0; }
+.recent-card:hover .recent-hide, .recent-card:focus-within .recent-hide { opacity: 1; }
+.home-footer { margin: auto auto 0; padding: 40px 0 26px; display: flex; align-items: center; justify-content: center; gap: 10px; color: var(--muted); font-size: 12px; letter-spacing: .04em; }
+.bookmarks-view { width: min(100%, 1280px); padding: 44px 48px 24px; margin: auto; }
+.page-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+.heading-with-icon { display: flex; align-items: center; gap: 12px; }
+.heading-icon { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; border-radius: 12px; background: var(--surface-low); color: var(--accent); flex-shrink: 0; }
+.page-heading h1 small { font: 12px var(--mono); background: var(--surface-low); color: var(--secondary); padding: 4px 8px; border-radius: 999px; margin-left: 8px; }
+.page-heading p { margin-top: 6px; color: var(--muted); font-size: 12px; }
+.page-heading p .status-dot { margin-right: 6px; }
+.collection-toolbar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.filter-input { height: 38px; display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; padding: 0 12px; border: 1px solid var(--line); background: var(--surface); border-radius: 8px; }
+.filter-input:focus-within { border-color: var(--accent); box-shadow: var(--focus); }
+.filter-input > input { min-width: 0; width: 100%; background: transparent; border: 0; outline: 0; box-shadow: none; }
+.filter-input > input:focus-visible { box-shadow: none; }
+.segmented-control { display: flex; padding: 3px; background: var(--surface-low); border-radius: 6px; }
+.segmented-control button { height: 30px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-radius: 4px; background: transparent; color: var(--secondary); font-size: 12px; }
+.segmented-control button.selected { background: var(--accent); color: var(--accent-text); }
+.pinned-section { margin-bottom: 32px; }
+.pinned-section h2 { margin-bottom: 14px; }
+.pinned-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+.pinned-site { text-align: left; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: transparent; }
+.pinned-site:hover { background: var(--surface-low); }
+.pinned-site strong, .pinned-site small { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.pinned-site strong { margin: 10px 0 3px; }
+.pinned-site small { color: var(--muted); }
+.site-icon { display: inline-flex; justify-content: center; align-items: center; height: 34px; width: 34px; flex-shrink: 0; background: var(--surface-low); color: var(--accent); border-radius: 8px; }
+.category-tabs { display: flex; gap: 6px; overflow-x: auto; padding: 2px 0 10px; margin-bottom: 16px; }
+.category-tabs button { background: var(--surface-low); color: var(--secondary); white-space: nowrap; height: 32px; padding: 0 12px; border-radius: 999px; font-size: 12px; flex-shrink: 0; }
+.category-tabs button.active { color: var(--accent-text); background: var(--accent); }
+.bookmark-collection.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.bookmark-card { position: relative; min-width: 0; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); transition: border-color 120ms, background 120ms; }
+.bookmark-card:hover { border-color: var(--line-strong); }
+.site-link { width: 100%; display: flex; align-items: center; text-align: left; gap: 12px; padding: 0; background: transparent; min-width: 0; color: var(--text); }
+.site-link > span:last-child { min-width: 0; }
+.site-link strong, .site-link small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.site-link small { color: var(--muted); font-family: var(--mono); margin-top: 4px; }
+.bookmark-card .site-link { padding-right: 20px; }
+.edit-bookmark { position: absolute; right: 6px; top: 10px; }
+.bookmark-meta { display: flex; align-items: center; gap: 6px; margin-top: 24px; flex-wrap: wrap; min-height: 20px; }
+.tag { font-size: 11px; padding: 2px 6px; border-radius: 4px; background: var(--surface-low); }
+.folder-label { font-size: 11px; color: var(--accent); background: var(--surface-low); padding: 2px 6px; border-radius: 4px; }
+.bookmark-collection.list { display: flex; flex-direction: column; gap: 8px; }
+.list .bookmark-card { display: flex; align-items: center; gap: 20px; padding: 12px 40px 12px 14px; }
+.list .bookmark-meta { margin: 0; flex-shrink: 0; }
+.collection-footer { display: flex; gap: 16px; align-items: center; color: var(--muted); font-size: 11px; padding-top: 24px; }
+.collection-footer > span:nth-child(2) { margin-left: auto; }
+.empty-state { min-height: 300px; padding: 64px 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 14px; }
+.empty-state > svg { color: var(--muted); }
+.empty-state h1, .empty-state h2 { font-size: 18px; }
+.empty-state p { color: var(--muted); max-width: 540px; overflow-wrap: anywhere; }
+.empty-inline { color: var(--muted); text-align: center; padding: 40px 16px; font-size: 12px; }
+
+/* 功能：沿用设置页左导航和白色分组面板；时间：2026-11-08；作者：lq。 */
+.settings-layout { display: grid; grid-template-columns: 220px minmax(0, 780px); gap: 36px; max-width: 1130px; padding: 36px 32px; margin: auto; }
+.settings-sidebar { align-self: start; position: sticky; top: 28px; }
+.settings-sidebar h1 { display: flex; gap: 10px; align-items: center; font-size: 16px; padding: 0 12px 20px; }
+.settings-sidebar h1 > svg { color: var(--accent); }
+.settings-sidebar nav { display: flex; flex-direction: column; gap: 4px; }
+.settings-sidebar a { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--secondary); padding: 10px 12px; border-radius: 999px; font-size: 12px; }
+.settings-sidebar a:hover { background: var(--surface-low); color: var(--accent); }
+.settings-sidebar a.active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.settings-sidebar a.active > svg { color: var(--accent); }
+.settings-sidebar > p { color: var(--muted); font-size: 11px; margin: 24px 12px; padding-top: 16px; border-top: 1px solid var(--line); }
+.settings-content { min-width: 0; }
+.settings-section { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; margin-bottom: 20px; scroll-margin-top: 20px; }
+.settings-section > h2 { display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 16px; }
+.settings-section > h2 > svg { color: var(--accent); }
+.settings-section h2 small { margin-left: auto; font: 10px var(--mono); color: var(--muted); font-weight: 400; }
+.settings-section p { color: var(--muted); font-size: 12px; margin: 12px 0 16px; line-height: 1.8; }
+.radio-option { display: flex; align-items: flex-start; gap: 10px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.radio-option.checked { background: var(--surface-low); border-color: var(--accent); }
+.radio-option input { accent-color: var(--accent); margin-top: 3px; }
+.radio-option small { display: block; color: var(--muted); margin-top: 4px; }
+.field-label { display: flex; flex-direction: column; gap: 8px; margin: 16px 0 10px; font-size: 12px; }
+.text-input { width: 100%; min-width: 0; height: 34px; border: 1px solid var(--line); border-radius: 6px; padding: 0 10px; background: var(--canvas); }
+.text-input[readonly] { color: var(--muted); }
+.setting-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 16px 0; }
+.setting-row > span small { display: block; color: var(--muted); margin-top: 4px; }
+.setting-row > select { max-width: 160px; }
+.switch { appearance: none; position: relative; background: var(--line-strong); height: 20px; width: 36px; flex-shrink: 0; border-radius: 999px; cursor: pointer; transition: background 120ms; }
+.switch:checked { background: var(--accent); }
+.switch::after { content: ''; position: absolute; width: 16px; height: 16px; left: 2px; top: 2px; border-radius: 50%; background: #fff; transition: transform 120ms; }
+.switch:checked::after { transform: translateX(16px); }
+.settings-save { display: flex; justify-content: flex-end; margin: -6px 0 24px; }
+.theme-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 14px 0 16px; }
+.theme-option { min-width: 0; display: flex; align-items: center; gap: 12px; text-align: left; padding: 10px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+.theme-option:hover { background: var(--surface-low); }
+.theme-option.selected { border-color: var(--accent); box-shadow: var(--focus); }
+.theme-option > svg { color: var(--accent); margin-left: auto; }
+.theme-swatch { width: 44px; height: 36px; display: flex; align-items: center; gap: 4px; padding: 7px; border-radius: 6px; background: var(--swatch); flex-shrink: 0; }
+.theme-swatch i { display: block; width: 5px; height: 20px; border-radius: 4px; background: var(--swatch-companion); }
+.theme-swatch i:nth-child(2) { height: 15px; background: color-mix(in srgb, var(--swatch-companion), white 24%); }
+.theme-swatch i:nth-child(3) { height: 10px; background: white; }
+.theme-copy { min-width: 0; }
+.theme-copy strong, .theme-copy small { display: block; }
+.theme-copy small { color: var(--muted); margin-top: 2px; }
+.about-brand { display: flex; align-items: center; gap: 12px; }
+.about-brand p { margin: 4px 0; }
+/* 功能：以紧凑尺寸展示公众号二维码和 QQ 联系方式；时间：2026-11-08；作者：lq。 */
+.about-contact { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 8px; color: var(--muted); font-size: 12px; }
+.about-qr { display: block; width: 64px; height: 64px; object-fit: contain; border: 1px solid var(--line); border-radius: 6px; }
+.muted { color: var(--muted); }
+
+/* 功能：复用收藏浮层的 600px 宽度与轻量进退动效；时间：2026-11-08；作者：lq。 */
+.overlay-panel { width: min(600px, calc(100vw - 32px)); max-height: 75dvh; border: 1px solid var(--line-strong); border-radius: 18px; padding: 16px 16px 0; color: var(--text); background: var(--surface); box-shadow: var(--overlay-shadow); overflow: auto; }
+.overlay-panel[open] { animation: panel-enter 160ms ease-out; }
+.overlay-panel::backdrop { background: rgb(15 23 42 / 20%); }
+.overlay-panel.compact { width: 260px; margin: 80px 12px auto auto; padding: 6px; border-radius: 8px; }
+.favorites-search { display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); border-radius: 12px; padding: 4px 10px; margin-bottom: 14px; }
+.favorites-search:focus-within { border-color: var(--accent); box-shadow: var(--focus); }
+.favorites-search input { min-width: 0; width: 100%; height: 36px; border: 0; outline: 0; background: transparent; box-shadow: none; }
+.favorites-search input:focus-visible { box-shadow: none; }
+.favorite-results { max-height: calc(75dvh - 210px); min-height: 120px; overflow-y: auto; padding-bottom: 10px; }
+.favorite-result { width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 10px; border-radius: 8px; background: transparent; text-align: left; }
+.favorite-result.highlighted, .favorite-result:hover { background: var(--surface-low); }
+.favorite-result > span:nth-child(2) { flex: 1; min-width: 0; }
+.favorite-result strong, .favorite-result small { display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.favorite-result small { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.panel-footer { display: flex; justify-content: flex-end; align-items: center; gap: 8px; padding: 14px 0; border-top: 1px solid var(--line); }
+.panel-footer > :first-child:not(:last-child) { margin-right: auto; }
+.bookmark-form > header { display: flex; align-items: center; justify-content: space-between; }
+.bookmark-form .field-label { margin-top: 14px; }
+.browser-menu { display: flex; flex-direction: column; gap: 2px; }
+.browser-menu > button { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 4px; background: transparent; text-align: left; }
+.browser-menu > button:hover { background: var(--surface-low); }
+.browser-menu > button:focus-visible { outline: none; background: var(--surface-low); box-shadow: inset 2px 0 var(--accent); }
+.browser-menu kbd { margin-left: auto; }
+.browser-menu hr { width: 100%; border: 0; border-top: 1px solid var(--line); margin: 4px 0; }
+/* 功能：绘制可搜索的已打开标签列表，并将当前页与关闭操作清晰区分；时间：2026-11-08；作者：lq。 */
+.tab-picker { position: fixed; z-index: 30; width: 320px; max-width: calc(100vw - 16px); max-height: min(560px, calc(100dvh - 56px)); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: var(--surface); box-shadow: var(--overlay-shadow); }
+.tab-picker-search { min-height: 58px; display: flex; align-items: center; gap: 12px; padding: 0 16px; border-bottom: 1px solid var(--line); color: var(--secondary); }
+.tab-picker-search input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; box-shadow: none; font-size: 14px; }
+.tab-picker-search input:focus-visible { box-shadow: none; }
+.tab-picker-search kbd { flex-shrink: 0; }
+.tab-picker > h2 { min-height: 48px; display: flex; align-items: center; gap: 8px; padding: 0 18px; color: var(--secondary); font-size: 13px; }
+.tab-picker > h2 span { color: var(--muted); font-size: 11px; font-weight: 400; }
+.tab-picker-list { min-height: 0; overflow-y: auto; padding: 0 0 6px; }
+.tab-picker-item { min-height: 72px; display: flex; align-items: center; padding: 5px 12px 5px 14px; }
+.tab-picker-item:hover, .tab-picker-item.selected { background: var(--surface-high); }
+.tab-picker-select { min-width: 0; flex: 1; display: flex; align-items: center; gap: 12px; padding: 0; background: transparent; text-align: left; }
+.tab-picker-icon { width: 48px; height: 48px; flex: 0 0 48px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-low); color: var(--accent); }
+.tab-picker-copy { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.tab-picker-copy strong, .tab-picker-copy small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.tab-picker-copy strong { font-size: 13px; font-weight: 500; }
+.tab-picker-copy small { color: var(--muted); font-size: 11px; }
+.tab-picker-close { width: 30px; height: 30px; flex: 0 0 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: transparent; color: var(--secondary); }
+.tab-picker-close:hover { background: var(--line); color: var(--text); }
+.tab-picker-empty { padding: 20px 16px; color: var(--muted); text-align: center; }
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; width: max-content; max-width: min(640px, calc(100vw - 32px)); background: var(--surface); color: var(--text); border: 1px solid var(--line-strong); border-radius: 10px; box-shadow: var(--shadow); padding: 6px 8px 6px 14px; z-index: 10; font-size: 12px; }
+.toast span { overflow-wrap: anywhere; }
+.panel-error { color: var(--danger); padding: 8px 0 12px; overflow-wrap: anywhere; }
+@keyframes panel-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 960px) {
+  .bookmarks-view { padding: 28px 24px; }
+  .pinned-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .bookmark-collection.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .settings-layout { gap: 16px; grid-template-columns: 180px minmax(0, 1fr); padding: 24px; }
+  .settings-section { padding: 18px; }
+  .page-heading h1 small { display: none; }
+}
+@media (max-width: 767px) {
+  .home-view { padding: 0 24px; }
+  .recent-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-search { margin-top: 100px; }
+  .page-heading { align-items: flex-start; }
+  .page-heading .inline-actions { flex-direction: column; align-items: flex-end; }
+  .settings-layout { display: block; }
+  .settings-sidebar { position: static; margin-bottom: 24px; }
+  .settings-sidebar nav { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .settings-sidebar > p { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+@media (prefers-reduced-transparency: reduce) { .overlay-panel::backdrop { background: var(--canvas); } }
