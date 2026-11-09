@@ -51,12 +51,16 @@ pub async fn browser_view(app: AppHandle, caller: Webview, action: BrowserAction
         let builder = WebviewBuilder::new(&label, WebviewUrl::External(url))
             .on_navigation(|url| website_url(url.as_str()).is_ok())
             .on_page_load(move |view, payload| {
-                // 页面完成加载不等于 HTTP 成功；历史写入待导航错误核验后启用。
-                let _ = view.app_handle().emit_to("main", "sab:page", PageEvent { tab_id: id_load.clone(), url: payload.url().to_string(), title: None, loading: Some(matches!(payload.event(), PageLoadEvent::Started)) });
+                // 功能：向外壳报告页面加载状态和标题，供标签更新及浏览记录保存；时间：2026-11-08；作者：lq。
+                let finished = matches!(payload.event(), PageLoadEvent::Finished);
+                let _ = view.app_handle().emit_to("main", "sab:page", PageEvent {
+                    tab_id: id_load.clone(), url: payload.url().to_string(), title: None,
+                    loading: Some(!finished),
+                });
             })
             .on_document_title_changed(move |view, title| {
                 if let Ok(url) = view.url() {
-                    let _ = view.app_handle().emit_to("main", "sab:page", PageEvent { tab_id: id_title.clone(), url: url.to_string(), title: Some(title), loading: None });
+                    let _ = view.app_handle().emit_to("main", "sab:page", PageEvent { tab_id: id_title.clone(), url: url.to_string(), title: Some(title), loading: Some(false) });
                 }
             })
             .on_new_window(move |url, _| {

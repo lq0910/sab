@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-apply-classification"
+description = "Enables the apply_classification command without any pre-configured scope."
+commands.allow = ["apply_classification"]
+
+[[permission]]
+identifier = "deny-apply-classification"
+description = "Denies the apply_classification command without any pre-configured scope."
+commands.deny = ["apply_classification"]

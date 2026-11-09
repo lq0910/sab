@@ -8,10 +8,19 @@ export const engines: Record<SearchEngine, { name: string; prefix: string }> = {
   duckduckgo: { name: 'DuckDuckGo', prefix: 'https://duckduckgo.com/?q=' },
 };
 
+// 功能：区分需要交给搜索引擎的词语与可直接打开的网址；时间：2026-11-08；作者：lq。
+export function isSearchQuery(input: string): boolean {
+  const value = input.trim();
+  if (!value || ['sab://home', 'sab://bookmarks', 'sab://settings', 'sab://history'].includes(value)) return false;
+  if (/^[a-z][a-z\d+.-]*:/i.test(value) && !/^[\w.-]+:\d+(?:\/|$)/.test(value)) return false;
+  return !(!/\s/.test(value) && /^(localhost|\[[\da-f:]+\]|[\w\p{L}-]+(?:\.[\w\p{L}-]+)+)(:\d+)?([/?#]|$)/iu.test(value));
+}
+
 export function resolveAddress(input: string, engine: SearchEngine = 'bing'): string {
   const value = input.trim();
   if (!value) return 'sab://home';
-  if (['sab://home', 'sab://bookmarks', 'sab://settings'].includes(value)) return value;
+  // 功能：将轻页内置历史页纳入可直接输入的地址；时间：2026-11-08；作者：lq。
+  if (['sab://home', 'sab://bookmarks', 'sab://settings', 'sab://history'].includes(value)) return value;
   if (/^[a-z][a-z\d+.-]*:/i.test(value) && !/^[\w.-]+:\d+(?:\/|$)/.test(value)) {
     const url = new URL(value);
     if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) {

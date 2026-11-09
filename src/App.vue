@@ -11,10 +11,11 @@ import appLogo from '../src-tauri/icons/source.svg';
 import AppIcon from './components/AppIcon.vue';
 import BookmarksView from './components/BookmarksView.vue';
 import HomeView from './components/HomeView.vue';
+import HistoryView from './components/HistoryView.vue';
 import OverlayPanel from './components/OverlayPanel.vue';
 import SettingsView from './components/SettingsView.vue';
-import { defaultSettings, type Bookmark, type BookmarkDraft, type Folder, type PageEvent, type RecentVisit, type SearchEngine, type Settings, type Tab, type ThemeId, type ViewBounds } from './domain/models';
-import { displayHost, isInternal, resolveAddress } from './domain/navigation';
+import { defaultSettings, type Bookmark, type BookmarkDraft, type ColorMode, type Folder, type PageEvent, type RecentVisit, type SearchEngine, type Settings, type Tab, type ThemeId, type ViewBounds } from './domain/models';
+import { displayHost, isInternal, isSearchQuery, resolveAddress } from './domain/navigation';
 import { api, desktop } from './services/desktop';
 
 const newTab = (url = 'sab://home'): Tab => ({ id: crypto.randomUUID(), url, title: '轻页 SAB Workspace', loading: false });
@@ -23,6 +24,9 @@ const activeId = ref(tabs.value[0]!.id);
 const active = computed(() => tabs.value.find(tab => tab.id === activeId.value)!);
 const address = ref(active.value.url);
 const addressElement = ref<HTMLInputElement>();
+const addressSuggestions = ref<RecentVisit[]>([]);
+const suggestionsOpen = ref(false);
+const suggestionIndex = ref(-1);
 const viewport = ref<HTMLElement>();
 const tabsElement = ref<HTMLElement>();
 const tabPickerButton = ref<HTMLElement>();
@@ -58,6 +62,10 @@ let observer: ResizeObserver | undefined;
 let nativeQueue = Promise.resolve();
 let searchSequence = 0;
 const internal = computed(() => isInternal(active.value.url));
+// 功能：识别当前 HTTPS 页面并在地址栏展示加密连接标志；时间：2026-11-08；作者：lq。
+const secureConnection = computed(() => !internal.value && active.value.url.toLowerCase().startsWith('https://'));
+// 功能：根据地址栏输入判断显示搜索或网页连接图标；时间：2026-11-08；作者：lq。
+const addressSearch = computed(() => isSearchQuery(address.value));
 const filteredTabs = computed(() => {
   const query = tabPickerQuery.value.trim().toLocaleLowerCase();
   if (!query) return tabs.value;
@@ -65,7 +73,7 @@ const filteredTabs = computed(() => {
 });
 const contentPage = computed(() => active.value.url === 'sab://home'
   ? (settings.value.homeMode === 'minimal' ? 'home' : 'bookmarks')
-  : active.value.url === 'sab://bookmarks' ? 'bookmarks' : active.value.url === 'sab://settings' ? 'settings' : 'web');
+  : active.value.url === 'sab://bookmarks' ? 'bookmarks' : active.value.url === 'sab://settings' ? 'settings' : active.value.url === 'sab://history' ? 'history' : 'web');
 
 // 功能：为自绘标题栏提供最小化、最大化和关闭窗口操作；时间：2026-11-08；作者：lq。
 async function controlWindow(action: 'minimize' | 'maximize' | 'close') {
@@ -164,12 +172,14 @@ async function activate(id: string) {
 async function navigate(input: string, newWindow = false) {
   const url = resolveAddress(input, settings.value.searchEngine);
   panel.value = '';
+  suggestionsOpen.value = false;
   message.value = '';
   pageError.value = '';
   if (newWindow) { const tab = newTab(url); tabs.value.push(tab); tabMotion.value = 'from-left'; activeId.value = tab.id; }
   const tab = active.value;
   tab.url = url;
-  tab.title = isInternal(url) ? (url === 'sab://settings' ? '设置 - 轻页 SAB' : url === 'sab://bookmarks' ? '收藏中心' : '轻页 SAB Workspace') : displayHost(url);
+  // 功能：为内置页面设置对应标签标题，包含浏览历史入口；时间：2026-11-08；作者：lq。
+  tab.title = isInternal(url) ? (url === 'sab://settings' ? '设置 - 轻页 SAB' : url === 'sab://bookmarks' ? '收藏中心' : url === 'sab://history' ? '浏览历史' : '轻页 SAB Workspace') : displayHost(url);
   tab.loading = !isInternal(url) && desktop;
   address.value = url;
   if (isInternal(url)) { await syncView(); return; }
@@ -228,7 +238,7 @@ async function copyTabAddress(id: string) {
 async function refreshData() {
   const state = await api.bootstrap();
   settings.value = { ...defaultSettings, ...state.settings };
-  applyTheme(settings.value.theme);
+  applyTheme(settings.value.theme, settings.value.colorMode);
   folders.value = state.folders;
   recent.value = await api.recent();
   revision.value++;
@@ -238,12 +248,69 @@ async function saveSettings(value: Settings) {
   await refreshData();
   message.value = '设置已保存';
 }
-// 功能：即时切换根节点主题令牌，并让保存设置持久化；时间：2026-11-08；作者：lq。
-function applyTheme(theme: ThemeId) { document.documentElement.dataset.theme = theme; }
-function previewTheme(theme: ThemeId) { settings.value.theme = theme; applyTheme(theme); }
+// 功能：即时应用主题色与明暗模式，并在自动模式下跟随系统配色；时间：2026-11-08；作者：lq。
+function applyTheme(theme: ThemeId, colorMode: ColorMode) {
+  document.documentElement.dataset.theme = theme;
+  document.documentElement.dataset.colorMode = colorMode;
+}
+// 功能：预览强调色及明暗模式，最终由保存设置持久化；时间：2026-11-08；作者：lq。
+function previewTheme(theme: ThemeId) { settings.value.theme = theme; applyTheme(theme, settings.value.colorMode); }
+// 功能：即时预览并更新当前明暗偏好；时间：2026-11-08；作者：lq。
+function previewColorMode(colorMode: ColorMode) { settings.value.colorMode = colorMode; applyTheme(settings.value.theme, colorMode); }
 async function changeEngine(engine: SearchEngine) { await saveSettings({ ...settings.value, searchEngine: engine }); }
-async function clearHistory() { await api.clearHistory(); recent.value = []; message.value = '浏览历史已删除'; }
+// 功能：清空历史后刷新所有依赖历史记录的界面状态；时间：2026-11-08；作者：lq。
+async function clearHistory() { await api.clearHistory(); await refreshData(); addressSuggestions.value = []; message.value = '浏览历史已删除'; }
 async function hideRecent(url: string) { await api.hideRecent(url); recent.value = await api.recent(); }
+
+// 功能：按地址栏内容查询最近匹配的网址，支持空输入时展示最近访问；时间：2026-11-08；作者：lq。
+let suggestionRequest = 0;
+// 功能：收起地址联想并作废尚未返回的查询；时间：2026-11-08；作者：lq。
+function closeAddressSuggestions() {
+  suggestionsOpen.value = false;
+  suggestionRequest++;
+}
+// 功能：清空地址栏时收起联想，输入非空内容时继续搜索历史；时间：2026-11-08；作者：lq。
+function handleAddressInput() {
+  suggestionIndex.value = -1;
+  if (!address.value.trim()) {
+    addressSuggestions.value = [];
+    closeAddressSuggestions();
+    return;
+  }
+  suggestionsOpen.value = true;
+  void loadAddressSuggestions();
+}
+// 功能：点击浏览器其他区域时同时关闭地址联想和标签搜索列表；时间：2026-11-08；作者：lq。
+function closeTransientPanels() {
+  closeAddressSuggestions();
+  void safely(closeTabPicker);
+}
+async function loadAddressSuggestions() {
+  if (!suggestionsOpen.value) return;
+  const sequence = ++suggestionRequest;
+  try {
+    const result = await api.history(address.value.trim(), 0, 8);
+    if (sequence === suggestionRequest && suggestionsOpen.value) addressSuggestions.value = result.items;
+  } catch (error) { message.value = String(error); }
+}
+// 功能：选择地址栏历史联想并打开对应网址；时间：2026-11-08；作者：lq。
+function chooseAddressSuggestion(visit: RecentVisit) { void safely(() => navigate(visit.url)); }
+// 功能：支持方向键选择历史联想、回车打开及 Escape 收起；时间：2026-11-08；作者：lq。
+function addressSuggestionKey(event: KeyboardEvent) {
+  if (event.key === 'ArrowDown' && addressSuggestions.value.length) {
+    event.preventDefault(); suggestionIndex.value = (suggestionIndex.value + 1) % addressSuggestions.value.length;
+  } else if (event.key === 'ArrowUp' && addressSuggestions.value.length) {
+    event.preventDefault(); suggestionIndex.value = (suggestionIndex.value - 1 + addressSuggestions.value.length) % addressSuggestions.value.length;
+  } else if (event.key === 'Enter' && suggestionIndex.value >= 0 && addressSuggestions.value[suggestionIndex.value]) {
+    event.preventDefault(); chooseAddressSuggestion(addressSuggestions.value[suggestionIndex.value]!);
+  } else if (event.key === 'Escape') closeAddressSuggestions();
+}
+// 功能：删除单条记录后同步主页、地址栏和历史页面的数据；时间：2026-11-08；作者：lq。
+async function deleteHistoryEntry(url: string) {
+  await api.deleteHistory(url);
+  await refreshData();
+  if (suggestionsOpen.value) await loadAddressSuggestions();
+}
 
 // 功能：先隐藏原生网页再显示 HTML 浮层，关闭后恢复原标签；时间：2026-11-08；作者：lq。
 async function showPanel(value: typeof panel.value) {
@@ -296,6 +363,12 @@ function openBookmark(url: string) { void safely(() => navigate(url)); }
 function editExistingBookmark(bookmark: Bookmark) { void safely(() => editBookmark(bookmark)); }
 function reportComponentError(value: string) { message.value = value; }
 function saveSettingsFromView(value: Settings) { void safely(() => saveSettings(value)); }
+// 功能：导入完成后刷新收藏分类计数并向用户显示新增和跳过数量；时间：2026-11-08；作者：lq。
+function importedBookmarks(result: { imported: number; skipped: number; folderMetadataUpdated: number }) {
+  void safely(async () => { await refreshData(); message.value = `书签导入完成：新增 ${result.imported} 条，跳过 ${result.skipped} 条${result.folderMetadataUpdated ? `，补回 ${result.folderMetadataUpdated} 条原目录线索` : ''}`; });
+}
+// 功能：规则整理完成或撤销后刷新收藏分类数量；时间：2026-11-08；作者：lq。
+function organizationCompleted() { void safely(refreshData); }
 function updateEngine(value: SearchEngine) { void safely(() => changeEngine(value)); }
 
 // 功能：绑定本地 UI 快捷键；网页持有焦点时的原生快捷键另行验收；时间：2026-11-08；作者：lq。
@@ -310,6 +383,7 @@ function keyboard(event: KeyboardEvent) {
     : key === 'w' && !panel.value ? () => closeTab(activeId.value)
     : key === 'd' ? saveCurrent
     : key === 'o' && event.shiftKey ? () => showPanel('favorites')
+    : key === 'y' ? () => navigate('sab://history')
     : key === ',' ? () => navigate('sab://settings')
     : key === 'r' && !internal.value ? () => api.view('reload', activeId.value)
     : undefined;
@@ -346,6 +420,11 @@ onMounted(() => { void safely(async () => {
       tab.url = event.payload.url;
       if (event.payload.title) tab.title = event.payload.title;
       if (event.payload.loading !== undefined) tab.loading = event.payload.loading;
+      if (event.payload.loading === false) void safely(async () => {
+        await api.recordVisit(event.payload.url, event.payload.title || displayHost(event.payload.url));
+        await refreshData();
+        if (suggestionsOpen.value) await loadAddressSuggestions();
+      });
     }));
     disposers.push(await listen<PageEvent>('sab:new-tab', event => { void safely(() => navigate(event.payload.url, true)); }));
   }
@@ -366,7 +445,7 @@ watch(tabs, () => { void measureTabsOverflow(); }, { deep: true });
 </script>
 
 <template>
-  <div class="browser-shell" @click="safely(closeTabPicker)">
+  <div class="browser-shell" @click="closeTransientPanels">
     <header class="browser-chrome">
       <div class="tab-strip" @mousedown="dragWindow">
         <!-- 功能：将窗口控制按钮与标签页放入同一栏；时间：2026-11-08；作者：lq。 -->
@@ -389,7 +468,12 @@ watch(tabs, () => { void measureTabsOverflow(); }, { deep: true });
         <button class="icon-button" aria-label="后退" :disabled="internal || !desktop" @click="safely(() => api.view('back', activeId))"><AppIcon name="back" /></button>
         <button class="icon-button" aria-label="前进" :disabled="internal || !desktop" @click="safely(() => api.view('forward', activeId))"><AppIcon name="forward" /></button>
         <button class="icon-button" aria-label="刷新" :disabled="internal || !desktop" @click="safely(() => api.view('reload', activeId))"><AppIcon name="refresh" /></button>
-        <form class="address-bar" @submit.prevent="safely(() => navigate(address))"><AppIcon :name="internal ? 'settings' : 'globe'" :size="15" /><input ref="addressElement" v-model="address" aria-label="地址或搜索" spellcheck="false" autocomplete="off" @focus="($event.target as HTMLInputElement).select()" /><kbd>⌘L</kbd></form>
+        <div class="address-wrap" @click.stop>
+          <form class="address-bar" @submit.prevent="safely(() => navigate(address))"><span class="address-security-icon" :class="{ secured: secureConnection && !addressSearch }" :title="addressSearch ? '搜索内容' : secureConnection ? 'HTTPS 加密连接' : (internal ? '轻页 SAB 内置页面' : '普通连接')" :aria-label="addressSearch ? '搜索内容' : secureConnection ? 'HTTPS 加密连接' : (internal ? '轻页 SAB 内置页面' : '普通连接')"><AppIcon :name="addressSearch ? 'search' : internal ? 'settings' : secureConnection ? 'lock' : 'globe'" :size="15" /></span><input ref="addressElement" v-model="address" aria-label="地址或搜索" spellcheck="false" autocomplete="off" role="combobox" aria-autocomplete="list" :aria-expanded="suggestionsOpen" aria-controls="address-suggestions" @focus="suggestionsOpen = true; suggestionIndex = -1; loadAddressSuggestions()" @input="handleAddressInput" @keydown="addressSuggestionKey" @blur="window.setTimeout(closeAddressSuggestions, 140)" /><kbd>⌘L</kbd></form>
+          <section v-if="suggestionsOpen && addressSuggestions.length" id="address-suggestions" class="address-suggestions" role="listbox" aria-label="浏览历史建议">
+            <button v-for="(visit, index) in addressSuggestions" :key="visit.url" :class="['address-suggestion', { selected: suggestionIndex === index }]" role="option" :aria-selected="suggestionIndex === index" @mousedown.prevent="chooseAddressSuggestion(visit)"><AppIcon name="clock" :size="15" /><span><strong>{{ visit.title }}</strong><small>{{ visit.url }}</small></span><kbd>{{ new Date(visit.visitedAt).toLocaleDateString() }}</kbd></button>
+          </section>
+        </div>
         <button class="icon-button" aria-label="收藏当前页面" title="收藏当前页面 (⌘/Ctrl+D)" :disabled="internal || !desktop" @click="safely(saveCurrent)"><AppIcon name="star" /></button>
         <button class="icon-button" aria-label="打开收藏中心浮层" title="收藏中心 (⌘/Ctrl+Shift+O)" @click="safely(() => showPanel('favorites'))"><AppIcon name="bookmarks" /></button>
         <button class="icon-button" aria-label="浏览器菜单" @click="safely(() => showPanel('menu'))"><AppIcon name="more" /></button>
@@ -410,8 +494,9 @@ watch(tabs, () => { void measureTabsOverflow(); }, { deep: true });
     <main ref="viewport" class="content-viewport">
       <div v-if="!desktop" class="preview-notice">界面预览 · 浏览网页与保存数据请运行桌面应用</div>
       <HomeView v-if="contentPage === 'home'" :settings="settings" :recent="recent" @navigate="homeNavigate" @engine="updateEngine" @hide-recent="hideRecent" @clear-history="clearHistory" />
-      <BookmarksView v-else-if="contentPage === 'bookmarks'" :folders="folders" :revision="revision" :homepage="active.url === 'sab://home'" @navigate="openBookmark" @create="editBookmark()" @edit="editExistingBookmark" @settings="homeNavigate('sab://settings')" @error="reportComponentError" />
-      <SettingsView v-else-if="contentPage === 'settings'" :settings="settings" @save="saveSettingsFromView" @theme="previewTheme" @clear-history="clearHistory" />
+      <HistoryView v-else-if="contentPage === 'history'" :revision="revision" @navigate="openBookmark" @delete="deleteHistoryEntry" @clear="clearHistory" @error="reportComponentError" />
+      <BookmarksView v-else-if="contentPage === 'bookmarks'" :folders="folders" :revision="revision" :homepage="active.url === 'sab://home'" @navigate="openBookmark" @create="editBookmark()" @edit="editExistingBookmark" @settings="homeNavigate('sab://settings')" @organized="organizationCompleted" @folders-changed="organizationCompleted" @error="reportComponentError" />
+      <SettingsView v-else-if="contentPage === 'settings'" :settings="settings" @save="saveSettingsFromView" @theme="previewTheme" @color-mode="previewColorMode" @clear-history="clearHistory" @imported="importedBookmarks" />
       <div v-else-if="pageError || !desktop" class="empty-state"><AppIcon name="globe" :size="36" /><h1>{{ desktop ? '网页暂未打开' : '请在桌面应用中浏览网页' }}</h1><p>{{ pageError || '运行 pnpm tauri:dev 启动轻页 SAB。' }}</p><button class="button secondary" @click="safely(() => navigate('sab://home'))">返回主页</button></div>
     </main>
     <div v-if="message" class="toast" role="status"><AppIcon name="info" :size="16" /><span>{{ message }}</span><button class="icon-button" aria-label="关闭提示" @click="message = ''"><AppIcon name="close" :size="14" /></button></div>
@@ -425,7 +510,7 @@ watch(tabs, () => { void measureTabsOverflow(); }, { deep: true });
         <footer class="panel-footer"><button class="button secondary" :disabled="internal || !desktop" @click="safely(saveCurrent)">收藏当前页面</button><button class="button primary" @click="safely(() => navigate('sab://bookmarks'))">打开收藏中心</button></footer>
       </template>
       <form v-else-if="panel === 'edit'" class="bookmark-form" @submit.prevent="safely(submitBookmark)"><header><h2>{{ editingId ? '编辑收藏' : '新建收藏' }}</h2><button class="icon-button" type="button" aria-label="关闭编辑" @click="safely(closePanel)"><AppIcon name="close" /></button></header><label class="field-label">网址<input v-model="bookmarkDraft.url" class="text-input" type="url" placeholder="https://example.com" required :readonly="!!editingId" autofocus /></label><label class="field-label">书签名<input v-model="bookmarkDraft.title" class="text-input" required maxlength="512" /></label><label class="field-label">存储目录<select v-model="bookmarkDraft.folderId" class="text-input"><option v-for="folder in folders" :key="folder.id" :value="folder.id">{{ folder.name }}</option></select></label><label class="field-label">标签（逗号分隔）<input v-model="tagInput" class="text-input" placeholder="工作, 参考资料" /></label><label class="setting-row"><span>固定到常用置顶</span><input v-model="bookmarkDraft.pinned" class="switch" type="checkbox" /></label><footer class="panel-footer"><button v-if="editingId" class="button destructive" type="button" :disabled="saving" @click="safely(deleteBookmark)">删除收藏</button><button class="button primary" type="submit" :disabled="saving">{{ saving ? '保存中…' : '保存收藏' }}</button></footer></form>
-      <nav v-else-if="panel === 'menu'" class="browser-menu" aria-label="浏览器操作"><button @click="safely(() => navigate('sab://home', true))"><AppIcon name="plus" />新建标签<kbd>⌘T</kbd></button><button @click="safely(() => navigate('sab://home'))"><AppIcon name="home" />主页</button><button @click="safely(() => navigate('sab://bookmarks'))"><AppIcon name="bookmarks" />收藏中心</button><hr /><button @click="safely(() => navigate('sab://settings'))"><AppIcon name="settings" />设置<kbd>⌘,</kbd></button></nav>
+      <nav v-else-if="panel === 'menu'" class="browser-menu" aria-label="浏览器操作"><button @click="safely(() => navigate('sab://home', true))"><AppIcon name="plus" />新建标签<kbd>⌘T</kbd></button><button @click="safely(() => navigate('sab://home'))"><AppIcon name="home" />主页</button><button @click="safely(() => navigate('sab://bookmarks'))"><AppIcon name="bookmarks" />收藏中心</button><button @click="safely(() => navigate('sab://history'))"><AppIcon name="clock" />浏览历史<kbd>⌘Y</kbd></button><hr /><button @click="safely(() => navigate('sab://settings'))"><AppIcon name="settings" />设置<kbd>⌘,</kbd></button></nav>
     </OverlayPanel>
     <!-- 功能：首次冷启动期间展示 SAB 品牌旋转标记，待本地状态和初始页面就绪后淡出；时间：2026-11-08；作者：lq。 -->
     <Transition name="launch-screen">

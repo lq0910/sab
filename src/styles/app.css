@@ -68,11 +68,24 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 .navigation-bar > .icon-button svg { stroke-width: 1.7; }
 /* 功能：加重导航栏最右侧菜单省略号的可视笔画，使其与邻近图标协调；时间：2026-11-08；作者：lq。 */
 .navigation-bar > .icon-button:last-child svg { stroke-width: 2.4; }
+.address-wrap { position: relative; min-width: 0; flex: 1; }
 .address-bar { height: 32px; min-width: 0; flex: 1; display: flex; align-items: center; gap: 8px; background: var(--surface-low); border: 1px solid var(--line); border-radius: 999px; padding: 0 12px; margin: 0 8px; }
-.address-bar > svg { color: var(--accent); }
+.address-wrap .address-bar { width: 100%; }
+/* 功能：用锁形标志和柔和绿色提示 HTTPS 加密连接；时间：2026-11-08；作者：lq。 */
+.address-security-icon { display: inline-flex; flex: 0 0 auto; color: var(--accent); }
+.address-security-icon.secured { color: #16834a; }
 .address-bar:focus-within { border-color: var(--accent); box-shadow: var(--focus); }
 .address-bar input { width: 100%; min-width: 0; background: transparent; border: 0; outline: none; box-shadow: none; font-size: 12px; }
 .address-bar input:focus-visible { box-shadow: none; }
+/* 功能：在地址栏下方展示可键盘选择的本地浏览历史联想；时间：2026-11-08；作者：lq。 */
+.address-suggestions { position: absolute; z-index: 40; top: calc(100% + 7px); left: 8px; right: 8px; display: flex; flex-direction: column; overflow: hidden; padding: 5px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: var(--overlay-shadow); }
+.address-suggestion { min-width: 0; min-height: 42px; display: flex; align-items: center; gap: 10px; padding: 5px 9px; border-radius: 7px; background: transparent; color: var(--secondary); text-align: left; }
+.address-suggestion:hover, .address-suggestion.selected { background: var(--surface-high); color: var(--text); }
+.address-suggestion > span { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.address-suggestion strong, .address-suggestion small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.address-suggestion strong { font-size: 12px; font-weight: 500; }
+.address-suggestion small { color: var(--muted); font-size: 10px; }
+.address-suggestion kbd { flex-shrink: 0; }
 .content-viewport { position: relative; flex: 1; min-height: 0; overflow: auto; }
 .preview-notice { background: var(--surface-high); color: var(--secondary); font-size: 11px; padding: 5px 16px; text-align: center; }
 .button { height: 32px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; transition: background 120ms; }
@@ -89,6 +102,11 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 /* 功能：为主页灰底叠加低对比度的柔焦色晕，不影响页面内容交互；时间：2026-11-08；作者：lq。 */
 .home-view { position: relative; isolation: isolate; min-height: 100%; display: flex; flex-direction: column; padding: 0 40px; }
 .home-view::before { content: ''; position: absolute; z-index: -1; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 18% 34%, rgb(211 224 248 / 24%), transparent 42%), radial-gradient(ellipse at 82% 58%, rgb(225 229 241 / 28%), transparent 44%); filter: blur(34px); }
+/* 功能：在深色主页中使用低亮度冷色光晕，避免浅色装饰破坏暗色氛围；时间：2026-11-08；作者：lq。 */
+:root[data-color-mode='dark'] .home-view::before { background: radial-gradient(ellipse at 18% 34%, rgb(62 87 133 / 14%), transparent 42%), radial-gradient(ellipse at 82% 58%, rgb(77 70 116 / 12%), transparent 44%); }
+@media (prefers-color-scheme: dark) {
+  :root[data-color-mode='auto'] .home-view::before { background: radial-gradient(ellipse at 18% 34%, rgb(62 87 133 / 14%), transparent 42%), radial-gradient(ellipse at 82% 58%, rgb(77 70 116 / 12%), transparent 44%); }
+}
 /* 功能：无最近访问记录时隐藏历史留白并将搜索区放在主页中线稍上方；时间：2026-11-08；作者：lq。 */
 .home-view--no-recent { display: grid; grid-template-rows: minmax(0, .86fr) auto minmax(0, 1.14fr); }
 .home-view--no-recent .home-search { grid-row: 2; margin: 0 auto; align-self: center; }
@@ -109,6 +127,22 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 .search-hints { display: flex; justify-content: space-between; color: var(--muted); margin: 12px 10px 0; font-size: 11px; }
 .search-hints kbd { margin-right: 5px; }
 .recent-section { width: min(100%, 1040px); margin: 56px auto 32px; }
+/* 功能：为完整历史页提供关键词检索、按时间浏览和逐条删除布局；时间：2026-11-08；作者：lq。 */
+.history-view { min-height: 100%; padding: 32px clamp(24px, 5vw, 64px); }
+.history-view .page-heading { width: min(100%, 1040px); margin: 0 auto 22px; }
+.history-search { width: min(100%, 1040px); height: 40px; display: flex; align-items: center; gap: 10px; margin: 0 auto 16px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--secondary); }
+.history-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; box-shadow: none; }
+.history-search input:focus-visible { box-shadow: none; }
+.history-list { width: min(100%, 1040px); margin: 0 auto; border-top: 1px solid var(--line); }
+.history-row { min-height: 64px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--line); }
+.history-open { min-width: 0; flex: 1; display: flex; align-items: center; gap: 12px; padding: 9px 4px; background: transparent; text-align: left; }
+.history-copy { min-width: 0; flex: 1; display: flex; flex-direction: column; }
+.history-copy strong, .history-copy small { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.history-copy strong { color: var(--text); font-weight: 500; }
+.history-copy small { color: var(--muted); font-size: 11px; }
+.history-open time { flex-shrink: 0; color: var(--muted); font-size: 11px; }
+.history-delete { opacity: 0; }
+.history-row:hover .history-delete, .history-row:focus-within .history-delete { opacity: 1; }
 .section-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .section-heading h2, .pinned-section h2 { display: flex; align-items: center; gap: 8px; }
 .section-heading h2 > svg, .pinned-section h2 > svg { color: var(--accent); }
@@ -166,6 +200,40 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 .empty-state h1, .empty-state h2 { font-size: 18px; }
 .empty-state p { color: var(--muted); max-width: 540px; overflow-wrap: anywhere; }
 .empty-inline { color: var(--muted); text-align: center; padding: 40px 16px; font-size: 12px; }
+/* 功能：呈现书签自动分类的预览分组、分类样例、确认操作及撤销反馈；时间：2026-11-08；作者：lq。 */
+.classification-preview { margin: -8px 0 24px; padding: 18px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.classification-preview > header, .classification-preview > footer { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.classification-preview header p { margin-top: 4px; color: var(--muted); font-size: 11px; }
+.classification-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+.classification-groups article { min-width: 0; display: flex; flex-direction: column; gap: 5px; padding: 10px; border-radius: 8px; background: var(--surface-low); }
+.classification-groups article strong { display: flex; justify-content: space-between; color: var(--text); }
+.classification-groups article strong span { color: var(--accent); }
+.classification-groups article small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); }
+.classification-empty { margin: 16px 0; color: var(--muted); font-size: 12px; }
+.classification-preview > footer { align-items: center; padding-top: 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+.classification-preview > footer > div, .classification-result { display: flex; align-items: center; gap: 8px; }
+.classification-result { justify-content: space-between; margin: -10px 0 20px; padding: 10px 12px; border-radius: 8px; background: var(--surface-low); color: var(--secondary); font-size: 12px; }
+/* 功能：以可滚动遮罩集中管理收藏分类并明确删除时的迁移目标；时间：2026-11-08；作者：lq。 */
+.folder-manager-backdrop { position: fixed; z-index: 60; inset: 0; display: flex; align-items: center; justify-content: center; padding: 20px; background: rgb(0 0 0 / 48%); }
+.folder-manager { width: min(620px, 100%); max-height: min(720px, calc(100dvh - 40px)); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line-strong); border-radius: 14px; background: var(--surface); box-shadow: var(--overlay-shadow); }
+.folder-manager-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; padding: 20px 22px 14px; border-bottom: 1px solid var(--line); }
+.folder-manager-header p { margin-top: 5px; color: var(--muted); font-size: 11px; }
+.folder-create { display: flex; gap: 8px; padding: 14px 22px; border-bottom: 1px solid var(--line); }
+.folder-create input { min-width: 0; flex: 1; }
+.folder-manager-list { min-height: 0; overflow-y: auto; padding: 6px 22px; }
+.folder-manager-row { padding: 10px 0; border-bottom: 1px solid var(--line); }
+.folder-manager-edit { display: flex; align-items: center; gap: 8px; }
+.folder-manager-edit > svg { color: var(--accent); flex: 0 0 auto; }
+.folder-manager-edit input { flex: 1; min-width: 60px; }
+.folder-manager-count { min-width: 26px; text-align: right; color: var(--muted); font-size: 11px; }
+.folder-manager-edit .button { height: 30px; padding: 0 9px; }
+.folder-manager-edit .icon-button { width: 30px; height: 30px; }
+.folder-delete { color: var(--danger); }
+.folder-system-label { color: var(--muted); font-size: 10px; white-space: nowrap; }
+.folder-delete-confirm { display: flex; align-items: flex-end; justify-content: flex-end; gap: 8px; padding: 10px 0 0 25px; }
+.folder-delete-confirm label { display: flex; align-items: center; gap: 8px; margin-right: auto; color: var(--secondary); font-size: 11px; }
+.folder-delete-confirm select { width: 150px; height: 30px; padding: 0 8px; }
+.folder-manager > footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
 
 /* 功能：沿用设置页左导航和白色分组面板；时间：2026-11-08；作者：lq。 */
 .settings-layout { display: grid; grid-template-columns: 220px minmax(0, 780px); gap: 36px; max-width: 1130px; padding: 36px 32px; margin: auto; }
@@ -184,6 +252,17 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 .settings-section > h2 > svg { color: var(--accent); }
 .settings-section h2 small { margin-left: auto; font: 10px var(--mono); color: var(--muted); font-weight: 400; }
 .settings-section p { color: var(--muted); font-size: 12px; margin: 12px 0 16px; line-height: 1.8; }
+/* 功能：为界面明暗模式选项提供与强调色卡片一致的可选状态；时间：2026-11-08；作者：lq。 */
+.appearance-subheading { margin: 16px 0 8px; font-size: 12px; font-weight: 600; }
+.theme-heading { margin-top: 22px; }
+.mode-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.mode-option { min-width: 0; min-height: 58px; display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); text-align: left; }
+.mode-option:hover { background: var(--surface-low); }
+.mode-option.selected { border-color: var(--accent); box-shadow: var(--focus); }
+.mode-option > span { min-width: 0; }
+.mode-option strong, .mode-option small { display: block; }
+.mode-option small { margin-top: 2px; color: var(--muted); }
+.mode-option > svg { color: var(--accent); margin-left: auto; }
 .radio-option { display: flex; align-items: flex-start; gap: 10px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
 .radio-option.checked { background: var(--surface-low); border-color: var(--accent); }
 .radio-option input { accent-color: var(--accent); margin-top: 3px; }
@@ -217,6 +296,8 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 .about-contact { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 8px; color: var(--muted); font-size: 12px; }
 .about-qr { display: block; width: 64px; height: 64px; object-fit: contain; border: 1px solid var(--line); border-radius: 6px; }
 .muted { color: var(--muted); }
+/* 功能：隐藏原生文件选择框并保留无障碍名称，由可见按钮触发选择；时间：2026-11-08；作者：lq。 */
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
 /* 功能：复用收藏浮层的 600px 宽度与轻量进退动效；时间：2026-11-08；作者：lq。 */
 .overlay-panel { width: min(600px, calc(100vw - 32px)); max-height: 75dvh; border: 1px solid var(--line-strong); border-radius: 18px; padding: 16px 16px 0; color: var(--text); background: var(--surface); box-shadow: var(--overlay-shadow); overflow: auto; }
@@ -271,6 +352,8 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
   .bookmarks-view { padding: 28px 24px; }
   .pinned-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .bookmark-collection.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 功能：窄屏下减少分类预览列数，保持分类理由可读；时间：2026-11-08；作者：lq。 */
+  .classification-groups { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .settings-layout { gap: 16px; grid-template-columns: 180px minmax(0, 1fr); padding: 24px; }
   .settings-section { padding: 18px; }
   .page-heading h1 small { display: none; }
@@ -281,6 +364,17 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
   .home-search { margin-top: 100px; }
   .page-heading { align-items: flex-start; }
   .page-heading .inline-actions { flex-direction: column; align-items: flex-end; }
+  /* 功能：移动宽度下让分类预览操作和分组纵向排列；时间：2026-11-08；作者：lq。 */
+  .classification-groups { grid-template-columns: 1fr; }
+  .classification-preview > footer { align-items: flex-start; flex-direction: column; }
+  .classification-preview > footer > div { align-self: flex-end; }
+  .folder-manager-backdrop { padding: 10px; }
+  .folder-manager-header, .folder-create, .folder-manager-list, .folder-manager > footer { padding-left: 14px; padding-right: 14px; }
+  .folder-manager-edit { gap: 5px; }
+  .folder-manager-edit .button { padding: 0 6px; }
+  .folder-system-label { display: none; }
+  .folder-delete-confirm { flex-wrap: wrap; padding-left: 0; }
+  .folder-delete-confirm label { width: 100%; justify-content: space-between; }
   .settings-layout { display: block; }
   .settings-sidebar { position: static; margin-bottom: 24px; }
   .settings-sidebar nav { display: grid; grid-template-columns: repeat(3, 1fr); }

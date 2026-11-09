@@ -1,4 +1,4 @@
-/* 功能：定义浅色浏览器界面、黑曜默认强调色与紧凑设计令牌；时间：2026-11-08；作者：lq。 */
+/* 功能：定义浏览器浅色基础界面、黑曜默认强调色与紧凑设计令牌；时间：2026-11-08；作者：lq。 */
 :root {
   color-scheme: light;
   --canvas: #f8f9ff;
@@ -46,4 +46,59 @@
   --accent: #98620a;
   --accent-text: #ffffff;
   --accent-soft: #fbf0d9;
+}
+
+/* 功能：为显式深色与自动跟随系统的深色界面提供完整中性色令牌；时间：2026-11-08；作者：lq。 */
+@media (prefers-color-scheme: dark) {
+  :root[data-color-mode='auto'] {
+    color-scheme: dark;
+    --canvas: #111318;
+    --chrome: #191c23;
+    --toolbar: #1b1f27;
+    --surface: #1b1f27;
+    --surface-low: #252a34;
+    --surface-high: #303641;
+    --text: #edf0f5;
+    --secondary: #c0c7d2;
+    --muted: #929baa;
+    --line: #343a46;
+    --line-strong: #4a5261;
+    --accent-soft: color-mix(in srgb, var(--accent) 22%, #20242c);
+    --danger: #ff8585;
+    --success: #62d6ac;
+    --shadow: 0 4px 18px rgb(0 0 0 / 24%);
+    --overlay-shadow: 0 12px 32px rgb(0 0 0 / 42%);
+  }
+}
+
+:root[data-color-mode='dark'] {
+  color-scheme: dark;
+  --canvas: #111318;
+  --chrome: #191c23;
+  --toolbar: #1b1f27;
+  --surface: #1b1f27;
+  --surface-low: #252a34;
+  --surface-high: #303641;
+  --text: #edf0f5;
+  --secondary: #c0c7d2;
+  --muted: #929baa;
+  --line: #343a46;
+  --line-strong: #4a5261;
+  --accent-soft: color-mix(in srgb, var(--accent) 22%, #20242c);
+  --danger: #ff8585;
+  --success: #62d6ac;
+  --shadow: 0 4px 18px rgb(0 0 0 / 24%);
+  --overlay-shadow: 0 12px 32px rgb(0 0 0 / 42%);
+}
+
+/* 功能：让黑曜强调色在深色表面上仍保持清晰对比；时间：2026-11-08；作者：lq。 */
+:root[data-color-mode='dark'][data-theme='obsidian'] {
+  --accent: #c5ccd6;
+  --accent-text: #171a20;
+}
+@media (prefers-color-scheme: dark) {
+  :root[data-color-mode='auto'][data-theme='obsidian'] {
+    --accent: #c5ccd6;
+    --accent-text: #171a20;
+  }
 }

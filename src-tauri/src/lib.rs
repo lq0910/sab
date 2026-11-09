@@ -26,7 +26,8 @@ pub fn run() {
                 .build()?;
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![bootstrap, list_bookmarks, save_bookmark, delete_bookmark, save_settings, list_recent, clear_history, hide_recent, browser::browser_view])
+        // 功能：注册收藏、历史记录和网页视图的受限命令；时间：2026-11-08；作者：lq。
+        .invoke_handler(tauri::generate_handler![bootstrap, create_folder, rename_folder, delete_folder, list_bookmarks, save_bookmark, import_bookmarks, classification_preview, apply_classification, undo_classification, delete_bookmark, save_settings, list_recent, list_history, record_visit, delete_history, clear_history, hide_recent, browser::browser_view])
         .run(tauri::generate_context!())
         .expect("轻页 SAB 启动失败");
 }

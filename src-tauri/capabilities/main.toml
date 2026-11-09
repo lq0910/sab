@@ -13,7 +13,11 @@ permissions = [
   # 功能：菜单使用完成后释放 Tauri 原生资源；时间：2026-11-08；作者：lq。
   "core:resources:allow-close",
   "core:event:allow-listen", "core:event:allow-unlisten",
-  "allow-bootstrap", "allow-list-bookmarks", "allow-save-bookmark",
-  "allow-delete-bookmark", "allow-save-settings", "allow-list-recent",
+  "allow-bootstrap", "allow-create-folder", "allow-rename-folder", "allow-delete-folder",
+  "allow-list-bookmarks", "allow-save-bookmark",
+  "allow-delete-bookmark", "allow-import-bookmarks", "allow-classification-preview",
+  "allow-apply-classification", "allow-undo-classification", "allow-save-settings", "allow-list-recent",
+  # 功能：允许本地界面检索历史、记录已打开网页并删除单条记录；时间：2026-11-08；作者：lq。
+  "allow-list-history", "allow-record-visit", "allow-delete-history",
   "allow-clear-history", "allow-hide-recent", "allow-browser-view"
 ]

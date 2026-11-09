@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-record-visit"
+description = "Enables the record_visit command without any pre-configured scope."
+commands.allow = ["record_visit"]
+
+[[permission]]
+identifier = "deny-record-visit"
+description = "Denies the record_visit command without any pre-configured scope."
+commands.deny = ["record_visit"]
