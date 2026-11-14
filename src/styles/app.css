@@ -382,3 +382,37 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
 @media (prefers-reduced-transparency: reduce) { .overlay-panel::backdrop { background: var(--canvas); } }
+
+/* 功能：下载入口、状态列表与活动进度沿用现有紧凑浮层设计；时间：2026-11-14；作者：lq。 */
+.download-trigger { position: relative; }
+.download-count { position: absolute; right: -2px; top: -2px; min-width: 15px; height: 15px; padding: 0 3px; border-radius: 8px; background: var(--accent); color: var(--accent-text); font-size: 10px; line-height: 15px; }
+.downloads-heading { display: flex; align-items: center; justify-content: space-between; padding: 3px 2px 14px; }
+.downloads-heading h2 { font-size: 17px; }
+.downloads-heading p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
+.downloads-list { list-style: none; margin: 0; padding: 0; max-height: 50dvh; overflow: auto; }
+.download-item { display: flex; gap: 12px; padding: 16px 2px; border-top: 1px solid var(--line); }
+.download-file-icon { width: 36px; height: 40px; border-radius: 8px; background: var(--surface-low); display: grid; place-items: center; flex-shrink: 0; color: var(--accent); }
+.download-item--completed .download-file-icon { color: var(--success); }
+.download-item--failed .download-file-icon, .download-item--interrupted .download-file-icon { color: var(--danger); }
+.download-copy { min-width: 0; flex: 1; }
+.download-copy > strong { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+.download-status { display: flex; flex-wrap: wrap; gap: 8px; margin: 7px 0; color: var(--secondary); font-size: 11px; }
+.download-status time { color: var(--muted); margin-left: auto; }
+.download-copy progress { display: block; width: 100%; height: 5px; accent-color: var(--accent); margin: 10px 0; }
+.download-hint, .download-path { margin: 6px 0 0; font-size: 11px; color: var(--muted); }
+.download-path { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.download-error { color: var(--danger); font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; margin: 8px 0; }
+.download-actions { display: flex; gap: 12px; margin: 5px -6px 0; }
+.download-actions .text-button { color: var(--accent); }
+.download-empty { text-align: center; padding: 44px 20px; color: var(--muted); }
+.download-empty svg { margin-bottom: 14px; }
+.download-empty h3 { color: var(--text); font-size: 14px; }
+.download-empty p { margin-top: 10px; font-size: 12px; }
+.resource-summary { padding: 8px 10px; font-size: 11px; color: var(--muted); }
+.page-zoom { display: flex; align-items: center; gap: 4px; padding: 6px 10px; font-size: 12px; }
+.page-zoom > span { margin-right: auto; }
+.page-zoom button { background: var(--surface-low); border-radius: 5px; padding: 5px 8px; }
+.sleep-confirm h2 { font-size: 17px; margin-bottom: 14px; }
+.sleep-confirm p { font-size: 13px; line-height: 1.8; color: var(--secondary); margin: 12px 0; }
+/* 功能：弱化不可用导航控件，与可点击状态形成明确区分；时间：2026-11-14；作者：lq。 */
+.navigation-bar > .icon-button:disabled { opacity: .4; }

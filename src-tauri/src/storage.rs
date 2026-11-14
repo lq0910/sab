@@ -4,7 +4,7 @@ use rusqlite::{params, Connection, OptionalExtension};
 use std::{path::Path, time::{SystemTime, UNIX_EPOCH}};
 use uuid::Uuid;
 
-pub struct Store { connection: Connection }
+pub struct Store { pub(crate) connection: Connection }
 type Result<T> = std::result::Result<T, String>;
 
 impl Store {
@@ -17,7 +17,7 @@ impl Store {
         connection.busy_timeout(std::time::Duration::from_secs(5)).map_err(error)?;
         connection.execute_batch("PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;").map_err(error)?;
         let mut version: u32 = connection.query_row("PRAGMA user_version", [], |row| row.get(0)).map_err(error)?;
-        if version > 3 { return Err("数据版本高于当前应用，请使用较新的轻页版本".into()); }
+        if version > 4 { return Err("数据版本高于当前应用，请使用较新的轻页版本".into()); }
         if version == 0 {
             let transaction = connection.unchecked_transaction().map_err(error)?;
             transaction.execute_batch(include_str!("../migrations/001_initial.sql")).map_err(error)?;
@@ -34,7 +34,15 @@ impl Store {
             let transaction = connection.unchecked_transaction().map_err(error)?;
             transaction.execute_batch(include_str!("../migrations/003_import_folder.sql")).map_err(error)?;
             transaction.commit().map_err(error)?;
+            version = 3;
         }
+        // 功能：升级下载记录并将上次退出时未完成的任务标记为中断；时间：2026-11-14；作者：lq。
+        if version == 3 {
+            let transaction = connection.unchecked_transaction().map_err(error)?;
+            transaction.execute_batch(include_str!("../migrations/004_downloads.sql")).map_err(error)?;
+            transaction.commit().map_err(error)?;
+        }
+        connection.execute("UPDATE downloads SET status='interrupted',error='上次退出时下载尚未完成，请返回来源页重新下载' WHERE status='downloading'", []).map_err(error)?;
         Ok(Self { connection })
     }
 
@@ -239,7 +247,11 @@ impl Store {
     pub fn save_settings(&self, settings: &Settings) -> Result<()> {
         if !settings.startup_url.is_empty() { website_url(&settings.startup_url)?; }
         let value = serde_json::to_string(settings).map_err(error)?;
-        self.connection.execute("INSERT INTO settings(id,value) VALUES(1,?1) ON CONFLICT(id) DO UPDATE SET value=excluded.value", [value]).map_err(error)?;
+        // 功能：偏好与清理会话同事务提交，避免关闭恢复后遗留旧快照；时间：2026-11-14；作者：lq。
+        let transaction = self.connection.unchecked_transaction().map_err(error)?;
+        transaction.execute("INSERT INTO settings(id,value) VALUES(1,?1) ON CONFLICT(id) DO UPDATE SET value=excluded.value", [value]).map_err(error)?;
+        if !settings.restore_session { transaction.execute("DELETE FROM sessions WHERE id='workspace'", []).map_err(error)?; }
+        transaction.commit().map_err(error)?;
         Ok(())
     }
 

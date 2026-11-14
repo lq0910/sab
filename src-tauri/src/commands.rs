@@ -97,3 +97,13 @@ pub async fn clear_history(caller: Webview, state: State<'_, AppState>) -> Resul
 pub async fn hide_recent(caller: Webview, state: State<'_, AppState>, url: String) -> Result<(), String> {
     with_store(caller, state, move |s| s.hide_recent(&url)).await
 }
+
+// 功能：仅允许可信外壳读取与保存标签会话；时间：2026-11-14；作者：lq。
+#[tauri::command]
+pub async fn load_session(caller: Webview, state: State<'_, AppState>) -> Result<Option<SessionSnapshot>, String> {
+    with_store(caller, state, |s| s.load_session()).await
+}
+#[tauri::command]
+pub async fn save_session(caller: Webview, state: State<'_, AppState>, snapshot: SessionSnapshot) -> Result<(), String> {
+    with_store(caller, state, move |s| s.save_session(snapshot)).await
+}

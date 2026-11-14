@@ -2,7 +2,7 @@
 [package]
 name = "sab"
 version = "0.1.0"
-description = "轻页 SAB 桌面浏览器技术骨架"
+description = "轻页 SAB 本地优先的轻量桌面浏览器"
 authors = ["lq"]
 edition = "2021"
 rust-version = "1.90"
@@ -22,9 +22,28 @@ serde_json = "1"
 rusqlite = { version = "=0.32.1", features = ["bundled"] }
 url = "=2.5.8"
 uuid = { version = "=1.29.0", features = ["v4"] }
+# 功能：下载原生保存对话框与完成文件定位，不向远程网页开放插件命令；时间：2026-11-14；作者：lq。
+rfd = "=0.17.2"
+# 功能：跨平台原子提交下载文件，避免竞争覆盖其他新文件；时间：2026-11-14；作者：lq。
+tempfile = "=3.27.0"
+tauri-plugin-opener = "=2.7.2"
+# 功能：系统链接转交已有窗口，避免重复启动进程丢失URL；时间：2026-11-14；作者：lq。
+tauri-plugin-single-instance = "=2.4.0"
+
+# 功能：查询macOS默认协议处理器并发送用户主动设置请求；时间：2026-11-14；作者：lq。
+[target.'cfg(target_os = "macos")'.dependencies]
+core-foundation = "=0.10.1"
+
+# 功能：只注册当前用户的浏览器能力，不篡改受保护的UserChoice；时间：2026-11-14；作者：lq。
+[target.'cfg(target_os = "windows")'.dependencies]
+winreg = "=0.56.0"
 
 [profile.release]
 codegen-units = 1
 lto = true
 opt-level = "s"
 strip = true
+
+# 功能：编译期过程宏保留符号，避免新版macOS加载剥离后的动态库失败；应用本体仍按上述配置缩减；时间：2026-11-14；作者：lq。
+[profile.release.build-override]
+strip = false

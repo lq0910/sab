@@ -1,10 +1,21 @@
 // 功能：封装本地命令；网页预览不伪装成原生浏览器或持久化存储；时间：2026-11-08；作者：lq。
 import { invoke, isTauri } from '@tauri-apps/api/core';
-import type { BookmarkDraft, BookmarkImportResult, BookmarkPage, Bootstrap, BrowserAction, ClassificationBatchResult, ClassificationPreview, ClassificationUndoResult, HistoryPage, RecentVisit, Settings, ViewBounds } from '../domain/models';
+import type { SessionSnapshot, DownloadItem, BookmarkDraft, BookmarkImportResult, BookmarkPage, Bootstrap, BrowserAction, ClassificationBatchResult, ClassificationPreview, ClassificationUndoResult, HistoryPage, RecentVisit, Settings, ViewBounds } from '../domain/models';
 import { defaultSettings } from '../domain/models';
 
 export const desktop = isTauri();
 export const api = {
+  // 功能：真实读取默认项并由用户主动发起系统设置，外部链接在外壳就绪后获取；时间：2026-11-14；作者：lq。
+  defaultBrowserStatus: (): Promise<DefaultBrowserStatus> => invoke('default_browser_status'),
+  requestDefaultBrowser: (): Promise<DefaultBrowserStatus> => invoke('request_default_browser'),
+  takeExternalLinks: (): Promise<string[]> => desktop ? invoke('take_external_links') : Promise.resolve([]),
+  // 功能：按下载记录 ID 管理文件，远程网页不能指定任意本地路径；时间：2026-11-14；作者：lq。
+  downloads: (): Promise<DownloadItem[]> => desktop ? invoke('list_downloads') : Promise.resolve([]),
+  clearDownloads: (): Promise<void> => invoke('clear_downloads'),
+  openDownload: (id: string, reveal = false): Promise<void> => invoke('open_download', { id, reveal }),
+  // 功能：本地会话读取与持久化，不在网页预览中模拟持久化；时间：2026-11-14；作者：lq。
+  loadSession: (): Promise<SessionSnapshot | null> => desktop ? invoke('load_session') : Promise.resolve(null),
+  saveSession: (snapshot: SessionSnapshot): Promise<void> => desktop ? invoke('save_session', { snapshot }) : Promise.resolve(),
   bootstrap: (): Promise<Bootstrap> => desktop
     ? invoke('bootstrap') : Promise.resolve({ settings: { ...defaultSettings }, folders: [] }),
   // 功能：提供书签分类的创建、重命名与指定目标删除操作；时间：2026-11-08；作者：lq。
@@ -32,6 +43,10 @@ export const api = {
   deleteHistory: (url: string): Promise<void> => invoke('delete_history', { url }),
   clearHistory: (): Promise<void> => invoke('clear_history'),
   hideRecent: (url: string): Promise<void> => invoke('hide_recent', { url }),
-  view: (action: BrowserAction, tabId: string, url?: string, bounds?: ViewBounds): Promise<void> =>
-    desktop ? invoke('browser_view', { action, tabId, url, bounds }) : Promise.reject(new Error('请通过 pnpm tauri:dev 启动桌面应用以浏览网页。')),
+  // 功能：传递经过宿主验证的缩放比例，保持远程网页无 IPC 权限；时间：2026-11-14；作者：lq。
+  view: (action: BrowserAction, tabId: string, url?: string, bounds?: ViewBounds, zoom?: number): Promise<void> =>
+    desktop ? invoke('browser_view', { action, tabId, url, bounds, zoom }) : Promise.reject(new Error('请通过 pnpm tauri:dev 启动桌面应用以浏览网页。')),
 };
+
+// 功能：分别反馈HTTP和HTTPS的实际系统关联，避免误报全部设为默认；时间：2026-11-14；作者：lq。
+export interface DefaultBrowserStatus { supported: boolean; http: boolean; https: boolean; message: string }

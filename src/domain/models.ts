@@ -12,6 +12,8 @@ export interface Settings {
   theme: ThemeId;
   // 功能：保存界面明暗模式并允许自动跟随系统；时间：2026-11-08；作者：lq。
   colorMode: ColorMode;
+  // 功能：允许启动时恢复上次标签并支持关闭后清理会话；时间：2026-11-14；作者：lq。
+  restoreSession: boolean;
 }
 export interface Folder { id: string; name: string; count: number }
 export interface Bookmark {
@@ -56,11 +58,24 @@ export interface Bootstrap { settings: Settings; folders: Folder[] }
 export interface RecentVisit { url: string; title: string; visitedAt: number }
 // 功能：承载历史列表的分页结果，避免完整历史一次性加载；时间：2026-11-08；作者：lq。
 export interface HistoryPage { items: RecentVisit[]; total: number }
-export interface Tab { id: string; url: string; title: string; loading: boolean }
+// 功能：按标签保存错误、缩放和休眠状态，避免切换标签串用状态；时间：2026-11-14；作者：lq。
+export interface Tab { id: string; url: string; title: string; loading: boolean; error?: string; loadIssue?: 'timeout' | 'offline'; suspended?: boolean; zoom?: number }
 export interface ViewBounds { x: number; y: number; width: number; height: number }
-export type BrowserAction = 'open' | 'activate' | 'resize' | 'hide' | 'close' | 'reload' | 'back' | 'forward';
+// 功能：增加停止加载与原生网页缩放操作；时间：2026-11-14；作者：lq。
+export type BrowserAction = 'open' | 'activate' | 'resize' | 'hide' | 'close' | 'reload' | 'back' | 'forward' | 'stop' | 'zoom' | 'focusshell' | 'focuspage';
 export interface PageEvent { tabId: string; url: string; title?: string; loading?: boolean }
 export const defaultSettings: Settings = {
   // 功能：默认主页显示最近访问区，即使为空也展示品牌提示；时间：2026-11-08；作者：lq。
-  homeMode: 'minimal', searchEngine: 'bing', showRecent: true, startupUrl: '', theme: 'obsidian', colorMode: 'auto',
+  homeMode: 'minimal', searchEngine: 'bing', showRecent: true, startupUrl: '', theme: 'obsidian', colorMode: 'auto', restoreSession: true,
 };
+
+// 功能：展示持久化下载状态和原生引擎实际接收大小；时间：2026-11-14；作者：lq。
+export interface DownloadItem {
+  id: string; url: string; tabId: string; sourceUrl: string; name: string; path: string;
+  status: 'downloading' | 'completed' | 'failed' | 'interrupted'; receivedBytes: number;
+  startedAt: number; finishedAt?: number; error: string;
+}
+
+// 功能：会话只保存导航信息与缩放，不保存网页正文、表单和运行状态；时间：2026-11-14；作者：lq。
+export interface SessionTab { id: string; url: string; title: string; zoom: number }
+export interface SessionSnapshot { version: 1; tabs: SessionTab[]; activeId: string; closed: SessionTab[] }

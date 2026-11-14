@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 功能：声明已有应用图标与HTTP/HTTPS浏览器候选资格，系统选择仍由用户确认；时间：2026-11-14；作者：lq。 -->
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>CFBundleURLTypes</key><array><dict>
+    <key>CFBundleURLName</key><string>com.lq.sab.web</string>
+    <key>CFBundleTypeRole</key><string>Viewer</string>
+    <key>CFBundleURLSchemes</key><array><string>http</string><string>https</string></array>
+  </dict></array>
+  <key>NSHumanReadableCopyright</key><string>Copyright © 2026 lq. Apache-2.0.</string>
+</dict></plist>

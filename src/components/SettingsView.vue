@@ -3,9 +3,11 @@
 import { onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import type { BookmarkDraft, BookmarkImportResult, ColorMode, Settings, ThemeId } from '../domain/models';
 import { engines } from '../domain/navigation';
-import { api, desktop } from '../services/desktop';
+import { api, desktop, type DefaultBrowserStatus } from '../services/desktop';
 import AppIcon from './AppIcon.vue';
 import officialAccountQr from '../../docs/qrcode_for_gh_554a10e3d22b_258.jpg';
+// 功能：关于页显示与构建清单一致的版本、构建号及已交付范围；时间：2026-11-14；作者：lq。
+import { release } from '../domain/release';
 const props = defineProps<{ settings: Settings }>();
 const emit = defineEmits<{ save: [value: Settings]; clearHistory: []; theme: [value: ThemeId]; colorMode: [value: ColorMode]; imported: [value: BookmarkImportResult] }>();
 const draft = reactive({ ...props.settings });
@@ -15,7 +17,26 @@ const importInput = ref<HTMLInputElement>();
 const importing = ref(false);
 const importMessage = ref('');
 let sectionObserver: IntersectionObserver | undefined;
-watch(() => props.settings, value => Object.assign(draft, value), { deep: true });
+// 功能：默认浏览器状态读取、请求反馈及返回应用后的刷新；时间：2026-11-14；作者：lq。
+const browserStatus = ref<DefaultBrowserStatus>();
+const browserBusy = ref(false);
+const browserMessage = ref('');
+async function refreshDefaultBrowser() {
+  if (!desktop || browserBusy.value) return;
+  browserBusy.value = true;
+  try { browserStatus.value = await api.defaultBrowserStatus(); browserMessage.value = browserStatus.value.message; }
+  catch (error) { browserMessage.value = String(error); }
+  finally { browserBusy.value = false; }
+}
+async function setDefaultBrowser() {
+  if (!desktop || browserBusy.value) return;
+  browserBusy.value = true;
+  try { browserStatus.value = await api.requestDefaultBrowser(); browserMessage.value = browserStatus.value.message; }
+  catch (error) { browserMessage.value = String(error); }
+  finally { browserBusy.value = false; }
+}
+// 功能：只在设置整体重载后刷新草稿，主题预览不覆盖其他未保存选项；时间：2026-11-14；作者：lq。
+watch(() => props.settings, value => Object.assign(draft, value));
 const sections = [
   { id: 'appearance', title: '外观与主题', icon: 'palette' },
   { id: 'startup', title: '启动行为与主页', icon: 'home' },
@@ -105,6 +126,8 @@ async function importBookmarkFile(event: Event) {
   }
 }
 onMounted(() => {
+  void refreshDefaultBrowser();
+  window.addEventListener('focus', refreshDefaultBrowser);
   const root = document.querySelector('.content-viewport');
   sectionObserver = new IntersectionObserver((entries) => {
     const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -115,7 +138,7 @@ onMounted(() => {
     if (element) sectionObserver?.observe(element);
   });
 });
-onUnmounted(() => sectionObserver?.disconnect());
+onUnmounted(() => { sectionObserver?.disconnect(); window.removeEventListener('focus', refreshDefaultBrowser); });
 </script>
 
 <template>
@@ -124,14 +147,16 @@ onUnmounted(() => sectionObserver?.disconnect());
     <div class="settings-content">
       <form @submit.prevent="emit('save', { ...draft })">
         <section id="appearance" class="settings-section"><h2><AppIcon name="palette" />外观与主题 <small>appearance.theme</small></h2><p>选择界面明暗模式和强调色，切换后立即预览。</p><h3 class="appearance-subheading">界面明暗</h3><div class="mode-options" role="radiogroup" aria-label="界面明暗模式"><button v-for="mode in colorModes" :key="mode.id" type="button" role="radio" :aria-checked="draft.colorMode === mode.id" :class="['mode-option', { selected: draft.colorMode === mode.id }]" @click="selectColorMode(mode.id)"><span><strong>{{ mode.name }}</strong><small>{{ mode.description }}</small></span><AppIcon v-if="draft.colorMode === mode.id" name="check" :size="16" /></button></div><h3 class="appearance-subheading theme-heading">强调色</h3><div class="theme-options" role="radiogroup" aria-label="浏览器主题"><button v-for="theme in themes" :key="theme.id" type="button" role="radio" :aria-checked="draft.theme === theme.id" :class="['theme-option', { selected: draft.theme === theme.id }]" @click="selectTheme(theme.id)"><span class="theme-swatch" :style="{ '--swatch': theme.color, '--swatch-companion': theme.companion }"><i></i><i></i><i></i></span><span class="theme-copy"><strong>{{ theme.name }}</strong><small>{{ theme.description }}</small></span><AppIcon v-if="draft.theme === theme.id" name="check" :size="16" /></button></div><small class="muted">外观偏好保存在本机；点击底部“保存设置”后下次启动继续使用。</small></section>
-        <section id="startup" class="settings-section"><h2><AppIcon name="home" />启动行为与新标签页 <small>startup.mode</small></h2><p>主页模式与搜索引擎分别配置。</p><label class="radio-option" :class="{ checked: draft.homeMode === 'minimal' }"><input v-model="draft.homeMode" type="radio" value="minimal" name="homepage" /><span><strong>打开极简搜索主页（默认）</strong><small>保留一个搜索框，专注当前浏览。</small></span></label><label class="radio-option" :class="{ checked: draft.homeMode === 'bookmarks' }"><input v-model="draft.homeMode" type="radio" value="bookmarks" name="homepage" /><span><strong>打开收藏书签主页</strong><small>常用置顶、分类与收藏网格。</small></span></label><label class="field-label">启动时打开指定网页（可选）<input v-model="draft.startupUrl" class="text-input" type="url" placeholder="https://example.com" /></label><small class="muted">留空使用内置主页，新标签始终使用上述主页模式。</small><label class="setting-row"><span><strong>在主页显示最近访问</strong><small>默认开启，最多显示 20 项。</small></span><input v-model="draft.showRecent" class="switch" type="checkbox" /></label></section>
+        <section id="startup" class="settings-section"><h2><AppIcon name="home" />启动行为与新标签页 <small>startup.mode</small></h2><p>主页模式与搜索引擎分别配置。</p><label class="radio-option" :class="{ checked: draft.homeMode === 'minimal' }"><input v-model="draft.homeMode" type="radio" value="minimal" name="homepage" /><span><strong>打开极简搜索主页（默认）</strong><small>保留一个搜索框，专注当前浏览。</small></span></label><label class="radio-option" :class="{ checked: draft.homeMode === 'bookmarks' }"><input v-model="draft.homeMode" type="radio" value="bookmarks" name="homepage" /><span><strong>打开收藏书签主页</strong><small>常用置顶、分类与收藏网格。</small></span></label><label class="field-label">启动时打开指定网页（可选）<input v-model="draft.startupUrl" class="text-input" type="url" placeholder="https://example.com" /></label><small class="muted">指定网页优先于会话恢复；留空时按下方恢复设置启动。新标签使用上述主页模式。</small><!-- 功能：允许用户关闭会话保存，并说明恢复范围；时间：2026-11-14；作者：lq。 --><label class="setting-row"><span><strong>启动时恢复上次标签</strong><small>默认开启。恢复网址、标签和缩放；后台网页选择后才加载。关闭并保存后会清除会话记录。</small></span><input v-model="draft.restoreSession" class="switch" type="checkbox" /></label><label class="setting-row"><span><strong>在主页显示最近访问</strong><small>默认开启，最多显示 20 项。</small></span><input v-model="draft.showRecent" class="switch" type="checkbox" /></label></section>
         <section id="search" class="settings-section"><h2><AppIcon name="search" />搜索引擎 <small>search.engine</small></h2><label class="setting-row"><span><strong>地址栏默认搜索引擎</strong><small>输入搜索词并回车后使用。</small></span><select v-model="draft.searchEngine" class="text-input"><option v-for="(engine, id) in engines" :key="id" :value="id">{{ engine.name }}</option></select></label></section>
         <div class="settings-save"><button class="button primary" type="submit" :disabled="!desktop">保存设置</button></div>
       </form>
       <section id="import" class="settings-section"><h2><AppIcon name="download" />书签迁移与导入</h2><p>在 Chrome、Edge 或其他浏览器中将书签导出为 HTML 文件，再选择文件导入。会保留原目录层级作为自动分类线索；导入内容进入“待整理”，已存在的网址不会覆盖原收藏。若之前用旧版导入过，可重新选择原文件补回目录线索，网址会自动去重。</p><input ref="importInput" class="visually-hidden" type="file" accept=".html,.htm,text/html" aria-label="选择浏览器书签 HTML 文件" @change="importBookmarkFile" /><div class="inline-actions"><button class="button secondary" :disabled="!desktop || importing" @click="importInput?.click()"><AppIcon name="download" :size="16" />{{ importing ? '正在导入…' : '选择书签 HTML 文件' }}</button></div><p v-if="importMessage" class="muted" role="status" aria-live="polite">{{ importMessage }}</p><small class="muted">单次最多 5000 条书签，文件最大 20 MB。</small></section>
-      <section id="default" class="settings-section"><h2><AppIcon name="shield" />默认浏览器</h2><p>系统注册、设置引导和实际状态回读尚未接入。</p><span class="state-badge">尚未验证</span></section>
+      <!-- 功能：设置默认浏览器展示真实HTTP/HTTPS状态，点击才请求系统更改；时间：2026-11-14；作者：lq。 -->
+      <section id="default" class="settings-section"><h2><AppIcon name="shield" />默认浏览器</h2><p>{{ browserStatus?.http && browserStatus?.https ? '轻页 SAB 已是默认浏览器' : '让系统中的网页链接使用轻页 SAB 打开。' }}</p><p v-if="browserStatus" class="muted">HTTP：{{ browserStatus.http ? '已默认' : '未默认' }} · HTTPS：{{ browserStatus.https ? '已默认' : '未默认' }}</p><div class="inline-actions"><button class="button primary" :disabled="!desktop || browserBusy || browserStatus?.supported === false || (browserStatus?.http && browserStatus?.https)" @click="setDefaultBrowser">{{ browserBusy ? '正在读取系统状态…' : '设为默认浏览器' }}</button><button class="button secondary" :disabled="!desktop || browserBusy" @click="refreshDefaultBrowser">刷新状态</button></div><p class="muted" role="status" aria-live="polite">{{ browserMessage }}</p></section>
       <section id="privacy" class="settings-section"><h2><AppIcon name="shield" />隐私与本地数据</h2><label class="setting-row"><span><strong>删除浏览历史</strong><small>不会删除收藏或网站登录数据。</small></span><button class="button destructive" :disabled="!desktop" @click="emit('clearHistory')">删除历史</button></label><p>密码管理、隐私会话和网站数据清理仍待专项实现与验证。</p></section>
-      <section id="about" class="settings-section"><h2><AppIcon name="info" />关于轻页 SAB <small>v0.1.0</small></h2><div class="about-brand"><span class="heading-icon">SAB</span><div><strong>轻页 · Small And Beautiful</strong><p>技术骨架 · 作者：非人类程序员 · Apache-2.0</p></div></div><p>基于 v0.3 定稿设计。当前为开发阶段，尚未完成日常浏览与发行验收。</p><!-- 功能：展示公众号二维码缩略图及 QQ 联系方式；时间：2026-11-08；作者：lq。 --><div class="about-contact"><span>QQ：960661824</span><img class="about-qr" :src="officialAccountQr" alt="公众号二维码" title="公众号二维码" /></div></section>
+      <!-- 功能：首版清楚标注预览渠道、版本和本地优先的数据边界；时间：2026-11-14；作者：lq。 -->
+      <section id="about" class="settings-section"><h2><AppIcon name="info" />关于轻页 SAB <small>v{{ release.version }} · {{ release.channel }}</small></h2><div class="about-brand"><span class="heading-icon">SAB</span><div><strong>轻页 · Small And Beautiful</strong><p>作者：lq · Apache-2.0 · 构建 {{ release.build }}</p></div></div><p>轻量日常浏览、收藏整理与文件下载。使用系统网页引擎；收藏、历史、下载记录和标签会话保存在当前设备，不提供账号同步。</p><p>预览版暂不支持自动更新、隐私窗口和密码管理。默认浏览器设置由系统确认。下载支持保存位置、记录、重试与文件定位；暂停、单任务取消及断点续传尚未提供。</p><!-- 功能：展示公众号二维码缩略图及 QQ 联系方式；时间：2026-11-08；作者：lq。 --><div class="about-contact"><span>QQ：960661824</span><img class="about-qr" :src="officialAccountQr" alt="公众号二维码" title="公众号二维码" /></div></section>
     </div>
   </div>
 </template>

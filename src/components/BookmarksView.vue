@@ -1,10 +1,12 @@
 <script setup lang="ts">
 // 功能：按 _5 页面稿实现收藏网格、列表、分类和分页；时间：2026-11-08；作者：lq。
-import { computed, ref, watch } from 'vue';
+import { computed, onUnmounted, ref, watch } from 'vue';
 import type { Bookmark, ClassificationBatchResult, ClassificationPreview, Folder } from '../domain/models';
 import { api, desktop } from '../services/desktop';
 import { displayHost } from '../domain/navigation';
 import AppIcon from './AppIcon.vue';
+// 功能：合并连续搜索并在页面离开时停止待执行查询；时间：2026-11-14；作者：lq。
+import { debounceTask } from '../domain/tasks';
 import FolderManager from './FolderManager.vue';
 
 const props = defineProps<{ folders: Folder[]; revision: number; homepage?: boolean }>();
@@ -41,10 +43,14 @@ async function load(append = false) {
     if (sequence !== request) return;
     items.value = append ? [...items.value, ...page.items] : page.items;
     total.value = page.total;
-  } catch (error) { emit('error', String(error)); }
+  } catch (error) { if (sequence === request) emit('error', String(error)); }
   finally { if (sequence === request) loading.value = false; }
 }
-watch([query, category, () => props.revision], () => { void load(); }, { immediate: true });
+// 功能：键入时立即作废旧响应，停顿后查询；分类与数据变更立即刷新；时间：2026-11-14；作者：lq。
+const searchTask = debounceTask(() => { void load(); });
+watch(query, () => { request++; loading.value = true; items.value = []; searchTask.schedule(); });
+watch([category, () => props.revision], () => { searchTask.cancel(); void load(); }, { immediate: true });
+onUnmounted(() => { request++; searchTask.cancel(); });
 watch(() => props.revision, async () => {
   try { pinned.value = (await api.bookmarks('', '', 0, true)).items.slice(0, 6); }
   catch (error) { emit('error', String(error)); }

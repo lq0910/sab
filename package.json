@@ -1,10 +1,12 @@
 {
   "name": "sab",
   "version": "0.1.0",
+  "// buildNumber": "功能：标记首个 macOS 预览构建；时间：2026-11-14；作者：lq。",
+  "buildNumber": "2026111402",
   "private": true,
   "type": "module",
   "//": "功能：工程命令与精确依赖清单；时间：2026-11-08；作者：lq。",
-  "description": "轻页 SAB — Small And Beautiful 桌面浏览器技术骨架",
+  "description": "轻页 SAB — 本地优先的轻量桌面浏览器",
   "author": "lq",
   "license": "Apache-2.0",
   "packageManager": "pnpm@10.33.2",
@@ -20,7 +22,8 @@
     "tauri:build": "tauri build",
     "cargo:check": "cargo check --manifest-path src-tauri/Cargo.toml --locked",
     "cargo:test": "cargo test --manifest-path src-tauri/Cargo.toml --locked",
-    "verify": "pnpm typecheck && pnpm test && pnpm build && pnpm cargo:test"
+    "verify": "pnpm typecheck && pnpm test && pnpm build && pnpm cargo:test",
+    "release:mac": "node scripts/release-macos.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "2.12.4",

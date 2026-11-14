@@ -1,9 +1,11 @@
 <script setup lang="ts">
 // 功能：展示、搜索、分页和管理本地浏览历史；时间：2026-11-08；作者：lq。
-import { ref, watch } from 'vue';
+import { onUnmounted, ref, watch } from 'vue';
 import type { HistoryPage, RecentVisit } from '../domain/models';
 import { api } from '../services/desktop';
 import AppIcon from './AppIcon.vue';
+// 功能：合并连续搜索并在页面离开时停止待执行查询；时间：2026-11-14；作者：lq。
+import { debounceTask } from '../domain/tasks';
 
 const props = defineProps<{ revision: number }>();
 const emit = defineEmits<{ navigate: [url: string]; delete: [url: string]; clear: []; error: [message: string] }>();
@@ -22,13 +24,17 @@ async function load(append = false) {
     if (sequence !== request) return;
     items.value = append ? [...items.value, ...page.items] : page.items;
     total.value = page.total;
-  } catch (error) { emit('error', String(error)); }
+  } catch (error) { if (sequence === request) emit('error', String(error)); }
   finally {
     if (sequence === request) loading.value = false;
   }
 }
 
-watch([query, () => props.revision], () => { void load(); }, { immediate: true });
+// 功能：键入时立即作废旧响应，停顿后查询；分类与数据变更立即刷新；时间：2026-11-14；作者：lq。
+const searchTask = debounceTask(() => { void load(); });
+watch(query, () => { request++; loading.value = true; items.value = []; searchTask.schedule(); });
+watch([() => props.revision], () => { searchTask.cancel(); void load(); }, { immediate: true });
+onUnmounted(() => { request++; searchTask.cancel(); });
 </script>
 
 <template>

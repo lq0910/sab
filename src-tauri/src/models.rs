@@ -37,11 +37,13 @@ pub struct Settings {
     // 功能：兼容旧版偏好并保存新的界面明暗模式；时间：2026-11-08；作者：lq。
     #[serde(default)]
     pub color_mode: ColorMode,
+    // 功能：兼容旧设置并默认启用标签恢复；时间：2026-11-14；作者：lq。
+    pub restore_session: bool,
 }
 impl Default for Settings {
     fn default() -> Self {
         // 功能：默认主页显示最近访问区，空列表时展示品牌提示；时间：2026-11-08；作者：lq。
-        Self { home_mode: HomeMode::Minimal, search_engine: SearchEngine::Bing, show_recent: true, startup_url: String::new(), theme: Theme::Obsidian, color_mode: ColorMode::Auto }
+        Self { home_mode: HomeMode::Minimal, search_engine: SearchEngine::Bing, show_recent: true, startup_url: String::new(), theme: Theme::Obsidian, color_mode: ColorMode::Auto, restore_session: true }
     }
 }
 
@@ -117,3 +119,11 @@ pub struct RecentVisit { pub url: String, pub title: String, pub visited_at: i64
 // 功能：向前端返回浏览历史的分页数据；时间：2026-11-08；作者：lq。
 #[derive(Serialize)]
 pub struct HistoryPage { pub items: Vec<RecentVisit>, pub total: u32 }
+
+// 功能：跨重启保存受限标签导航信息；时间：2026-11-14；作者：lq。
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SessionTab { pub id: String, pub url: String, pub title: String, pub zoom: f64 }
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SessionSnapshot { pub version: u32, pub tabs: Vec<SessionTab>, pub active_id: String, pub closed: Vec<SessionTab> }

@@ -1,0 +1,11 @@
+# Automatically generated - DO NOT EDIT!
+
+[[permission]]
+identifier = "allow-take-external-links"
+description = "Enables the take_external_links command without any pre-configured scope."
+commands.allow = ["take_external_links"]
+
+[[permission]]
+identifier = "deny-take-external-links"
+description = "Denies the take_external_links command without any pre-configured scope."
+commands.deny = ["take_external_links"]
