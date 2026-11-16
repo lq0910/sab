@@ -2,6 +2,10 @@
 import { invoke, isTauri } from '@tauri-apps/api/core';
 import type { SessionSnapshot, DownloadItem, BookmarkDraft, BookmarkImportResult, BookmarkPage, Bootstrap, BrowserAction, ClassificationBatchResult, ClassificationPreview, ClassificationUndoResult, HistoryPage, RecentVisit, Settings, ViewBounds } from '../domain/models';
 import { defaultSettings } from '../domain/models';
+import type { CredentialDraft } from '../domain/credentialCsv';
+
+// 功能：传递 Chrome 凭据迁移和按网站账号选择填充的接口类型；时间：2026-11-16；作者：lq。
+export interface CredentialAccount { id: string; origin: string; username: string }
 
 export const desktop = isTauri();
 export const api = {
@@ -27,6 +31,11 @@ export const api = {
   saveBookmark: (draft: BookmarkDraft): Promise<void> => invoke('save_bookmark', { draft }),
   // 功能：把解析后的浏览器书签批量写入本地收藏并返回导入统计；时间：2026-11-08；作者：lq。
   importBookmarks: (drafts: BookmarkDraft[]): Promise<BookmarkImportResult> => invoke('import_bookmarks', { drafts }),
+  // 功能：将明文仅经可信 IPC 送入操作系统密码库并返回账号索引；时间：2026-11-16；作者：lq。
+  importCredentials: (drafts: CredentialDraft[]): Promise<{ imported: number; skipped: number; failed: number }> => invoke('import_credentials', { drafts }),
+  listCredentials: (origin: string): Promise<CredentialAccount[]> => invoke('list_credentials', { origin }),
+  deleteCredential: (id: string): Promise<void> => invoke('delete_credential', { id }),
+  fillCredential: (tabId: string, id: string): Promise<void> => invoke('fill_credential', { tabId, id }),
   // 功能：获取待整理收藏的本地自动分类预览；时间：2026-11-08；作者：lq。
   classificationPreview: (): Promise<ClassificationPreview> => invoke('classification_preview'),
   // 功能：应用本地规则分类并创建撤销批次；时间：2026-11-08；作者：lq。

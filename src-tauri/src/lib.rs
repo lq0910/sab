@@ -1,6 +1,8 @@
 // 功能：初始化数据库、受限命令和无边框本地窗口，由前端标题栏提供窗口控制；时间：2026-11-08；作者：lq。
 mod browser;
 mod commands;
+// 功能：启用系统安全密码库及网站账号手动填充；时间：2026-11-16；作者：lq。
+mod credentials;
 // 功能：启用本地下载管理及完成文件操作；时间：2026-11-14；作者：lq。
 mod downloads;
 mod models;
@@ -52,7 +54,7 @@ pub fn run() {
             Ok(())
         })
         // 功能：注册收藏、历史记录和网页视图的受限命令；时间：2026-11-08；作者：lq。
-        .invoke_handler(tauri::generate_handler![bootstrap, create_folder, rename_folder, delete_folder, list_bookmarks, save_bookmark, import_bookmarks, classification_preview, apply_classification, undo_classification, delete_bookmark, save_settings, list_recent, list_history, record_visit, delete_history, clear_history, hide_recent, browser::browser_view, downloads::list_downloads, downloads::clear_downloads, downloads::open_download, load_session, save_session, system_browser::default_browser_status, system_browser::request_default_browser, system_browser::take_external_links])
+        .invoke_handler(tauri::generate_handler![bootstrap, create_folder, rename_folder, delete_folder, list_bookmarks, save_bookmark, import_bookmarks, classification_preview, apply_classification, undo_classification, delete_bookmark, save_settings, list_recent, list_history, record_visit, delete_history, clear_history, hide_recent, browser::browser_view, downloads::list_downloads, downloads::clear_downloads, downloads::open_download, load_session, save_session, system_browser::default_browser_status, system_browser::request_default_browser, system_browser::take_external_links, commands::import_credentials, commands::list_credentials, commands::fill_credential, commands::delete_credential])
         .build(tauri::generate_context!());
     match application {
         Ok(app) => app.run(|_app, event| {

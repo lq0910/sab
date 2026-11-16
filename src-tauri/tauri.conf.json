@@ -23,7 +23,7 @@
     "targets": ["dmg", "nsis"],
     "category": "Utility",
     "shortDescription": "轻页 SAB — Small And Beautiful",
-    "macOS": { "minimumSystemVersion": "12.0", "bundleVersion": "2026111402", "infoPlist": "Info.plist" },
+    "macOS": { "minimumSystemVersion": "12.0", "bundleVersion": "2026111601", "infoPlist": "Info.plist" },
     "windows": {
       "webviewInstallMode": { "type": "downloadBootstrapper", "silent": false },
       "nsis": { "installMode": "currentUser", "installerHooks": "windows/browser-hooks.nsh", "languages": ["SimpChinese", "English"], "displayLanguageSelector": true }

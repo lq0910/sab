@@ -5,6 +5,8 @@
 #[path = "../src/security.rs"] mod security;
 #[path = "../src/storage.rs"] mod storage;
 #[path = "../src/commands.rs"] mod commands;
+// 功能：隔离工作区测试编译密码命令，默认不访问系统真实凭据；时间：2026-11-16；作者：lq。
+#[path = "../src/credentials.rs"] mod credentials;
 #[path = "../src/downloads.rs"] mod downloads;
 #[path = "../src/session.rs"] mod session;
 #[path = "../src/shortcuts.rs"] mod shortcuts;
@@ -39,12 +41,38 @@ const HARNESS: &str = r#"
  assert(waiting,'continue waiting');waiting.click();
  await until(()=>!document.querySelector('.empty-state'),'continue existing request');
  await pause(2300);
+ // 功能：密集切换只恢复最终活动网页，重复激活不能新建视图或重发页面请求；时间：2026-11-16；作者：lq。
+ const pageTabs=[...document.querySelectorAll('.browser-tab [role="tab"]')].slice(0,2);
+ for(let i=0;i<30;i++)pageTabs[i%2].click();
+ await until(()=>document.querySelector('[aria-label="地址或搜索"]').value.includes('/slow'),'latest tab wins');
+ await pause(300);
+ for(let i=0;i<8;i++)pageTabs[1].click();
+ await pause(300);
+ document.title='SAB_SMOKE_SWITCHES';await pause(100);
  await action('downloads');
  await until(()=>document.querySelector('.downloads-view'),'downloads panel');
  await action('close-tab');assert(tabs().length===4,'closing panel preserves tabs');
  // 功能：真实查询系统默认项，随后注入系统链接检验现有窗口的新标签接收；时间：2026-11-14；作者：lq。
  await action('settings');
  await until(()=>document.querySelector('#default .muted')?.textContent.includes('HTTP：'),'default browser status');
+ // 功能：以随机假账号走真实文件解析、预览、IPC、系统密码库、去重和删除流程；时间：2026-11-16；作者：lq。
+ const passwordSection=document.querySelector('#passwords');
+ assert(passwordSection,'password settings');
+ const input=passwordSection.querySelector('input[type=file]');
+ const csv='name,url,username,password\nFixture,https://sab-password-fixture.invalid/,'+crypto.randomUUID()+',"dummy,""quotes"" $() 中文"\n';
+ const chooseCsv=()=>{const transfer=new DataTransfer();transfer.items.add(new File([csv],'fixture-passwords.csv',{type:'text/csv'}));input.files=transfer.files;input.dispatchEvent(new Event('change',{bubbles:true}));};
+ chooseCsv();await until(()=>passwordSection.querySelector('.password-import-preview'),'password import preview');
+ passwordSection.querySelector('.password-import-preview .primary').click();
+ await until(()=>passwordSection.querySelectorAll('.saved-account').length===1,'password system store import');
+ assert(passwordSection.innerText.includes('新增 1 个账号'),'password import success');
+ chooseCsv();await until(()=>passwordSection.querySelector('.password-import-preview'),'duplicate preview');
+ passwordSection.querySelector('.password-import-preview .primary').click();
+ await until(()=>passwordSection.innerText.includes('跳过 1 个项目'),'duplicate skipped');
+ assert(passwordSection.querySelectorAll('.saved-account').length===1,'duplicate preserves account');
+ passwordSection.querySelector('.saved-account .icon-button').click();
+ await until(()=>[...passwordSection.querySelectorAll('button')].some(button=>button.textContent==='确认删除'),'delete confirmation');
+ [...passwordSection.querySelectorAll('button')].find(button=>button.textContent==='确认删除').click();
+ await until(()=>passwordSection.querySelectorAll('.saved-account').length===0,'password deleted');
  document.title='SAB_SMOKE_EXTERNAL';
  await until(()=>tabs().length===5,'external link creates tab');
  await until(()=>document.querySelector('[aria-label="地址或搜索"]').value.includes('/external'),'external address');
@@ -96,12 +124,16 @@ fn main() {
         }
     });
     let passed = Arc::new(AtomicBool::new(false));
+    // 功能：实际 WKWebView 中确认新建网页已安装细滚动条，回调通道返回 JSON 字符串；时间：2026-11-16；作者：lq。
+    let scrollbar_passed = Arc::new(AtomicBool::new(false));
+    let setup_scrollbar = scrollbar_passed.clone();
     let setup_store = store.clone(); let setup_passed = passed.clone(); let setup_requests = requests.clone();
     let exit_code = tauri::Builder::default().setup(move |app| {
         app.manage(commands::AppState(setup_store.clone()));
         app.manage(system_browser::ExternalLinks::default());
         shortcuts::install(app.handle())?;
         let results = setup_passed.clone(); let requests = setup_requests.clone();
+        let scrollbar_result = setup_scrollbar.clone();
         WebviewWindowBuilder::new(app, "main", WebviewUrl::External("http://127.0.0.1:1421/index.html".parse().unwrap()))
             .title("SAB isolated workspace smoke").inner_size(1000.0, 700.0)
             .on_page_load(|view, event| { println!("shell page: {:?} {}", event.event(), event.url()); if matches!(event.event(), tauri::webview::PageLoadEvent::Finished) { view.eval(HARNESS).unwrap(); } })
@@ -118,21 +150,35 @@ fn main() {
                 else if title == "SAB_SMOKE_LAZY" {
                     let views = window.app_handle().webviews().keys().filter(|name| name.starts_with("page-")).count();
                     if views != 1 || requests.load(Ordering::SeqCst) != 1 { eprintln!("lazy restore failed: views={views}"); window.app_handle().exit(1); }
+                // 功能：切换不导航、不增加后台视图，避免可见性优化导致重载回归；时间：2026-11-16；作者：lq。
+                } else if title == "SAB_SMOKE_SWITCHES" {
+                    let views = window.app_handle().webviews().keys().filter(|name| name.starts_with("page-")).count();
+                    if views != 2 || requests.load(Ordering::SeqCst) != 2 { eprintln!("tab reuse failed: views={views}, requests={}", requests.load(Ordering::SeqCst)); window.app_handle().exit(1); }
+                    let result = scrollbar_result.clone();
+                    let view = window.app_handle().webviews().into_iter().find(|(name, _)| name.starts_with("page-")).unwrap().1;
+                    view.eval_with_callback("getComputedStyle(document.documentElement,'::-webkit-scrollbar').width", move |width| {
+                        result.store(serde_json::from_str::<String>(&width).unwrap_or_default() == "10px", Ordering::SeqCst);
+                    }).unwrap();
                 } else if title.starts_with("SAB_SMOKE_FAIL:") { eprintln!("{title}"); window.app_handle().exit(1); }
             }).build()?;
         let handle = app.handle().clone();
         std::thread::spawn(move || { std::thread::sleep(Duration::from_secs(20)); eprintln!("workspace smoke: TIMEOUT"); handle.exit(2); });
         Ok(())
     })
-    .invoke_handler(tauri::generate_handler![commands::bootstrap, commands::list_recent, commands::list_history, commands::record_visit, commands::load_session, commands::save_session, browser::browser_view, downloads::list_downloads, system_browser::default_browser_status, system_browser::take_external_links])
+    .invoke_handler(tauri::generate_handler![commands::bootstrap, commands::list_recent, commands::list_history, commands::record_visit, commands::load_session, commands::save_session, commands::import_credentials, commands::list_credentials, commands::delete_credential, commands::fill_credential, browser::browser_view, downloads::list_downloads, system_browser::default_browser_status, system_browser::take_external_links])
     .build(tauri::generate_context!()).expect("native workspace runtime").run_return(|_, _| {});
     // 功能：只有正常退出已落盘且未重发慢请求才判定成功；时间：2026-11-14；作者：lq。
+    // 功能：即使界面测试失败也尝试清理本次隔离数据库创建的测试密码，不触及用户数据库；时间：2026-11-16；作者：lq。
+    let cleanup_store = storage::Store::open(&directory.path().join("test.sqlite3")).unwrap();
+    for account in credentials::list(&cleanup_store, "").unwrap() { credentials::delete(&cleanup_store, &account.id).expect("remove isolated test credential"); }
     assert_eq!(exit_code, 0, "native runtime exit");
     let snapshot = storage::Store::open(&directory.path().join("test.sqlite3")).unwrap().load_session().unwrap().unwrap();
     assert!(passed.load(Ordering::SeqCst), "frontend smoke must finish");
+    assert!(scrollbar_passed.load(Ordering::SeqCst), "native webpage scrollbar must be 10px");
     assert_eq!(snapshot.tabs.len(), 6);
     assert_eq!(snapshot.active_id, snapshot.tabs.last().unwrap().id);
     assert_eq!(snapshot.tabs.last().unwrap().url, "sab://home");
     assert_eq!(requests.load(Ordering::SeqCst), 3);
-    println!("native workspace smoke: PASS (lazy restore, focus action, tab actions, offline/continue, downloads panel, default status, system link, save before quit)");
+    // 功能：报告密集切换与重复激活的真实原生视图复用验收；时间：2026-11-16；作者：lq。
+    println!("native workspace smoke: PASS (lazy restore, focus action, tab actions, rapid tab reuse, password CSV preview/import/duplicate/delete, offline/continue, downloads panel, default status, system link, save before quit)");
 }

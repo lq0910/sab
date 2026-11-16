@@ -4,6 +4,8 @@ Small And Beautiful，本地优先的轻量桌面浏览器。
 
 基于 Vue、Tauri、系统 WebView 与 SQLite。支持多标签、地址搜索与历史补全、收藏管理/导入、外观设置、原生网页下载、原生菜单快捷键、会话恢复、离线/等待超时提示及后台标签手动休眠。
 
+构建 2026111601 增加 Chrome 密码 CSV 导入、系统密码库保存和按网站手动填表，并改进滚动条及网页视图切换开销。使用入口见[密码迁移说明](docs/Chrome密码导入与手动填表-20261116.md)，性能与测试范围见[视图调度优化](docs/网页视图调度优化-20261116.md)。
+
 开发运行：`pnpm install --frozen-lockfile`，然后 `pnpm tauri:dev`。
 
 完整检查：`pnpm verify`。隔离原生下载验收：`cargo run --manifest-path src-tauri/Cargo.toml --example download_smoke --offline`。

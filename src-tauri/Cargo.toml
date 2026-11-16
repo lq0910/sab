@@ -30,6 +30,11 @@ tauri-plugin-opener = "=2.7.2"
 # 功能：系统链接转交已有窗口，避免重复启动进程丢失URL；时间：2026-11-14；作者：lq。
 tauri-plugin-single-instance = "=2.4.0"
 
+# 功能：将网站密码保存在 macOS 钥匙串和 Windows 凭据管理器；时间：2026-11-16；作者：lq。
+keyring = { version = "=3.6.3", default-features = false, features = ["apple-native", "windows-native"] }
+# 功能：释放导入批次时清空 Rust 持有的密码文本；时间：2026-11-16；作者：lq。
+zeroize = "=1.9.1"
+
 # 功能：查询macOS默认协议处理器并发送用户主动设置请求；时间：2026-11-14；作者：lq。
 [target.'cfg(target_os = "macos")'.dependencies]
 core-foundation = "=0.10.1"

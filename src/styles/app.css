@@ -87,6 +87,14 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 .address-suggestion small { color: var(--muted); font-size: 10px; }
 .address-suggestion kbd { flex-shrink: 0; }
 .content-viewport { position: relative; flex: 1; min-height: 0; overflow: auto; }
+/* 功能：让内置页滚动条更细、更轻，并用强调色作低对比悬停状态；时间：2026-11-16；作者：lq。 */
+@supports not selector(::-webkit-scrollbar) { * { scrollbar-color: color-mix(in srgb, var(--muted) 48%, transparent) transparent; scrollbar-width: thin; } }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 42%, transparent); border: 2px solid transparent; border-radius: 999px; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--accent) 56%, var(--muted)); background-clip: padding-box; }
+::-webkit-scrollbar-button { display: none; }
+::-webkit-scrollbar-corner { background: transparent; }
 .preview-notice { background: var(--surface-high); color: var(--secondary); font-size: 11px; padding: 5px 16px; text-align: center; }
 .button { height: 32px; padding: 0 12px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; transition: background 120ms; }
 .primary { background: var(--accent); color: var(--accent-text); }
@@ -390,6 +398,32 @@ kbd { font: 10px/1.5 var(--mono); background: var(--surface-high); color: var(--
 .downloads-heading h2 { font-size: 17px; }
 .downloads-heading p { margin: 5px 0 0; color: var(--muted); font-size: 12px; }
 .downloads-list { list-style: none; margin: 0; padding: 0; max-height: 50dvh; overflow: auto; }
+/* 功能：显示不含密码内容的网站账号选择列表；时间：2026-11-16；作者：lq。 */
+.credential-panel > p:first-child { margin: 0 0 12px; color: var(--secondary); font: 11px var(--mono); overflow-wrap: anywhere; }
+.credential-list { max-height: 45dvh; overflow: auto; }
+.credential-row { width: 100%; min-width: 0; display: flex; align-items: center; gap: 10px; padding: 11px 8px; border-top: 1px solid var(--line); background: transparent; color: var(--text); text-align: left; }
+.credential-row:hover { background: var(--surface-low); }
+.credential-row > svg:first-child { color: var(--accent); }
+.credential-row > svg:last-child { margin-left: auto; color: var(--muted); }
+.credential-row > span { min-width: 0; display: grid; }
+.credential-row strong, .credential-row small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.credential-row small { color: var(--muted); font-size: 10px; }
+/* 功能：账号管理沿用设置页分隔行，导入预览保持紧凑并可适配窄窗口；时间：2026-11-16；作者：lq。 */
+.password-import-preview { margin-top: 12px; padding: 12px 14px; border-radius: 8px; background: var(--surface-low); }
+.password-import-preview > p { margin: 0 0 10px; }
+.saved-accounts-heading { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); }
+.saved-accounts-heading h3 { margin: 0; font-size: 12px; font-weight: 600; }
+.saved-accounts-heading h3 span { margin-left: 6px; color: var(--muted); font-weight: 400; }
+.saved-accounts-heading + input { margin-top: 12px; }
+.saved-accounts { max-height: 350px; overflow: auto; margin-top: 8px; }
+.saved-account { display: flex; align-items: center; gap: 10px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.saved-account > svg { color: var(--muted); }
+.saved-account > span { min-width: 0; flex: 1; }
+.saved-account strong, .saved-account small { display: block; overflow-wrap: anywhere; }
+.saved-account small { color: var(--muted); margin-top: 2px; }
+.password-import-preview .inline-actions, .saved-account .inline-actions { flex-wrap: wrap; }
+/* 功能：高对比模式沿用系统滚动条颜色，保留原生可访问性；时间：2026-11-16；作者：lq。 */
+@media (forced-colors: active) { * { scrollbar-color: auto; } }
 .download-item { display: flex; gap: 12px; padding: 16px 2px; border-top: 1px solid var(--line); }
 .download-file-icon { width: 36px; height: 40px; border-radius: 8px; background: var(--surface-low); display: grid; place-items: center; flex-shrink: 0; color: var(--accent); }
 .download-item--completed .download-file-icon { color: var(--success); }

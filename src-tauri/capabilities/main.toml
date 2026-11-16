@@ -26,5 +26,7 @@ permissions = [
   "allow-load-session", "allow-save-session",
   # 功能：系统默认项和外部链接只允许本地main使用；时间：2026-11-14；作者：lq。
   "allow-default-browser-status", "allow-request-default-browser", "allow-take-external-links",
+  # 功能：仅授权本地界面导入凭据、读取账号名称并按明确选择填写；时间：2026-11-16；作者：lq。
+  "allow-import-credentials", "allow-list-credentials", "allow-fill-credential", "allow-delete-credential",
   "allow-clear-history", "allow-hide-recent", "allow-browser-view"
 ]

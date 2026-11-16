@@ -17,7 +17,7 @@ import SettingsView from './components/SettingsView.vue';
 import DownloadsView from './components/DownloadsView.vue';
 import { defaultSettings, type DownloadItem, type Bookmark, type BookmarkDraft, type ColorMode, type Folder, type PageEvent, type RecentVisit, type SearchEngine, type Settings, type Tab, type ThemeId, type ViewBounds } from './domain/models';
 import { displayHost, isInternal, isSearchQuery, resolveAddress } from './domain/navigation';
-import { api, desktop } from './services/desktop';
+import { api, desktop, type CredentialAccount } from './services/desktop';
 // 功能：复用输入合并与页面状态更新规则；时间：2026-11-14；作者：lq。
 import { debounceTask } from './domain/tasks';
 import { applyPageEvent } from './domain/pageLifecycle';
@@ -51,7 +51,10 @@ const message = ref('');
 // 功能：错误跟随所属标签保存，切换后仍可重试；时间：2026-11-14；作者：lq。
 const pageError = computed(() => active.value.error ?? '');
 const initialized = ref(false);
-const panel = ref<'' | 'favorites' | 'edit' | 'menu' | 'sleep' | 'downloads' | 'quit'>('');
+const panel = ref<'' | 'favorites' | 'edit' | 'menu' | 'sleep' | 'downloads' | 'quit' | 'credentials'>('');
+// 功能：暂存当前网站的账号名称列表，不从系统密码库读取口令；时间：2026-11-16；作者：lq。
+const credentialAccounts = ref<CredentialAccount[]>([]);
+const credentialOrigin = ref('');
 const contextTabId = ref('');
 const tabPickerOpen = ref(false);
 const tabPickerQuery = ref('');
@@ -186,11 +189,15 @@ async function closeTabFromPicker(id: string) {
   await closeTab(id);
 }
 
-// 功能：串行处理标签切换和浮层避让，保持最终视图与活动标签一致；时间：2026-11-08；作者：lq。
+// 功能：用递增序号跳过队列里被新操作替代的同步，减少连续切换/关闭浮层的原生调用；时间：2026-11-16；作者：lq。
+let viewSyncRequest = 0;
+// 功能：串行处理标签切换和浮层避让，保持最终视图与活动标签一致；时间：2026-11-16；作者：lq。
 async function syncView() {
   if (!desktop || !initialized.value) return;
+  const request = ++viewSyncRequest;
   await nextTick();
   await enqueue(async () => {
+    if (request !== viewSyncRequest) return;
     const tab = active.value;
     if (internal.value || panel.value || tabPickerOpen.value || (suggestionsOpen.value && addressSuggestions.value.length) || tab.error) { await api.view('hide', tab.id); return; }
     const exists = created.value.has(tab.id);
@@ -385,6 +392,21 @@ async function showPanel(value: typeof panel.value) {
   if (desktop) await enqueue(() => api.view('hide', active.value.id));
   message.value = '';
   panel.value = value;
+}
+// 功能：仅对当前网站检索账号并显示明确的手动填充选项；时间：2026-11-16；作者：lq。
+async function openCredentialPanel() {
+  if (isInternal(active.value.url)) { message.value = '请先打开要登录的网站'; return; }
+  const origin = new URL(active.value.url).origin;
+  credentialAccounts.value = await api.listCredentials(origin);
+  credentialOrigin.value = origin;
+  await showPanel('credentials');
+}
+// 功能：用户选择账号后校验来源并填写当前标签表单，不自动提交；时间：2026-11-16；作者：lq。
+async function fillCredential(account: CredentialAccount) {
+  const tabId = activeId.value;
+  await api.fillCredential(tabId, account.id);
+  await closePanel();
+  message.value = '账号和密码已填写，请检查后手动登录';
 }
 async function closePanel() { panel.value = ''; await syncView(); await focusPage(); }
 async function editBookmark(bookmark?: Bookmark) {
@@ -739,6 +761,8 @@ watch(() => tabs.value.map(tab => `${tab.id}:${tab.title}`), () => { void measur
         </div>
         <button class="icon-button" aria-label="收藏当前页面" title="收藏当前页面 (⌘/Ctrl+D)" :disabled="isInternal(active.url) || !isDesktop()" @click="safely(saveCurrent)"><AppIcon name="star" /></button>
         <button class="icon-button" aria-label="打开收藏中心浮层" title="收藏中心 (⌘/Ctrl+Shift+O)" @click="safely(() => showPanel('favorites'))"><AppIcon name="bookmarks" /></button>
+        <!-- 功能：打开当前网站的保存账号列表，用户逐项选择填充；时间：2026-11-16；作者：lq。 -->
+        <button class="icon-button" aria-label="当前网站账号" title="填写已保存账号" :disabled="internal || !isDesktop()" @click="safely(openCredentialPanel)"><AppIcon name="key" /></button>
         <!-- 功能：下载始终可达，活动任务显示数量且使用原生浮层避让；时间：2026-11-14；作者：lq。 -->
         <button class="icon-button download-trigger" :aria-label="activeDownloads.length ? `下载中 ${activeDownloads.length} 个文件` : '下载管理'" title="下载管理" @click="safely(() => showPanel('downloads'))"><AppIcon name="download" /><span v-if="activeDownloads.length" class="download-count">{{ activeDownloads.length }}</span></button>
         <button class="icon-button" aria-label="浏览器菜单" @click="safely(() => showPanel('menu'))"><AppIcon name="more" /></button>
@@ -766,7 +790,7 @@ watch(() => tabs.value.map(tab => `${tab.id}:${tab.title}`), () => { void measur
     </main>
     <div v-if="message" class="toast" role="status"><AppIcon name="info" :size="16" /><span>{{ message }}</span><button class="icon-button" aria-label="关闭提示" @click="message = ''"><AppIcon name="close" :size="14" /></button></div>
 
-    <OverlayPanel :open="panel !== ''" :label="panel === 'favorites' ? '收藏中心' : panel === 'edit' ? '编辑收藏' : panel === 'sleep' ? '休眠后台标签' : panel === 'downloads' ? '下载管理' : panel === 'quit' ? '退出浏览器' : '浏览器菜单'" :compact="panel === 'menu'" @close="safely(closePanel)">
+    <OverlayPanel :open="panel !== ''" :label="panel === 'favorites' ? '收藏中心' : panel === 'edit' ? '编辑收藏' : panel === 'sleep' ? '休眠后台标签' : panel === 'downloads' ? '下载管理' : panel === 'quit' ? '退出浏览器' : panel === 'credentials' ? '当前网站账号' : '浏览器菜单'" :compact="panel === 'menu'" @close="safely(closePanel)">
       <p v-if="message" class="panel-error" role="alert">{{ message }}</p>
       <template v-if="panel === 'favorites'">
         <div class="favorites-search"><AppIcon name="search" /><input v-model="favoriteQuery" aria-label="搜索收藏浮层" placeholder="搜索标题、域名、网址或标签" autofocus @keydown="event => safely(() => favoriteKey(event))" /><kbd>Esc</kbd><button class="icon-button" aria-label="关闭收藏浮层" @click="safely(closePanel)"><AppIcon name="close" :size="16" /></button></div>
@@ -777,6 +801,8 @@ watch(() => tabs.value.map(tab => `${tab.id}:${tab.title}`), () => { void measur
       <form v-else-if="panel === 'edit'" class="bookmark-form" @submit.prevent="safely(submitBookmark)"><header><h2>{{ editingId ? '编辑收藏' : '新建收藏' }}</h2><button class="icon-button" type="button" aria-label="关闭编辑" @click="safely(closePanel)"><AppIcon name="close" /></button></header><label class="field-label">网址<input v-model="bookmarkDraft.url" class="text-input" type="url" placeholder="https://example.com" required :readonly="!!editingId" autofocus /></label><label class="field-label">书签名<input v-model="bookmarkDraft.title" class="text-input" required maxlength="512" /></label><label class="field-label">存储目录<select v-model="bookmarkDraft.folderId" class="text-input"><option v-for="folder in folders" :key="folder.id" :value="folder.id">{{ folder.name }}</option></select></label><label class="field-label">标签（逗号分隔）<input v-model="tagInput" class="text-input" placeholder="工作, 参考资料" /></label><label class="setting-row"><span>固定到常用置顶</span><input v-model="bookmarkDraft.pinned" class="switch" type="checkbox" /></label><footer class="panel-footer"><button v-if="editingId" class="button destructive" type="button" :disabled="saving" @click="safely(deleteBookmark)">删除收藏</button><button class="button primary" type="submit" :disabled="saving">{{ saving ? '保存中…' : '保存收藏' }}</button></footer></form>
       <!-- 功能：文件打开、定位、重试和仅清除记录形成完整下载闭环；时间：2026-11-14；作者：lq。 -->
       <DownloadsView v-else-if="panel === 'downloads'" :items="downloads" @close="safely(closePanel)" @clear="safely(clearDownloadRecords)" @open="id => safely(() => api.openDownload(id))" @reveal="id => safely(() => api.openDownload(id, true))" @retry="item => safely(() => retryDownload(item))" />
+      <!-- 功能：按当前来源列出账号并要求用户明确选择后填表；时间：2026-11-16；作者：lq。 -->
+      <section v-else-if="panel === 'credentials'" class="credential-panel"><p>{{ credentialOrigin }}</p><p v-if="!credentialAccounts.length" class="empty-inline">此网站没有已保存的账号。可在设置中的“密码管理”导入 Chrome 密码 CSV。</p><div class="credential-list"><button v-for="account in credentialAccounts" :key="account.id" class="credential-row" @click="safely(() => fillCredential(account))"><AppIcon name="key" :size="17" /><span><strong>{{ account.username || '未保存用户名' }}</strong><small>{{ account.origin }}</small></span><AppIcon name="chevron" :size="16" /></button></div><small class="muted">只填写账号密码，不会自动提交登录表单。</small></section>
       <!-- 功能：退出前确认未完成任务，用户可以继续下载或明确中断退出；时间：2026-11-14；作者：lq。 -->
       <section v-else-if="panel === 'quit'" class="sleep-confirm"><h2>还有 {{ activeDownloads.length }} 个下载未完成</h2><p>退出浏览器会中断下载。已完成文件会保留；下次启动可查看中断记录并重新下载。</p><footer class="panel-footer"><button class="button primary" @click="panel = 'downloads'">继续下载</button><button class="button destructive" @click="safely(quitBrowser)">退出浏览器</button></footer></section>
       <!-- 功能：主动释放内存前说明会丢失网页临时状态；时间：2026-11-14；作者：lq。 -->

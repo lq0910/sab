@@ -1,6 +1,26 @@
 // 功能：定义 Rust 服务与本地 UI 的序列化契约；时间：2026-11-08；作者：lq。
 use serde::{Deserialize, Serialize};
 
+// 功能：定义账号导入数据与不含密码的站点账号列表；时间：2026-11-16；作者：lq。
+#[derive(Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CredentialDraft { pub origin: String, pub username: String, pub password: String }
+
+// 功能：批次结束时清空 Rust 输入对象中的密码内容；时间：2026-11-16；作者：lq。
+impl Drop for CredentialDraft {
+    fn drop(&mut self) { use zeroize::Zeroize; self.password.zeroize(); }
+}
+
+// 功能：返回给界面的账号选项不包含密码正文；时间：2026-11-16；作者：lq。
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CredentialAccount { pub id: String, pub origin: String, pub username: String }
+
+// 功能：汇报 Chrome 密码导入新增和重复跳过数量；时间：2026-11-16；作者：lq。
+#[derive(Clone, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct CredentialImportResult { pub imported: u32, pub skipped: u32, pub failed: u32 }
+
 #[derive(Clone, Debug, Default, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub enum HomeMode { #[default] Minimal, Bookmarks }

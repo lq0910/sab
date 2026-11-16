@@ -1,8 +1,8 @@
 {
   "name": "sab",
   "version": "0.1.0",
-  "// buildNumber": "功能：标记首个 macOS 预览构建；时间：2026-11-14；作者：lq。",
-  "buildNumber": "2026111402",
+  "// buildNumber": "功能：标记密码迁移、滚动条及视图性能优化预览构建；时间：2026-11-16；作者：lq。",
+  "buildNumber": "2026111601",
   "private": true,
   "type": "module",
   "//": "功能：工程命令与精确依赖清单；时间：2026-11-08；作者：lq。",

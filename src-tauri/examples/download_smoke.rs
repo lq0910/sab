@@ -6,6 +6,8 @@
 #[path = "../src/security.rs"] mod security;
 #[path = "../src/storage.rs"] mod storage;
 #[path = "../src/commands.rs"] mod commands;
+// 功能：隔离下载测试编译新增密码命令，不导入真实账号；时间：2026-11-16；作者：lq。
+#[path = "../src/credentials.rs"] mod credentials;
 #[path = "../src/downloads.rs"] mod downloads;
 #[path = "../src/session.rs"] mod session;
 use std::{io::{Read, Write}, net::TcpListener, sync::{Arc, Mutex}, time::{Duration, Instant}};

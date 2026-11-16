@@ -17,7 +17,7 @@ impl Store {
         connection.busy_timeout(std::time::Duration::from_secs(5)).map_err(error)?;
         connection.execute_batch("PRAGMA foreign_keys=ON; PRAGMA journal_mode=WAL;").map_err(error)?;
         let mut version: u32 = connection.query_row("PRAGMA user_version", [], |row| row.get(0)).map_err(error)?;
-        if version > 4 { return Err("数据版本高于当前应用，请使用较新的轻页版本".into()); }
+        if version > 5 { return Err("数据版本高于当前应用，请使用较新的轻页版本".into()); }
         if version == 0 {
             let transaction = connection.unchecked_transaction().map_err(error)?;
             transaction.execute_batch(include_str!("../migrations/001_initial.sql")).map_err(error)?;
@@ -40,6 +40,13 @@ impl Store {
         if version == 3 {
             let transaction = connection.unchecked_transaction().map_err(error)?;
             transaction.execute_batch(include_str!("../migrations/004_downloads.sql")).map_err(error)?;
+            transaction.commit().map_err(error)?;
+            version = 4;
+        }
+        // 功能：记录密码库索引；密码正文仅存操作系统安全凭据库；时间：2026-11-16；作者：lq。
+        if version == 4 {
+            let transaction = connection.unchecked_transaction().map_err(error)?;
+            transaction.execute_batch(include_str!("../migrations/005_credentials.sql")).map_err(error)?;
             transaction.commit().map_err(error)?;
         }
         connection.execute("UPDATE downloads SET status='interrupted',error='上次退出时下载尚未完成，请返回来源页重新下载' WHERE status='downloading'", []).map_err(error)?;

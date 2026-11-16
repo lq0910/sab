@@ -5,6 +5,31 @@ use tauri::{State, Webview};
 
 pub struct AppState(pub Arc<Mutex<Store>>);
 
+// 功能：导入账号密码时仅接收可信本地 UI 的操作；时间：2026-11-16；作者：lq。
+#[tauri::command]
+pub async fn import_credentials(caller: Webview, state: State<'_, AppState>, drafts: Vec<CredentialDraft>) -> Result<CredentialImportResult, String> {
+    with_store(caller, state, move |store| crate::credentials::import(store, drafts)).await
+}
+
+// 功能：按当前网页来源列出账号，不向调用界面或网页返回密码；时间：2026-11-16；作者：lq。
+#[tauri::command]
+pub async fn list_credentials(caller: Webview, state: State<'_, AppState>, origin: String) -> Result<Vec<CredentialAccount>, String> {
+    with_store(caller, state, move |store| crate::credentials::list(store, &origin)).await
+}
+
+// 功能：可信设置页删除凭据时同步清理系统密码库及本地索引；时间：2026-11-16；作者：lq。
+#[tauri::command]
+pub async fn delete_credential(caller: Webview, state: State<'_, AppState>, id: String) -> Result<(), String> {
+    with_store(caller, state, move |store| crate::credentials::delete(store, &id)).await
+}
+
+// 功能：只允许可信本地 UI 请求按标签和账号触发受限密码填充；时间：2026-11-16；作者：lq。
+#[tauri::command]
+pub async fn fill_credential(caller: Webview, app: tauri::AppHandle, tab_id: String, id: String) -> Result<(), String> {
+    require_shell(&caller)?;
+    tauri::async_runtime::spawn_blocking(move || crate::credentials::fill(&app, &tab_id, &id)).await.map_err(|error| error.to_string())?
+}
+
 async fn with_store<T, F>(caller: Webview, state: State<'_, AppState>, operation: F) -> Result<T, String>
 where T: Send + 'static, F: FnOnce(&Store) -> Result<T, String> + Send + 'static {
     require_shell(&caller)?;
